@@ -142,7 +142,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 	    String name = "First Cart name: " +userId;
 	    Cart first = createCart(userId, name);
 		String testData = "This is teh sserialized data of the object";
-		String testType = "CDE Cart Test";
+		String testType = ":Test:CDE Cart Test";
 	    CartObject testObject = new CartObject();
 	    testObject.setType(testType);
 	    testObject.setData(testData);
@@ -175,7 +175,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 	    String name = "First Cart name: " +userId;
 	    Cart first = createCart(userId, name);
 	    String testData = "This is teh sserialized data of the object";
-		String testType = "CDE Cart Test";
+		String testType = ":Test:CDE Cart Test";
 	    CartObject testObject = new CartObject();
 	    testObject.setType(testType);
 	    testObject.setData(testData);
@@ -236,7 +236,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 	    String name = "First Cart name: " +userId;
 	    Cart first = createCart(userId, name);
 	    String testData = "This is teh sserialized data of the object";
-		String testType = "CDE Cart Test";
+		String testType = ":Test:CDE Cart Test";
 	    CartObject testObject = new CartObject();
 	    testObject.setType(testType);
 	    testObject.setData(testData);
@@ -288,7 +288,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 	    String name = "First Cart name: " +userId;
 	    Cart first = createCart(userId, name);
 	    String testData = "This is teh sserialized data of the object";
-		String testType = "CDE Cart Test";
+		String testType = ":Test:CDE Cart Test";
 	    CartObject testObject = new CartObject();
 	    testObject.setType(testType);
 	    testObject.setData(testData);
