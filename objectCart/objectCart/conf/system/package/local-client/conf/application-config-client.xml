@@ -10,7 +10,9 @@
 			<map>
 				<entry key="APPLICATION_SERVICE_BEAN" value="applicationService" />
 				<!--@SECURITY_START@-->
+				<!-- 
 				<entry key="AUTHENTICATION_SERVICE_BEAN" value-ref="authenticationProvider"/>
+				-->
 				<!--@SECURITY_END@-->
 			</map>
 		</constructor-arg>

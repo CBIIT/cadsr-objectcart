@@ -25,9 +25,9 @@
 				<prop key="resultCountPerQuery">1000</prop>
 				<prop key="resultOutputFormatter">resultOutputFormatter.xsl</prop>
 				<prop key="rowCounter">200</prop>
-				<prop key="securityEnabled">@SECURITY_ENABLED@</prop>
-				<prop key="instanceLevelSecurityEnabled">@INSTANCE_LEVEL_SECURITY@</prop>
-				<prop key="attributeLevelSecurityEnabled">@ATTRIBUTE_LEVEL_SECURITY@</prop>				
+				<prop key="securityEnabled">false</prop>
+				<prop key="instanceLevelSecurityEnabled">false</prop>
+				<prop key="attributeLevelSecurityEnabled">false</prop>				
 			</props>
 		</constructor-arg>
 	</bean>
@@ -36,7 +36,9 @@
 		<constructor-arg>
 			<map>
 				<!--@SECURITY_START@-->
+				<!-- 
 				<entry key="AUTHENTICATION_PROVIDER" value-ref="authenticationProvider"/>
+				-->
 				<!--@SECURITY_END@-->
 			</map>
 		</constructor-arg>

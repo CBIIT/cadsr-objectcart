@@ -209,25 +209,22 @@ public class ObjectCartServiceImplTest extends TestCase{
 		Integer removedId = arr[0];
 		Integer remainingId = arr[arr.length-1];
 		
-		System.out.println(removedId);
+		System.out.println("Removing:"+removedId);
 		System.out.println(remainingId);
 		
 		removeObject(second.getId(), arr[0]);
-		
-		Cart third = getCart(second.getId());	
+	
+		Cart third = getCart(second.getId());
 		
 		assertNotNull(third);
 		assertNotNull(third.getCartObjectCollection());
 		assertTrue(!third.getCartObjectCollection().isEmpty());
-		System.out.println(third.getCartObjectCollection().size());
-		
 		assertTrue(third.getCartObjectCollection().size() == 1);
 
 		CartObject retrievedObject = third.getCartObjectCollection().iterator().next(); 
 		
 		assertEquals(remainingId, retrievedObject.getId());
 		assertTrue(retrievedObject.getId().intValue() != removedId.intValue());
-			
 	}
 	
 	public void testRemoveObjects() {
@@ -245,12 +242,17 @@ public class ObjectCartServiceImplTest extends TestCase{
 	    testObject2.setType(testType);
 	    testObject2.setData(testData+testType);
 	   
+	    CartObject testObject3 = new CartObject();
+	    testObject3.setType(testType);
+	    testObject3.setData(testData+testType);
+	    
 	    assertNull(first.getCartObjectCollection());
 	    
 		Collection<CartObject> testCol = new HashSet<CartObject>();
 		
 		testCol.add(testObject);
 		testCol.add(testObject2);
+		testCol.add(testObject3);
 		
 		addObjects(first.getId(), testCol);
 	
@@ -259,26 +261,25 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertNotNull(second);
 		assertNotNull(second.getCartObjectCollection());
 		assertTrue(!second.getCartObjectCollection().isEmpty());
-		assertTrue(second.getCartObjectCollection().size() == 2);
+		assertTrue(second.getCartObjectCollection().size() == 3);
 	
 		Integer[] arr = new Integer[second.getCartObjectCollection().size()];
 
 		int cntr = 0;
 		for (CartObject c: second.getCartObjectCollection()){
 			arr[cntr++] = c.getId();
+			System.out.println(arr[cntr-1]);
 		}
-		Integer removedId = arr[0];
-		Integer remainingId = arr[arr.length-1];
-		
-		System.out.println(removedId);
-		System.out.println(remainingId);
 		
 		removeObjects(second.getId(), arr);
 		
 		Cart third = getCart(second.getId());	
 		
 		assertNotNull(third);
+		assertNotNull(third.getCartObjectCollection());
+		assertTrue(third.getCartObjectCollection().isEmpty());
 		System.out.println(third.getCartObjectCollection().size());
+		
 	
 	}
 	
