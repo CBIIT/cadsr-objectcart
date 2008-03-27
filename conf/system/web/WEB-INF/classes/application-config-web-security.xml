@@ -3,7 +3,7 @@
 
 <beans>
 	<!--@SECURITY_START@-->
-
+<!-- 
 	<bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
 		<property name="filterInvocationDefinitionSource">
 			<value>
@@ -94,7 +94,7 @@
 			</list>
 		</constructor-arg>
 	</bean>
-
+-->
 	<!--@SECURITY_END@-->	
 	
 </beans>
