@@ -32,7 +32,7 @@ public class POJOSerializer implements Serializer {
 			cob = marshalObject(cl, displayName, nativeId, ob);
 			return cob;
 		} catch (MarshalException me) {
-			throw new ObjectCartException("Marhaling Error while trying to convert object to CartObject", me);			
+			throw new ObjectCartException("Marshaling Error while trying to convert object to CartObject", me);			
 		} catch (ValidationException ve) {
 			throw new ObjectCartException("Validation Error while trying to convert object to CartObject", ve);	
 		}
