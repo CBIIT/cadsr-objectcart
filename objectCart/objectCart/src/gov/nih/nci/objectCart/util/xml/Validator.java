@@ -77,7 +77,7 @@ public class Validator {
 	}
 	
 	
-	private static String getSchema(String name) {
+	public static String getSchema(String name) {
 		
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());  
 		
