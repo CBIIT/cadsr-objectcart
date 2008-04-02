@@ -5,6 +5,7 @@ import java.util.List;
 
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.objectCart.util.ValidatorException;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
@@ -78,7 +79,7 @@ public interface ObjectCartService extends ApplicationService {
 	 * @return 
 	 * @throws ApplicationException
 	 */
-	public Cart addObjects(Integer cartId, Collection<CartObject> cartObjects) throws ApplicationException;
+	public Cart addObjects(Integer cartId, Collection<CartObject> cartObjects) throws ApplicationException, ValidatorException;
 	
 	/**
 	 * Takes a cartId of an existing cart and a CartObject. The method retrieves the cart using the 
@@ -90,7 +91,7 @@ public interface ObjectCartService extends ApplicationService {
 	 * @return 
 	 * @throws ApplicationException
 	 */
-	public Cart addObject(Integer cartId, CartObject cartObject) throws ApplicationException;
+	public Cart addObject(Integer cartId, CartObject cartObject) throws ApplicationException, ValidatorException;
 	
 	/**
 	 * Convenience method to support guest carts for a particular application.  Mainly to support users that

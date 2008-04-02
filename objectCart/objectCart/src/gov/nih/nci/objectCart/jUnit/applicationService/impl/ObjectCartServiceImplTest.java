@@ -11,6 +11,7 @@ import junit.framework.TestCase;
 import gov.nih.nci.objectCart.applicationService.ObjectCartService;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.objectCart.util.ValidatorException;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
@@ -353,6 +354,9 @@ public class ObjectCartServiceImplTest extends TestCase{
 		} catch (ApplicationException ae) {
 			ae.printStackTrace();
 			fail("Expire User Cart" +ae.getMessage());
+		}  catch (ValidatorException ae) {
+			ae.printStackTrace();
+			fail("Error During Validation" +ae.getMessage());
 		} 
 	
 	}
@@ -386,6 +390,9 @@ public class ObjectCartServiceImplTest extends TestCase{
 		} catch (ApplicationException ae) {
 			ae.printStackTrace();
 			fail("Expire User Cart" +ae.getMessage());
+		}  catch (ValidatorException ae) {
+			ae.printStackTrace();
+			fail("Error During Validation" +ae.getMessage());
 		} 
 	
 	}

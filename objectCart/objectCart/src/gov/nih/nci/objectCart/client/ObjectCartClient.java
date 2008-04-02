@@ -9,6 +9,7 @@ import gov.nih.nci.system.client.ApplicationServiceProvider;
 import gov.nih.nci.objectCart.applicationService.ObjectCartService;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.objectCart.util.ValidatorException;
 
 public class ObjectCartClient {
 	private ObjectCartService appService = null;
@@ -96,6 +97,8 @@ public class ObjectCartClient {
 			return appService.addObject(cart.getId(),ob);
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException("Error while trying to store object to Cart using ObjectCart service", ae);
+		} catch (ValidatorException ae) {
+			throw new ObjectCartException("Validation Error while trying to store object to Cart using ObjectCart service", ae);
 		}
 	}
 	
@@ -104,6 +107,8 @@ public class ObjectCartClient {
 			return appService.addObjects(cart.getId(),col);
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException("Error while trying to store object to Cart using ObjectCart service", ae);
+		} catch (ValidatorException ae) {
+			throw new ObjectCartException("Validation Error while trying to store object to Cart using ObjectCart service", ae);
 		}
 	}
 	
