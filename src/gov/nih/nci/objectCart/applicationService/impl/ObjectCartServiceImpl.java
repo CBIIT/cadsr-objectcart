@@ -13,6 +13,7 @@ import gov.nih.nci.objectCart.applicationService.ObjectCartService;
 import gov.nih.nci.objectCart.dao.CartDAO;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.objectCart.util.ValidatorException;
 import gov.nih.nci.objectCart.util.xml.Validator;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.impl.ApplicationServiceImpl;
@@ -107,7 +108,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		return carts;
 	}
 	
-	public Cart addObjects(Integer cartId, Collection<CartObject> cartObjects) throws ApplicationException {
+	public Cart addObjects(Integer cartId, Collection<CartObject> cartObjects) throws ApplicationException, ValidatorException {
 		
 		Cart cart = getCart(cartId);
 		
@@ -121,7 +122,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		return storeCart(cart);	
 	}
 	
-	public Cart addObject(Integer cartId, CartObject cartObject) throws ApplicationException {
+	public Cart addObject(Integer cartId, CartObject cartObject) throws ApplicationException, ValidatorException {
 		
 		Cart cart = getCart(cartId);
 		

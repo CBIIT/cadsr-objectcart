@@ -1,6 +1,8 @@
 package gov.nih.nci.objectCart.util.xml;
 
 import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.objectCart.util.PropertiesLoader;
+import gov.nih.nci.objectCart.util.ValidatorException;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
 import java.io.BufferedReader;
@@ -8,7 +10,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -33,7 +34,7 @@ public class Validator {
 	private static Logger log = Logger.getLogger(Validator.class.getName());
 	
 	public static void validateObject(CartObject cartObject)
-			throws ApplicationException {
+			throws ApplicationException, ValidatorException {
 		
 		if (!cartObject.getType().startsWith(":Serialized:") &&
 			!cartObject.getType().startsWith(":Test:") &&
@@ -68,7 +69,7 @@ public class Validator {
 			} catch (SAXException e) {
 				e.printStackTrace();
 				log.error("Error during validation");
-				throw new ApplicationException("Error During Validation", e);
+				throw new ValidatorException("Error During Validation", e);
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	            log.error("IOException in Validation");
@@ -78,11 +79,12 @@ public class Validator {
 	}
 	
 	
-	public static File getSchema(String name) {
+	public static File getSchema(String name) throws ApplicationException, ValidatorException {
 		
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());  
 		File schemaFile = null;
-		
+		String localContentLocation = PropertiesLoader.getProperty("path.local.content");
+		String GMEGridServiceLocation = PropertiesLoader.getProperty("service.grid.GME");
 		try { 
 
 			if (name.startsWith("gme://")) {
@@ -92,18 +94,18 @@ public class Validator {
 	            String filename = ii.getFileName();
 					
 				XMLDataModelService handle = 
-					(XMLDataModelService) GridServiceResolver.getInstance().getGridService("http://training02.cagrid.org:6080/wsrf/services/cagrid/GlobalModelExchange"); 
+					(XMLDataModelService) GridServiceResolver.getInstance().getGridService(GMEGridServiceLocation); 
 					
-				schemaFile = new File("localcontent"+ File.separator +filename);
+				schemaFile = new File(localContentLocation+ File.separator +filename);
 				
-				List namespaces = null;
 				if (!schemaFile.canRead()) 
-					namespaces = handle.cacheSchema(ns, new File("localcontent"));
+					handle.cacheSchema(ns, new File(localContentLocation));
+				
 			} else {
-				schemaFile = new File("localcontent"+ File.separator +name);
+				schemaFile = new File(localContentLocation+ File.separator +name);
 			}			
 		} catch (MobiusException e1) {
-				e1.printStackTrace(); 
+			throw new ValidatorException("Error while getting schema "+name, e1);
 		} 
 		
 		return schemaFile;

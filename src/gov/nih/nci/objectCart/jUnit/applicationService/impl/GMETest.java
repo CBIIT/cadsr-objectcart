@@ -18,91 +18,95 @@ import org.xml.sax.XMLReader;
 import junit.framework.TestCase;
 
 public class GMETest extends TestCase{
-	
-		public void test1()
-		{
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			factory.setValidating(false);
-			factory.setNamespaceAware(true);
 
-			SchemaFactory schemaFactory = SchemaFactory
-					.newInstance("http://www.w3.org/2001/XMLSchema");
-			
+	public void test1()
+	{
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		factory.setValidating(false);
+		factory.setNamespaceAware(true);
+
+		SchemaFactory schemaFactory = SchemaFactory
+		.newInstance("http://www.w3.org/2001/XMLSchema");
+		try {
 			File schema = Validator.getSchema("shiporder.xsd");
 			System.out.println(schema);
-			
-			try {
-				factory.setSchema(
-						schemaFactory.newSchema(schema));
-				
-				SAXParser parser = factory.newSAXParser();
-	
-				XMLReader reader = parser.getXMLReader();	
-				reader.setErrorHandler(new ValidationErrorHandler());	
-				StringReader strReader = new StringReader(Validator.readFileAsString(new File("localcontent"+File.separator+"shiporder.xml")));
-				InputSource inputSource = new InputSource(strReader);
-				reader.parse(inputSource);	
-			
-				strReader = new StringReader(exampleXML());
-			    inputSource = new InputSource(strReader);
-				reader.parse(inputSource);	
-				
-			} catch (SAXException se){	
-				se.printStackTrace();
-				fail("Parse Failure");
-			} catch (IOException ioe){	
-				ioe.printStackTrace();
-				fail("IO Failure");
-			} catch (ParserConfigurationException pce){	
-				pce.printStackTrace();
-				fail("Parse configuration Failure");
-			}
-		}
-		
-		public void test2()
-		{
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			factory.setValidating(false);
-			factory.setNamespaceAware(true);
+			factory.setSchema(
+					schemaFactory.newSchema(schema));
 
-			SchemaFactory schemaFactory = SchemaFactory
-					.newInstance("http://www.w3.org/2001/XMLSchema");
-			
+			SAXParser parser = factory.newSAXParser();
+
+			XMLReader reader = parser.getXMLReader();	
+			reader.setErrorHandler(new ValidationErrorHandler());	
+			StringReader strReader = new StringReader(Validator.readFileAsString(new File("localcontent"+File.separator+"shiporder.xml")));
+			InputSource inputSource = new InputSource(strReader);
+			reader.parse(inputSource);	
+
+			strReader = new StringReader(exampleXML());
+			inputSource = new InputSource(strReader);
+			reader.parse(inputSource);	
+
+		} catch (SAXException se){	
+			se.printStackTrace();
+			fail("Parse Failure");
+		} catch (IOException ioe){	
+			ioe.printStackTrace();
+			fail("IO Failure");
+		} catch (ParserConfigurationException pce){	
+			pce.printStackTrace();
+			fail("Parse configuration Failure");
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Error getting schema");
+		}
+	}
+
+	public void test2()
+	{
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		factory.setValidating(false);
+		factory.setNamespaceAware(true);
+
+		SchemaFactory schemaFactory = SchemaFactory
+		.newInstance("http://www.w3.org/2001/XMLSchema");
+		try {
 			File schema = Validator.getSchema("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata");
-			
-			System.out.println(schema);
-			
-			try {
-				factory.setSchema(
-						schemaFactory.newSchema(schema));
-				
-				SAXParser parser = factory.newSAXParser();
-	
-				XMLReader reader = parser.getXMLReader();	
-				reader.setErrorHandler(new ValidationErrorHandler());	
-				StringReader strReader = new StringReader(Validator.readFileAsString(new File("localcontent"+File.separator+"testCaGridService.xml")));
-				InputSource inputSource = new InputSource(strReader);
-				reader.parse(inputSource);	
 
-				strReader = new StringReader(exampleCaGridXML());
-			    inputSource = new InputSource(strReader);
-				reader.parse(inputSource);	
-				
-			} catch (SAXException se){	
-				se.printStackTrace();
-				fail("Parse Failure");
-			} catch (IOException ioe){	
-				ioe.printStackTrace();
-				fail("IO Failure");
-			} catch (ParserConfigurationException pce){	
-				pce.printStackTrace();
-				fail("Parse configuration Failure");
-			}
+
+			System.out.println(schema);
+
+			factory.setSchema(
+					schemaFactory.newSchema(schema));
+
+			SAXParser parser = factory.newSAXParser();
+
+			XMLReader reader = parser.getXMLReader();	
+			reader.setErrorHandler(new ValidationErrorHandler());	
+			StringReader strReader = new StringReader(Validator.readFileAsString(new File("localcontent"+File.separator+"testCaGridService.xml")));
+			InputSource inputSource = new InputSource(strReader);
+			reader.parse(inputSource);	
+
+			strReader = new StringReader(exampleCaGridXML());
+			inputSource = new InputSource(strReader);
+			reader.parse(inputSource);	
+
+		} catch (SAXException se){	
+			se.printStackTrace();
+			fail("Parse Failure");
+		} catch (IOException ioe){	
+			ioe.printStackTrace();
+			fail("IO Failure");
+		} catch (ParserConfigurationException pce){	
+			pce.printStackTrace();
+			fail("Parse configuration Failure");
+		}  catch (Exception e) {
+			e.printStackTrace();
+			fail("Error getting schema");
 		}
+	}
 	public static String exampleXML() {
-		
+
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
 		sb.append("<shiporder orderid=\"889923\"\n");
 		sb.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
@@ -128,7 +132,7 @@ public class GMETest extends TestCase{
 		sb.append("</shiporder>\n");
 		return sb.toString();
 	}
-	
+
 	public static String exampleCaGridXML() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -136,11 +140,11 @@ public class GMETest extends TestCase{
 		sb.append("<cagrid:ServiceMetadata xsi:schemaLocation=\"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata caGrid.caBIG-1.0_gov.nih.nci.cagrid.metadata.xsd\"" +
 				" xmlns:cagrid=\"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata\" " +
 				"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:com=\"gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common\">" +
-				"\n");
-		
+		"\n");
+
 		sb.append("<cagrid:serviceDescription/>\n");
 		sb.append("<cagrid:hostingResearchCenter>\n");
-		
+
 		sb.append("<com:ResearchCenter displayName=\"String\" shortName=\"String\">\n");
 		sb.append("	<com:Address street1=\"String\" country=\"String\"/>\n");
 		sb.append("	<com:ResearchCenterDescription homepageURL=\"String\" description=\"String\"/>\n");
@@ -150,12 +154,12 @@ public class GMETest extends TestCase{
 		sb.append("	</com:pointOfContactCollection>\n");
 		sb.append("</com:ResearchCenter>\n");
 		sb.append("</cagrid:hostingResearchCenter>\n");
-		
+
 		sb.append("</cagrid:ServiceMetadata>\n");
 
-		
-		
+
+
 		return sb.toString();
 	}
-	
+
 }
