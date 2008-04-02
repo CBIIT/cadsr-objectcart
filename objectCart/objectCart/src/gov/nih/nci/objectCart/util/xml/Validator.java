@@ -3,7 +3,9 @@ package gov.nih.nci.objectCart.util.xml;
 import gov.nih.nci.objectCart.domain.CartObject;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -16,12 +18,12 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
+import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
-import org.projectmobius.protocol.gme.SchemaNode;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -34,7 +36,8 @@ public class Validator {
 			throws ApplicationException {
 		
 		if (!cartObject.getType().startsWith(":Serialized:") &&
-			!cartObject.getType().startsWith(":Test:"))
+			!cartObject.getType().startsWith(":Test:") &&
+			!cartObject.getType().startsWith("http://"))
 		{
 			try {
 				SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -44,11 +47,9 @@ public class Validator {
 				SchemaFactory schemaFactory = SchemaFactory
 						.newInstance("http://www.w3.org/2001/XMLSchema");
 				
-				String schema = getSchema(cartObject.getType());
-				
 				factory.setSchema(
 						schemaFactory.newSchema(
-								new Source[] {new StreamSource(schema)} ));
+								new Source[] {new StreamSource(getSchema(cartObject.getType()))} ));
 	
 				SAXParser parser = factory.newSAXParser();
 	
@@ -77,37 +78,52 @@ public class Validator {
 	}
 	
 	
-	public static String getSchema(String name) {
+	public static File getSchema(String name) {
 		
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());  
+		File schemaFile = null;
 		
 		try { 
-			Namespace ns = new Namespace(name);
-			File f = new File("localcontent/"+name);
-		
-			XMLDataModelService handle = 
-				(XMLDataModelService) GridServiceResolver.getInstance().getGridService("http://dc04.bmi.ohio-state.edu:8080/ogsa/services/cagrid/gme"); 
-			List nodes = handle.cacheSchema(ns, f);
-			
-			String schema = constructSchema(nodes);
-			return schema;
-			
-			
+
+			if (name.startsWith("gme://")) {
+				Namespace ns = new Namespace(name);
+				ImportInfo ii= new ImportInfo(ns);
+				
+	            String filename = ii.getFileName();
+					
+				XMLDataModelService handle = 
+					(XMLDataModelService) GridServiceResolver.getInstance().getGridService("http://training02.cagrid.org:6080/wsrf/services/cagrid/GlobalModelExchange"); 
+					
+				schemaFile = new File("localcontent"+ File.separator +filename);
+				
+				List namespaces = null;
+				if (!schemaFile.canRead()) 
+					namespaces = handle.cacheSchema(ns, new File("localcontent"));
+			} else {
+				schemaFile = new File("localcontent"+ File.separator +name);
+			}			
 		} catch (MobiusException e1) {
 				e1.printStackTrace(); 
-		}
-		return null;
-	}
+		} 
 		
-	private static String constructSchema(List nodes) {
-		
-		for (Object o: nodes){
-			SchemaNode sn = (SchemaNode) o;
-			System.out.println("+++++++++++++++++++++");
-			System.out.println(sn.getSchemaContents());
-		}
-		return "";
+		return schemaFile;
 	}
+	
+    public static String readFileAsString(File file)
+    throws java.io.IOException{
+        StringBuilder fileData = new StringBuilder(1000);
+        BufferedReader reader = new BufferedReader(
+                new FileReader(file));
+        char[] buf = new char[1024];
+        int numRead=0;
+        while((numRead=reader.read(buf)) != -1){
+            String readData = String.valueOf(buf, 0, numRead);
+            fileData.append(readData);
+            buf = new char[1024];
+        }
+        reader.close();
+        return fileData.toString();
+    }
 }
 
 
