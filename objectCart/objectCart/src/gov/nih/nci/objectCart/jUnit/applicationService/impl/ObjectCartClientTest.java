@@ -18,9 +18,9 @@ public class ObjectCartClientTest extends TestCase{
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-
+		
 		try {
-			cartManager = new ObjectCartClient("unitTest");
+			cartManager = new ObjectCartClient("CDE Cart Classification: Test Classification");
 		} catch (Exception e) {
 			fail("Exception creating cart manager");
 		}		
@@ -153,7 +153,7 @@ public class ObjectCartClientTest extends TestCase{
 		String name = "testCreateCart Cart Name";
 		String userId = "testCreateCart Cart User";
 		
-		String type = "CDE Cart type";
+		String type = ":Test:CDE Cart type";
 		String dispName = "This is my Name";
 		String data = "Some data here";
 		
@@ -215,7 +215,7 @@ public class ObjectCartClientTest extends TestCase{
 		String name = "testAddCollection Cart Name";
 		String userId = "testAddCollection Cart User";
 		
-		String type = "CDE Cart type";
+		String type = ":Test:CDE Cart type";
 		String dispName = "This is my Name";
 		String data = "Some data here";
 		
@@ -281,7 +281,7 @@ public class ObjectCartClientTest extends TestCase{
 		printCart(secondCart);
 	}	
 	
-	private void printCart(Cart cart) {
+	public static void printCart(Cart cart) {
 		System.out.println("------------------------");
 		System.out.print("Id:         ");
 		System.out.println(cart.getId());
@@ -295,6 +295,8 @@ public class ObjectCartClientTest extends TestCase{
 		System.out.println(cart.getLastActive());
 		System.out.print("Expires:    ");
 		System.out.println(cart.getExpirationDate());
+		System.out.print("Classification Scheme Type:");
+		System.out.println(cart.getClassificationScheme().getType());
 		System.out.print("Contents:   ");
 		printContents(cart.getCartObjectCollection());
 		System.out.println("______________________");
@@ -302,7 +304,7 @@ public class ObjectCartClientTest extends TestCase{
 	
 	
 	
-	private void printContents(Collection<CartObject> objects) {
+	public static void printContents(Collection<CartObject> objects) {
 		
 		if (objects != null) {
 			System.out.println("Collection Size:"+objects.size());

@@ -13,6 +13,7 @@ import gov.nih.nci.objectCart.applicationService.ObjectCartService;
 import gov.nih.nci.objectCart.dao.CartDAO;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.objectCart.domain.ClassificationScheme;
 import gov.nih.nci.objectCart.util.ValidatorException;
 import gov.nih.nci.objectCart.util.xml.Validator;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -32,18 +33,21 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 	
 	public ObjectCartServiceImpl(ClassCache classCache,
 			Properties systemProperties) {
-		super(classCache, systemProperties);
-		
+		super(classCache, systemProperties);		
 	}
 	
-	public Cart getNewCart(String userId, String cartName) throws ApplicationException {		
+	public Cart getNewCart(String userId, String cartName, String classificationSchemeType) throws ApplicationException {		
 		Cart newCart = new Cart();	
 		
 		newCart.setUserId(userId);
 		newCart.setName(cartName);
 		
+		ClassificationScheme cs = new ClassificationScheme();
+		cs.setType(classificationSchemeType);
+		cs = getClassificationScheme(cs);
+		newCart.setClassificationScheme(cs);
 		List<Cart> carts = getNewCarts(newCart);
-		
+
 		if (carts.size() > 1)
 			throw new ApplicationException("More than one cart with that name/userId pairing exists (Expiration failure?)");
 		else if(carts.isEmpty())
@@ -55,6 +59,18 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 
 	}
 
+	public List<Cart> getClassificationSchemeCarts(String classificationSchemeType) throws ApplicationException {
+		Cart exampleCart = new Cart();	
+		ClassificationScheme cs = new ClassificationScheme();
+		
+		cs.setType(classificationSchemeType);
+		cs = getClassificationScheme(cs);
+		exampleCart.setClassificationScheme(cs);
+
+		List<Cart> carts = cartSearch(Cart.class, exampleCart);
+		return carts;
+	}
+	
 	public Cart getCart(Integer cartId) throws ApplicationException {
 		Cart newCart = new Cart();
 		newCart.setId(cartId);
@@ -86,11 +102,15 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		return getCarts(newCart);	
 	}
 
-	public Cart getCart(String userId, String cartName) throws ApplicationException {
+	public Cart getCart(String userId, String cartName, String classificationSchemeType) throws ApplicationException {
 		Cart newCart = new Cart();	
 
 		newCart.setUserId(userId);
 		newCart.setName(cartName);
+		ClassificationScheme cs = new ClassificationScheme();
+		cs.setType(classificationSchemeType);
+		cs = getClassificationScheme(cs);
+		newCart.setClassificationScheme(cs);
 		
 		List<Cart> carts = getCarts(newCart);	
 		
@@ -338,6 +358,17 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		}
 	}
 
+	private ClassificationScheme getClassificationScheme(ClassificationScheme example) throws ApplicationException {
+		
+		List<Object> objects  = search(ClassificationScheme.class, example);
+		
+		if (objects.size() > 1) 
+			throw new ApplicationException("Search for Classification Scheme by type returned more than one result.");
+		else 
+			return (ClassificationScheme) objects.get(0);
+		
+	}
+	
 	private Date now(long add) {
 		return new Date(System.currentTimeMillis()+add);
 	}

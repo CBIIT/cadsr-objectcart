@@ -9,17 +9,15 @@ import gov.nih.nci.system.client.ApplicationServiceProvider;
 import gov.nih.nci.objectCart.applicationService.ObjectCartService;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.objectCart.domain.ClassificationScheme;
 import gov.nih.nci.objectCart.util.ValidatorException;
 
 public class ObjectCartClient {
 	private ObjectCartService appService = null;
-	private String appSuite = "";
-	private POJOSerializer pojoSerializer = null;
+	private String csType = "";
 	
-	public ObjectCartClient(String appSuiteName) throws ObjectCartException {
-		appSuite = appSuiteName+":Guest:";
-		pojoSerializer = POJOSerializer.getInstance();
-		
+	public ObjectCartClient(String classificationSchemeType) throws ObjectCartException {
+		csType = classificationSchemeType;
 		try {
 			appService = (ObjectCartService) ApplicationServiceProvider
 					.getApplicationService();
@@ -31,7 +29,7 @@ public class ObjectCartClient {
 
 	public Cart createCart(String userId, String cartName) throws ObjectCartException {
 		try {
-			return appService.getNewCart(userId, cartName);
+			return appService.getNewCart(userId, cartName, csType);
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to get new cart from ObjectCart service", ae);
@@ -47,18 +45,9 @@ public class ObjectCartClient {
 		}
 	}
 	
-	public Cart createGuestCart(String userId) throws ObjectCartException {
-		try {
-			return appService.getNewCart(userId, appSuite);
-		} catch (ApplicationException ae) {
-			throw new ObjectCartException(
-					"Error while trying to get new guest cart from ObjectCart service", ae);
-		}
-	}
-	
 	public Cart retrieveCart(String userId, String cartName) throws ObjectCartException {
 		try {
-			return appService.getCart(userId, cartName);
+			return appService.getCart(userId, cartName, csType);
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to get user cart from ObjectCart service", ae);
@@ -71,15 +60,6 @@ public class ObjectCartClient {
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to get user carts from ObjectCart service", ae);
-		}
-	}
-	
-	public List<Cart> retrieveGuestCarts(String userId) throws ObjectCartException {
-		try {
-			return appService.getCartsByName(appSuite+userId);
-		} catch (ApplicationException ae) {
-			throw new ObjectCartException(
-					"Error while trying to get guest carts from ObjectCart service", ae);
 		}
 	}
 	
@@ -113,7 +93,7 @@ public class ObjectCartClient {
 	}
 	
 	public Cart storePOJO(Cart cart, Class cl, String objectDisplayName, String nativeId, Object pOb) throws ObjectCartException {
-		CartObject cartObject = pojoSerializer.serializeObject(cl, objectDisplayName, nativeId, pOb);
+		CartObject cartObject = POJOSerializer.getInstance().serializeObject(cl, objectDisplayName, nativeId, pOb);
 		return storeObject(cart, cartObject);
 	}
 	
