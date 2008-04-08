@@ -45,7 +45,7 @@ public class POJOSerializer implements Serializer {
 			return pob;
 
 		} catch (MarshalException me) {
-			throw new ObjectCartException("Marhaling Error while trying to convert CartObject to " + cl.getName(), me);			
+			throw new ObjectCartException("Marshaling Error while trying to convert CartObject to " + cl.getName(), me);			
 		} catch (ValidationException ve) {
 			throw new ObjectCartException("Validation Error while trying to convert CartObject to " + cl.getName(), ve);	
 		}
