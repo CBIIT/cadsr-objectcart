@@ -86,14 +86,10 @@
 				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
 			</manifest>
 			<include name="gov/nih/nci/objectCart/client/**/*" />
-			<include name="gov/nih/nci/objectCart/applicationService/*" />
-			<include name="gov/nih/nci/objectCart/query/**/*" />
-			<include name="gov/nih/nci/objectCart/dao/*Exception*.*" />
+			<include name="gov/nih/nci/objectCart/applicationService/**/*" />
 			<fileset dir="${src.dir}">
 				<include name="gov/nih/nci/objectCart/client/**/*" />
-				<include name="gov/nih/nci/objectCart/applicationService/*" />
-				<include name="gov/nih/nci/objectCart/query/**/*" />
-				<include name="gov/nih/nci/objectCart/dao/*Exception*.*" />
+				<include name="gov/nih/nci/objectCart/applicationService/**/*" />
 			</fileset>
 		</jar>
 
@@ -102,15 +98,16 @@
 				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
 			</manifest>
 			<include name="gov/nih/nci/objectCart/dao/**/*" />
+			<include name="gov/nih/nci/objectCart/dao/orm/**/*" />
 			<include name="gov/nih/nci/objectCart/applicationService/impl/**/*" />
 			<include name="gov/nih/nci/objectCart/util/**/*" />
-			<exclude name="gov/nih/nci/objectCart/dao/*Exception*.*" />
-			<include name="gov/nih/nci/objectCart/security/**/*" />
+			<include name="gov/nih/nci/objectCart/util/xml/**/*" />		
 			<fileset dir="${src.dir}">
 				<include name="gov/nih/nci/objectCart/dao/**/*" />
+				<include name="gov/nih/nci/objectCart/dao/orm/**/*" />
 				<include name="gov/nih/nci/objectCart/applicationService/impl/**/*" />
 				<include name="gov/nih/nci/objectCart/util/**/*" />
-				<exclude name="gov/nih/nci/objectCart/dao/*Exception*.*" />
+				<include name="gov/nih/nci/objectCart/util/xml/**/*" />
 			</fileset>
 		</jar>
 
