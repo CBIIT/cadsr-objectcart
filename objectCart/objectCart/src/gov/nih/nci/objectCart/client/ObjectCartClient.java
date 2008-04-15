@@ -1,15 +1,16 @@
 package gov.nih.nci.objectCart.client;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
 import gov.nih.nci.objectCart.applicationService.ObjectCartService;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
-import gov.nih.nci.objectCart.domain.ClassificationScheme;
 import gov.nih.nci.objectCart.util.ValidatorException;
 
 public class ObjectCartClient {
@@ -95,6 +96,28 @@ public class ObjectCartClient {
 	public Cart storePOJO(Cart cart, Class cl, String objectDisplayName, String nativeId, Object pOb) throws ObjectCartException {
 		CartObject cartObject = POJOSerializer.getInstance().serializeObject(cl, objectDisplayName, nativeId, pOb);
 		return storeObject(cart, cartObject);
+	}
+	
+	public Cart storePOJOCollection (Cart cart, Class cl, Map<String,String> objectDisplayNames, Map<String,Object> objects) throws ObjectCartException {
+		Collection<CartObject> clist = new ArrayList<CartObject>();
+		for (Object key: objectDisplayNames.keySet().toArray()){
+			String id = (String) key;
+			clist.add(POJOSerializer.getInstance().serializeObject(cl, objectDisplayNames.get(id), id, objects.get(id)));
+		}
+		
+		return storeObjectCollection(cart, clist);
+	}
+	
+	public Object getPOJO(Class cl, CartObject cob) throws ObjectCartException {
+		return POJOSerializer.getInstance().deserializeObject(cl, cob);
+	}
+	
+	public Collection<Object> getPOJOCollection(Class cl, Collection<CartObject> col) throws ObjectCartException {
+		Collection<Object> clist = new ArrayList<Object>();
+		for (CartObject cob: col){
+			clist.add(POJOSerializer.getInstance().deserializeObject(cl, cob));
+		}
+		return clist;
 	}
 	
 	public Cart storeCustomObject(Cart cart, Class cl, String objectDisplayName, String nativeId, Object pOb, Serializer customSerializer) throws ObjectCartException {
