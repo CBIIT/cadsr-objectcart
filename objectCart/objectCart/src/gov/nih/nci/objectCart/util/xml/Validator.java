@@ -36,6 +36,7 @@ public class Validator {
 	public static void validateObject(CartObject cartObject)
 			throws ApplicationException, ValidatorException {
 		
+		//TODO: remove Hard Coded values and use properties file for filtering.
 		if (!cartObject.getType().startsWith(":Serialized:") &&
 			!cartObject.getType().startsWith(":Test:") &&
 			!cartObject.getType().startsWith("http://"))
