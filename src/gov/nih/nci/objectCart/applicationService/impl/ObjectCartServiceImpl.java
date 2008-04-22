@@ -14,6 +14,7 @@ import gov.nih.nci.objectCart.dao.CartDAO;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
 import gov.nih.nci.objectCart.domain.ClassificationScheme;
+import gov.nih.nci.objectCart.util.PropertiesLoader;
 import gov.nih.nci.objectCart.util.ValidatorException;
 import gov.nih.nci.objectCart.util.xml.Validator;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -67,7 +68,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		cs = getClassificationScheme(cs);
 		exampleCart.setClassificationScheme(cs);
 
-		List<Cart> carts = cartSearch(Cart.class, exampleCart);
+		List<Cart> carts = cartSearch(exampleCart);
 		return carts;
 	}
 	
@@ -75,7 +76,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		Cart newCart = new Cart();
 		newCart.setId(cartId);
 		
-		List<Cart> carts = cartSearch(Cart.class, newCart);
+		List<Cart> carts = cartSearch(newCart);
 		
 		if (carts.size() > 1)
 			throw new ApplicationException("More than one cart with that ID exists (SHOULD NOT HAPPEN)");
@@ -123,7 +124,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 	}
 	
 	private List<Cart> getCarts(Cart example) throws ApplicationException {
-		List<Cart> carts = cartSearch(Cart.class, example);
+		List<Cart> carts = cartSearch(example);
 					
 		return carts;
 	}
@@ -171,7 +172,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 	}
 	
 	private Cart associateCart(Cart cart, String userId) throws ApplicationException {
-		List<Cart> carts = cartSearch(Cart.class, cart);
+		List<Cart> carts = cartSearch(cart);
 		
 		if (carts.size() > 1)
 			throw new ApplicationException("More than one cart with that name/guestId pairing exists");
@@ -196,17 +197,18 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 	}
 
 	private Cart createCart(Cart newCart) throws ApplicationException {
-			
-		Date now = now(0);
-		newCart.setExpirationDate(now(24*60*60*1000));
+		int expirationInSeconds;	
+		expirationInSeconds = Integer.valueOf(PropertiesLoader.getProperty("cart.time.expiration.minutes"));
+		Date now = now(0);		
+		newCart.setExpirationDate(now(expirationInSeconds*60*1000));
 		newCart.setCreationTime(now);
-		newCart.setLastActive(now);
 		
 		return storeCart(newCart);
 	}
 	
 	private Cart storeCart(Cart cart) throws ApplicationException, DAOException {
 		
+		cart.setLastActive(now(0));
 		CartDAO dao = (CartDAO) getClassCache().getDAOForClass(cart.getClass().getCanonicalName());
 		
 		if(dao == null)
@@ -228,27 +230,10 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		}
 	}
 	
-	private List<Cart> cartSearch(Class cl, Object obj) throws ApplicationException {
-		//TODO Change class so it performs expiration date filter on DB side	
-		List<Object> objects  = search(cl, obj);
-		List<Cart> carts = new ArrayList<Cart>();
-		
-		for (Object o: objects) {
-			if (o instanceof Cart){
-				Cart c = (Cart) o;
-				//Return only non-expired carts
-				if (c.getExpirationDate().after(now(0)))
-					carts.add(c);
-			}
-			else 
-				throw new ApplicationException("Search for cart returned other than cart.  (Should not happen)");
-		}
-		return carts;		
-	}
 	
 	private void expireCart(Cart cart) throws ApplicationException {
 		
-		cart.setExpirationDate(now(-1));
+		cart.setExpirationDate(now(-1000));
 		storeCart(cart);
 	}
 
@@ -337,6 +322,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		
 	private Cart updateCart(Cart cart) throws ApplicationException, DAOException {
 		
+		cart.setLastActive(now(0));
 		CartDAO dao = (CartDAO) getClassCache().getDAOForClass(cart.getClass().getCanonicalName());
 	
 		if(dao == null)
@@ -345,6 +331,29 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		try
 		{
 			return dao.updateCart(cart);
+			 
+		} catch(DAOException daoException) {
+			log.error("Error while getting and storing Cart in DAO",daoException);
+			throw daoException;
+		} catch (ApplicationException e1) {
+			log.fatal("Unable to locate Service Locator :",e1);
+			throw new ApplicationException("Unable to locate Service Locator :",e1);
+		} catch(Exception exception) {
+			log.error("Exception while getting datasource information "+ exception.getMessage());
+			throw new ApplicationException("Exception in Base Delegate while getting datasource information: ", exception);
+		}
+	}
+	
+	private List<Cart> cartSearch(Cart cart) throws ApplicationException, DAOException {
+		
+		CartDAO dao = (CartDAO) getClassCache().getDAOForClass(cart.getClass().getCanonicalName());
+	
+		if(dao == null)
+			throw new ApplicationException("Could not obtain DAO for: "+cart.getClass().getCanonicalName());
+		
+		try
+		{
+			return dao.cartSearch(cart);
 			 
 		} catch(DAOException daoException) {
 			log.error("Error while getting and storing Cart in DAO",daoException);
