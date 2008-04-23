@@ -38,7 +38,7 @@ public class ObjectCartClient {
 		csType = classificationSchemeType;
 		try {
 			appService = (ObjectCartService) ApplicationServiceProvider
-					.getApplicationService();
+					.getApplicationService("objectCartServiceInfo");
 		} catch (Exception e) {
 			throw new ObjectCartException(
 					"ObjectCartClient: Error retrieving application service from provider.", e);

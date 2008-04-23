@@ -93,10 +93,10 @@ public class ObjectCartClientTest extends TestCase{
 		}
 		
 		try {
+			//This should throw exception
 			secondCart = cartManager.retrieveCart(cart.getUserId(), cart.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Exception retrieving cart");
 		}
 		
 		assertNull(secondCart);	

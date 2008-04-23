@@ -5,7 +5,7 @@
 	<import resource="application-config-security.xml"/>	
 	
 	<!-- Used only by the client and not the server components -->
-	<bean id="ServiceInfo" class="java.util.HashMap">
+	<bean id="objectCartServiceInfo" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
 				<entry key="APPLICATION_SERVICE_BEAN" value="applicationService" />

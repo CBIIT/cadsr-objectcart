@@ -30,7 +30,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		as = ApplicationServiceProvider.getApplicationService();
+		as = ApplicationServiceProvider.getApplicationService("objectCartServiceInfo");
 		ocs = (ObjectCartService) as;
 		setupTime = (new Date(System.currentTimeMillis())).toString();
 	
