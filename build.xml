@@ -112,5 +112,32 @@
 		</jar>
 
 	</target>
+	
+	<!--***********************************************************************
+			*** Create server war
+			*********************************************************************** -->
+		<target name="package-webapp" depends="dist">
+				<SDKecho message="${ant.project.name}: Packaging the server"/>
+				<war destfile="${dist.dir}/objectCart.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+					<lib dir="${dist.dir}" includes="*.jar"/>
+					<lib dir="${lib.dir}" includes="*.jar"/>
+					<lib dir="system/${lib.dir}" includes="*.jar">
+						<exclude name="${server-exclude-list}"/>
+						<exclude name="servlet.jar"/>
+						<exclude name="commons-logging*.*"/>
+						<exclude name="xercesImpl*.*"/>		
+					</lib>
+					<fileset dir="${conf.dir}/system/web">
+						<include name="**/*"/>
+						<exclude name="**/web.xml"/>
+					</fileset>
+					<fileset dir="${web.dir}">
+						<include name="**/*"/>
+					</fileset>
+					<fileset dir=".">
+						<include name="docs/**/*"/>
+					</fileset>
+				</war>
+			</target>
 
 </project>
