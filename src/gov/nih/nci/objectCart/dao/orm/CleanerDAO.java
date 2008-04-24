@@ -6,33 +6,47 @@ import org.apache.log4j.Logger;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 public class CleanerDAO extends HibernateDaoSupport {
+
+	private static Logger log = Logger.getLogger(CleanerDAO.class.getName());	
+	private static SessionFactory sessionFactory = null;
 	
-	private static Logger log = Logger.getLogger(CleanerDAO.class.getName());
-	
-	
+	private static void setFactory() {
+		try {
+			// Create the SessionFactory from hibernate.cfg.xml
+			sessionFactory = new Configuration().configure().buildSessionFactory();
+		} catch (Throwable ex) {
+			// Make sure you log the exception, as it might be swallowed
+			log.error("Initial SessionFactory creation failed." + ex);
+			throw new ExceptionInInitializerError(ex);
+		}
+	}
 	public void clean()
 	{
+		if (sessionFactory == null) {
+			setFactory();
+			this.setSessionFactory(sessionFactory);
+		}
 		Session session = getSession();
 		Transaction tx = session.beginTransaction();
-		
-		StringBuilder query = new StringBuilder();
-		query.append("delete from Cart where");
 
+		//REQUIRES ON-DELETE Cascade support in underlying database on the 
+		//CartObject cart_id FK constraint
+		Query cartQuery = session.createQuery("delete from Cart " +
+				"where expirationDate <=:expirationDate");
 		
-		
-		query.append(" EXPIRATION_DATE <= :expirationDate");	
-		Query q = session.createQuery(query.toString());
-		Timestamp now = new Timestamp(System.currentTimeMillis());
-		q.setTimestamp("expirationDate", now );
+		Timestamp now = new Timestamp(System.currentTimeMillis());	
+		cartQuery.setTimestamp("expirationDate", now );		
 		
 		try
-		{
-			int results = q.executeUpdate();
-			log.info("Cleaner thread ran and deleted "+results+" carts at "+now.toString());
+		{	
+			int results = cartQuery.executeUpdate();
+			log.info("Deleted "+results+" carts at "+now.toString());
 			
 		} catch (JDBCException ex){
 			log.error("JDBC Exception in ORMDAOImpl ", ex);
@@ -56,5 +70,5 @@ public class CleanerDAO extends HibernateDaoSupport {
 			}
 		}
 	}
-	
+
 }
