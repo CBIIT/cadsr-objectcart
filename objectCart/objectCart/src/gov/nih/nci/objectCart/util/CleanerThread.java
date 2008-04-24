@@ -14,8 +14,7 @@ public class CleanerThread extends Thread {
 		try {
 			temp = Long.getLong(PropertiesLoader.getProperty("cart.cleaner.sleep.seconds"));
 		} catch (ApplicationException ae) {
-			log.error(ae.getMessage());
-			ae.printStackTrace();
+			log.error(ae);
 		}
 		
 		if (temp != 0)
@@ -24,7 +23,7 @@ public class CleanerThread extends Thread {
 		while (true) {
 			try {
 				cleaner.clean();
-				Thread.sleep(secs);
+				Thread.sleep(secs*1000);
 			} catch (InterruptedException ie){
 				log.fatal(ie.getMessage());
 				ie.printStackTrace();	
