@@ -157,12 +157,12 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		return storeCart(cart);	
 	}
 	
-	public Cart associateCart(String guestId, String userId, String cartName) throws ApplicationException {
+	public Cart associateCart(String newUserId, String oldUserId, String cartName) throws ApplicationException {
 		Cart newCart = new Cart();
 		newCart.setName(cartName);
-		newCart.setUserId(guestId);
+		newCart.setUserId(oldUserId);
 		
-		return associateCart(newCart, userId);
+		return associateCart(newCart, newUserId);
 		
 	}
 	
@@ -171,7 +171,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		expireCart(cart);
 	}
 	
-	private Cart associateCart(Cart cart, String userId) throws ApplicationException {
+	private Cart associateCart(Cart cart, String newUserId) throws ApplicationException {
 		List<Cart> carts = cartSearch(cart);
 		
 		if (carts.size() > 1)
@@ -181,7 +181,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		else 
 			cart = carts.get(0);
 		
-		cart.setUserId(userId);
+		cart.setUserId(newUserId);
 		
 		return storeCart(cart);
 		

@@ -109,16 +109,16 @@ public interface ObjectCartService extends ApplicationService {
 	 * Convenience method to support guest carts for a particular application.  Mainly to support users that
 	 * are in the process of getting an ID with the SSO or whichever authentication system the over-arching
 	 * application is using.  Also supports temporary carts through the "guest" account.
-	 * It takes a guestId, the cart name and a user ID that the existing guest cart will finally be associated with.
+	 * It takes a new UserId, the cart name and a old userID that the existing guest cart will finally be associated with.
 	 * Method returns the updated cart to the requester.
 	 * 
-	 * @param guestId
+	 * @param newUserId
 	 * @param userId
 	 * @param cartName
 	 * @return 
 	 * @throws ApplicationException
 	 */
-	public Cart associateCart(String guestId, String userId, String cartName) throws ApplicationException;
+	public Cart associateCart(String newUserId, String oldUserId, String cartName) throws ApplicationException;
 	
 	
 	/**
