@@ -10,8 +10,7 @@
 			/WEB-INF/classes/application-config-web-security.xml
 		</param-value>
 	</context-param>
-	
-    
+
 	<filter> 
 		<filter-name>struts2</filter-name> 
 		<filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
@@ -46,12 +45,18 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
+	<listener>
+    	<listener-class>
+     		gov.nih.nci.objectCart.util.ExpiredCartCleaner
+    	</listener-class>
+    </listener>
     <servlet>
 		<servlet-name>httpinvoker</servlet-name>
 		<servlet-class>
 			org.springframework.web.servlet.DispatcherServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
+		
 	</servlet>	
 
 	<servlet>
