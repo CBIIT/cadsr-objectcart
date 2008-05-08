@@ -353,8 +353,15 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		
 		try
 		{
-			return dao.cartSearch(cart);
-			 
+			List<Cart> carts = dao.cartSearch(cart);
+			
+			for (Cart c: carts){
+				c.setLastActive(now(0));
+				updateCart(c);
+			}
+			
+			return carts;
+			
 		} catch(DAOException daoException) {
 			log.error("Error while getting and storing Cart in DAO",daoException);
 			throw daoException;

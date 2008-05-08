@@ -5,16 +5,17 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import org.apache.log4j.Logger;
 
 public class CleanerThread extends Thread {
-	long secs = 600;
+	private long secs = 600;
 	private static Logger log = Logger.getLogger(CleanerThread.class.getName());
 	
 	public void run() {
 		long temp = 0;
 		CleanerDAO cleaner = new CleanerDAO();
 		try {
-			temp = Long.getLong(PropertiesLoader.getProperty("cart.cleaner.sleep.seconds"));
-		} catch (ApplicationException ae) {
+			temp = Long.valueOf(PropertiesLoader.getProperty("cart.cleaner.sleep.seconds"));
+		} catch (Exception ae) {
 			log.error(ae);
+			ae.printStackTrace();
 		}
 		
 		if (temp != 0)
