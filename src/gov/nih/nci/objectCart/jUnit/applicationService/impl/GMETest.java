@@ -17,7 +17,7 @@ import org.xml.sax.XMLReader;
 
 import junit.framework.TestCase;
 
-public class GMETest extends TestCase{
+public class GMETest extends TestCase {
 
 	public void test1()
 	{
