@@ -177,7 +177,7 @@ public class ObjectCartClient {
 	/**
 	 * Takes an existing cart, an Object plainObject of type classToSerialize, the objectDisplayName and the nativeId of the object. 
 	 * The method uses the included POJOSerializer.serializeObject method to serialize the contents of the plainObject
-	 * and store the resulting CartObject with the storeObject method.
+	 * and store the resulting CartObject with the storeObject method by using the existing storeCustomObject method.
 	 * 
 	 * @param cart
 	 * @param classToSerialize
@@ -188,15 +188,17 @@ public class ObjectCartClient {
 	 * @throws ObjectCartException
 	 */
 	public Cart storePOJO(Cart cart, Class classToSerialize, String objectDisplayName, String nativeId, Object plainObject) throws ObjectCartException {
-		CartObject cartObject = POJOSerializer.getInstance().serializeObject(classToSerialize, objectDisplayName, nativeId, plainObject);
-		return storeObject(cart, cartObject);
+		//CartObject cartObject = POJOSerializer.getInstance().serializeObject(classToSerialize, objectDisplayName, nativeId, plainObject);
+		//return storeObject(cart, cartObject);
+		return storeCustomObject(cart, classToSerialize, objectDisplayName, nativeId, plainObject, POJOSerializer.getInstance());
 	}
 
 	/**
 	 * Takes an existing cart, a Map<String,Object> of objects of type classToSerialize, 
 	 * and a Map<String,String> of objectDisplayNames. The keys in both Maps are nativeId's of objects to be serialized.
 	 * The method uses the included POJOSerializer.serializeObject method to serialize the contents of the object Map
-	 * and store the resulting CartObject collection with the storeObjectCollection method.
+	 * and store the resulting CartObject collection with the storeObjectCollection method. It utilizes the existing 
+	 * storeCustomObjectCollection method.
 	 * 
 	 * @param cart
 	 * @param cl
@@ -206,13 +208,7 @@ public class ObjectCartClient {
 	 * @throws ObjectCartException
 	 */
 	public Cart storePOJOCollection (Cart cart, Class classToSerialize, Map<String,String> objectDisplayNames, Map<String,Object> objects) throws ObjectCartException {
-		Collection<CartObject> clist = new ArrayList<CartObject>();
-		for (Object key: objectDisplayNames.keySet().toArray()){
-			String id = (String) key;
-			clist.add(POJOSerializer.getInstance().serializeObject(classToSerialize, objectDisplayNames.get(id), id, objects.get(id)));
-		}
-
-		return storeObjectCollection(cart, clist);
+		return storeCustomObjectCollection(cart, classToSerialize, objectDisplayNames, objects, POJOSerializer.getInstance());		
 	}
 
 	/**
@@ -267,6 +263,33 @@ public class ObjectCartClient {
 		return storeObject(cart, cartObject);
 	}
 
+	
+	/**
+	 * Takes an existing cart, a Map<String,Object> of objects of type classToSerialize, 
+	 * a Map<String,String> of objectDisplayNames and a customSerializer. The keys in both Maps are nativeId's of objects to be serialized.
+	 * The method uses the included POJOSerializer.serializeObject method to serialize the contents of the object Map
+	 * and store the resulting CartObject collection with the storeObjectCollection method.
+	 * The method then uses the Serializer.serializeObject method to serialize the contents of the plainObject
+	 * and store the resulting CartObject with the storeObject method.
+	 * 
+	 * @param cart
+	 * @param cl
+	 * @param objectDisplayNames
+	 * @param objects
+	 * @param customSerializer
+	 * @return Cart
+	 * @throws ObjectCartException
+	 */
+	
+	public Cart storeCustomObjectCollection (Cart cart, Class classToSerialize, Map<String,String> objectDisplayNames, Map<String,Object> objects, Serializer customSerializer) throws ObjectCartException {
+		Collection<CartObject> clist = new ArrayList<CartObject>();
+		for (Object key: objectDisplayNames.keySet().toArray()){
+			String id = (String) key;
+			clist.add(customSerializer.serializeObject(classToSerialize, objectDisplayNames.get(id), id, objects.get(id)));
+		}
+		return storeObjectCollection(cart, clist);		
+	}
+	
 	/**
 	 * The method takes a Cart and a CartObject and passes them to the service for removal 
 	 * of CartObject from the CartObjectCollection associated with that Cart.
@@ -328,9 +351,9 @@ public class ObjectCartClient {
 	}
 
 	
-	public Cart associateCart(Cart cart, String guestId) throws ObjectCartException {
+	public Cart associateCart(Cart cart, String newId) throws ObjectCartException {
 		try {
-			return appService.associateCart(guestId, cart.getUserId(), cart.getName());
+			return appService.associateCart(newId, cart.getUserId(), cart.getName());
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException("Error while trying to associate cart using ObjectCart service", ae);
 		}
