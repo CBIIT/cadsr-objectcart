@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="classes/" kind="src" path="conf/system/web/WEB-INF"/>
+	<classpathentry excluding="hibernate.cfg.xml|system/package/local-client/conf/|system/web/WEB-INF/|system/web/WEB-INF/classes/" kind="src" path="conf"/>
 	<classpathentry kind="src" path="conf/system/web/WEB-INF/classes"/>
 	<classpathentry kind="src" path="conf/system/package/local-client/conf"/>
 	<classpathentry kind="lib" path="system/lib/acegi-security-1.0.4.jar"/>
 	<classpathentry kind="lib" path="system/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="system/lib/asm.jar"/>
-	<classpathentry kind="lib" path="system/lib/axis.jar"/>
 	<classpathentry kind="lib" path="system/lib/c3p0-0.9.0.jar"/>
-	<classpathentry kind="lib" path="system/lib/castor-1.0.2.jar"/>
 	<classpathentry kind="lib" path="system/lib/cglib-2.1.3.jar"/>
 	<classpathentry kind="lib" path="system/lib/clm.jar"/>
 	<classpathentry kind="lib" path="system/lib/commons-codec-1.3.jar"/>
@@ -38,17 +38,24 @@
 	<classpathentry kind="lib" path="system/lib/xwork-2.0-beta-1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="system/dist/sdk-core.jar"/>
 	<classpathentry kind="lib" path="lib/objectCart-beans.jar"/>
 	<classpathentry kind="lib" path="lib/objectCart-orm.jar"/>
-	<classpathentry kind="lib" path="system/dist/sdk-client-framework.jar"/>
 	<classpathentry kind="lib" path="system/lib/GlobalModelExchange.jar"/>
-	<classpathentry kind="lib" path="system/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="system/lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="system/lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="system/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="system/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="system/dist/sdk-web-framework.jar"/>
-	<classpathentry kind="lib" path="system/dist/sdk-ws-framework.jar"/>
+	<classpathentry kind="lib" path="lib/sdk-client-framework.jar"/>
+	<classpathentry kind="lib" path="lib/sdk-core.jar"/>
+	<classpathentry kind="lib" path="lib/sdk-web-framework.jar"/>
+	<classpathentry kind="lib" path="lib/sdk-ws-framework.jar"/>
+	<classpathentry kind="lib" path="lib/activation.jar"/>
+	<classpathentry kind="lib" path="lib/mail.jar"/>
+	<classpathentry kind="lib" path="system/lib/castor-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/mobius-castor-0.9.4.3-xml.jar"/>
+	<classpathentry kind="lib" path="lib/axis.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_factories-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_mako_client-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/addressing-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/caGrid-1.1-GlobalModelExchange-stubs.jar"/>
 	<classpathentry kind="output" path="cartbuild"/>
 </classpath>
