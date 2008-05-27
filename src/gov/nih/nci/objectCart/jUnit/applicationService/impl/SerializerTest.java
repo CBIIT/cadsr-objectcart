@@ -48,7 +48,7 @@ public class SerializerTest extends TestCase{
 		CartObject input = new CartObject();
 		CartObject output = null;
 		
-		input.setDisplayName(dispName);
+		input.setDisplayText(dispName);
 		input.setDateAdded(new Date());
 		input.setId(234);
 		input.setData(data);
@@ -71,7 +71,7 @@ public class SerializerTest extends TestCase{
 				output = (CartObject) o;
 			
 			
-			assertEquals(output.getDisplayName(), input.getDisplayName());
+			assertEquals(output.getDisplayText(), input.getDisplayText());
 			assertEquals(output.getId(),input.getId());
 			assertEquals(output.getData(),input.getData());
 			assertEquals(output.getType(), input.getType());

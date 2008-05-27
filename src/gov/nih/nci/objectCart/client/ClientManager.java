@@ -13,12 +13,12 @@ import java.util.Map;
 public class ClientManager {
 
 	private Map<String,ObjectCartClient> clients;
-	
+	private boolean initialized = false;
 	// Private constructor suppresses generation of a (public) default constructor
 	private ClientManager() {}
 	
 	/**
-	 * SingletonHolder is loaded on the first execution of CartManager.getInstance() 
+	 * SingletonHolder is loaded on the first execution of ClientManager.getInstance() 
 	 * or the first access to SingletonHolder.instance , not before.
 	 */
 	private static class SingletonHolder { 
@@ -44,6 +44,7 @@ public class ClientManager {
 				temp.put(cScheme, new ObjectCartClient(cScheme));
 			}
 			clients = temp;
+			initialized = true;
 		} else throw new ObjectCartException("Initializing manager more than once");
 	}
 
@@ -56,5 +57,9 @@ public class ClientManager {
 	 */
 	public ObjectCartClient getClient(String classificationScheme) {
 		return clients.get(classificationScheme);
+	}
+	
+	public boolean isInitialized() {
+		return initialized;	
 	}
 }

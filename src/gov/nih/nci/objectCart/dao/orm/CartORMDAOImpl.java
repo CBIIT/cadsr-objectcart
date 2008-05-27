@@ -75,7 +75,7 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 		Transaction t = session.beginTransaction();
 		try
 		{
-			newCart.setLastActive(new Date(System.currentTimeMillis()));
+			newCart.setLastWriteDate(new Date(System.currentTimeMillis()));
 			session.update(newCart);
 
 		} catch (JDBCException ex){
@@ -125,10 +125,10 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 				query.append(" NAME = :name");
 				andCntr++;
 			}
-			if (exampleCart.getClassificationScheme() != null && exampleCart.getClassificationScheme().getId() != null){
+			if (exampleCart.getType() != null && exampleCart.getType().length() > 0){
 				if (andCntr >0)
 					query.append(" and");
-				query.append(" CLASSIFICATION_SCHEME_ID = :classificationId");
+				query.append(" TYPE = :type");
 			}
 		}
 		
@@ -146,8 +146,8 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 					q.setString(param, exampleCart.getUserId());
 				if ("name".equals(param))
 					q.setString(param, exampleCart.getName());
-				if ("classificationId".equals(param))
-					q.setInteger(param, exampleCart.getClassificationScheme().getId());
+				if ("type".equals(param))
+					q.setString(param, exampleCart.getType());
 			}
 		}
 		q.setTimestamp("expirationDate", new Timestamp(System.currentTimeMillis()));

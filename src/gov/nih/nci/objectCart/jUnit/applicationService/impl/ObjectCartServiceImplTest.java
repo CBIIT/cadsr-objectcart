@@ -52,7 +52,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(userId, first.getUserId());
 		assertNotNull(first.getId());
 		assertNotNull(first.getExpirationDate());
-		assertNotNull(first.getCreationTime());
+		assertNotNull(first.getCreationDate());
 		
 		expireCart(first.getId());
 		
@@ -77,7 +77,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(userId, first.getUserId());
 		assertNotNull(first.getId());
 		assertNotNull(first.getExpirationDate());
-		assertNotNull(first.getCreationTime());
+		assertNotNull(first.getCreationDate());
 		
 		//Trying to create cart with same name and userId.  If it exists(not expired) it should return 
 		//cart with same id as before.  Otherwise create new cart.
@@ -87,7 +87,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(second.getUserId(), first.getUserId());
 		assertEquals(second.getId(), first.getId());
 		assertNotNull(first.getExpirationDate());
-		assertNotNull(first.getCreationTime());
+		assertNotNull(first.getCreationDate());
 	}
 	
 	@Test
@@ -109,7 +109,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(userId, second.getUserId());
 		assertNotNull(second.getId());
 		assertNotNull(second.getExpirationDate());
-		assertNotNull(second.getCreationTime());
+		assertNotNull(second.getCreationDate());
 		
 	}
 	
@@ -326,7 +326,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(userId, first.getUserId());
 		assertNotNull(first.getId());
 		assertNotNull(first.getExpirationDate());
-		assertNotNull(first.getCreationTime());
+		assertNotNull(first.getCreationDate());
 		
 		
 		//Trying to create cart with same name and userId but different classification.  It should return 
@@ -339,8 +339,8 @@ public class ObjectCartServiceImplTest extends TestCase{
 		ObjectCartClientTest.printCart(first);
 		ObjectCartClientTest.printCart(second);
 		
-		List<Cart> firstList = getCartsByClassification(first.getClassificationScheme().getType());
-		List<Cart> secondList = getCartsByClassification(second.getClassificationScheme().getType());
+		List<Cart> firstList = getCartsByClassification(first.getType());
+		List<Cart> secondList = getCartsByClassification(second.getType());
 				
 		assertTrue(cartContains(firstList, first));
 		assertTrue(cartContains(secondList, second));

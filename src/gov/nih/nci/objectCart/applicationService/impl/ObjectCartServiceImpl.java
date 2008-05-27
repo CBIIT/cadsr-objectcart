@@ -193,7 +193,8 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		Date now = now(0);		
 		newCart.setExpirationDate(now(expirationInSeconds*60*1000));
 		newCart.setCreationDate(now);
-		
+		newCart.setLastWriteDate(now);
+		newCart.setLastReadDate(now);
 		return storeCart(newCart);
 	}
 	
