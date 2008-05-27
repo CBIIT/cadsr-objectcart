@@ -24,9 +24,10 @@ public class ORMTest extends TestCase
 		o.setType("My Type");
 		
 		Cart c = new Cart();
-		c.setCreationTime(new Date());
+		c.setCreationDate(new Date());
 		c.setExpirationDate(new Date());
-		c.setLastActive(new Date());
+		c.setLastWriteDate(new Date());
+		c.setLastReadDate(new Date());
 		c.setName("My Name");
 		c.setUserId("My User");
 

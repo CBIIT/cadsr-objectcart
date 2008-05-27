@@ -237,8 +237,10 @@ public class ObjectCartClient {
 	 */	
 	public Collection<Object> getPOJOCollection(Class cl, Collection<CartObject> col) throws ObjectCartException {
 		Collection<Object> clist = new ArrayList<Object>();
-		for (CartObject cob: col){
-			clist.add(POJOSerializer.getInstance().deserializeObject(cl, cob));
+		if (col != null) {
+			for (CartObject cob: col){
+				clist.add(POJOSerializer.getInstance().deserializeObject(cl, cob));
+			}
 		}
 		return clist;
 	}
