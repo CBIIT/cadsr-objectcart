@@ -28,7 +28,6 @@
 		<!-- Mapped Resources -->
 		<mapping resource="gov/nih/nci/objectCart/domain/CartObject.hbm.xml" />
 		<mapping resource="gov/nih/nci/objectCart/domain/Cart.hbm.xml" />
-		<mapping resource="gov/nih/nci/objectCart/domain/ClassificationScheme.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>
 
