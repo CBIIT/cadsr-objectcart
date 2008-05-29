@@ -112,27 +112,27 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 		query.append("from Cart where");
 
 		if (exampleCart.getId() != null)
-			query.append(" ID = :cartId");
+			query.append(" id = :cartId");
 		else {
 			int andCntr = 0;
 			if (exampleCart.getUserId() != null && exampleCart.getUserId().length() > 0){
-				query.append(" USER_ID = :userId");
+				query.append(" userId = :userId");
 				andCntr++;
 			}
 			if (exampleCart.getName() != null && exampleCart.getName().length() > 0){
 				if (andCntr >0)
 					query.append(" and");
-				query.append(" NAME = :name");
+				query.append(" name = :name");
 				andCntr++;
 			}
 			if (exampleCart.getType() != null && exampleCart.getType().length() > 0){
 				if (andCntr >0)
 					query.append(" and");
-				query.append(" TYPE = :type");
+				query.append(" type = :type");
 			}
 		}
+			query.append(" and (expirationDate > :expirationDate or expirationDate is null)");
 		
-		query.append(" and EXPIRATION_DATE > :expirationDate");
 		
 		Query q = session.createQuery(query.toString());
 		String[] params = q.getNamedParameters();
@@ -150,8 +150,9 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 					q.setString(param, exampleCart.getType());
 			}
 		}
-		q.setTimestamp("expirationDate", new Timestamp(System.currentTimeMillis()));
 		
+		q.setTimestamp("expirationDate", new Timestamp(System.currentTimeMillis()));
+
 		try
 		{
 			results = (List<Cart>)q.list();
