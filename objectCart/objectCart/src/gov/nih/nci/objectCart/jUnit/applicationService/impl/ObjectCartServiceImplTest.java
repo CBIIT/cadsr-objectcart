@@ -3,7 +3,6 @@ package gov.nih.nci.objectCart.jUnit.applicationService.impl;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(name, first.getName());
 		assertEquals(userId, first.getUserId());
 		assertNotNull(first.getId());
-		assertNotNull(first.getExpirationDate());
+		//assertNotNull(first.getExpirationDate());
 		assertNotNull(first.getCreationDate());
 		
 		expireCart(first.getId());
@@ -76,7 +75,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(name, first.getName());
 		assertEquals(userId, first.getUserId());
 		assertNotNull(first.getId());
-		assertNotNull(first.getExpirationDate());
+		//assertNotNull(first.getExpirationDate());
 		assertNotNull(first.getCreationDate());
 		
 		//Trying to create cart with same name and userId.  If it exists(not expired) it should return 
@@ -86,7 +85,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(second.getName(), first.getName());
 		assertEquals(second.getUserId(), first.getUserId());
 		assertEquals(second.getId(), first.getId());
-		assertNotNull(first.getExpirationDate());
+		//assertNotNull(first.getExpirationDate());
 		assertNotNull(first.getCreationDate());
 	}
 	
@@ -108,7 +107,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(name, second.getName());
 		assertEquals(userId, second.getUserId());
 		assertNotNull(second.getId());
-		assertNotNull(second.getExpirationDate());
+		//assertNotNull(second.getExpirationDate());
 		assertNotNull(second.getCreationDate());
 		
 	}
@@ -278,9 +277,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		
 		assertNotNull(third);
 		assertNotNull(third.getCartObjectCollection());
-		assertTrue(third.getCartObjectCollection().isEmpty());
-		System.out.println(third.getCartObjectCollection().size());
-		
+		assertTrue(third.getCartObjectCollection().isEmpty());		
 	
 	}
 	
@@ -325,7 +322,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(name, first.getName());
 		assertEquals(userId, first.getUserId());
 		assertNotNull(first.getId());
-		assertNotNull(first.getExpirationDate());
+		//assertNotNull(first.getExpirationDate());
 		assertNotNull(first.getCreationDate());
 		
 		
@@ -344,6 +341,107 @@ public class ObjectCartServiceImplTest extends TestCase{
 				
 		assertTrue(cartContains(firstList, first));
 		assertTrue(cartContains(secondList, second));
+	}
+	
+	public void testAssociateCart() {
+
+		String userId = "Test Associate Cart" +System.currentTimeMillis();
+	    String name = "First Cart name: " +userId;
+	    Cart first = createCart(userId, name);
+	    
+	    String userId2 = "Test Associate Cart TWO" +System.currentTimeMillis();
+	    String name2 = "Second Cart name: " +userId;
+	    Cart second = createCart(userId2, name2);
+	    
+	    String testData = "This is teh sserialized data of the object";
+		String testType = ":Test:CDE Cart Test";
+	    CartObject testObject = new CartObject();
+	    testObject.setType(testType);
+	    testObject.setData(testData);
+		   
+	    CartObject testObject2 = new CartObject();
+	    testObject2.setType(testType);
+	    testObject2.setData(testData+testType);
+	   
+	    
+	    CartObject testObject3 = new CartObject();
+	    testObject3.setType(testType);
+	    testObject3.setData(testData+testType+testType);
+	   
+	    assertNull(first.getCartObjectCollection());
+	    
+		Collection<CartObject> testCol = new HashSet<CartObject>();
+		
+		testCol.add(testObject);
+		testCol.add(testObject2);
+		
+		addObjects(first.getId(), testCol);
+		addObject(second.getId(), testObject3);
+		
+		associateCart(second.getUserId(), first.getUserId(), first.getName());
+		
+		second = getCart(second.getId());
+		first = getCart(first.getId());
+		
+		assertEquals(first.getUserId(), userId2);
+		assertEquals(first.getName(), name);
+		
+		assertTrue(first.getCartObjectCollection().contains(testObject));
+		
+	}
+	
+	public void testAssociateCartSameName() {
+
+		String userId = "Test Associate Cart" +System.currentTimeMillis();
+	    String name = "First Cart name: " +userId;
+	    Cart first = createCart(userId, name);
+	    
+	    String userId2 = "Test Associate Cart TWO" +System.currentTimeMillis();
+	    
+	    Cart second = createCart(userId2, name);
+	    
+	    String testData = "This is teh sserialized data of the object";
+		String testType = ":Test:CDE Cart Test";
+	    CartObject testObject = new CartObject();
+	    testObject.setType(testType);
+	    testObject.setData(testData);
+		   
+	    CartObject testObject2 = new CartObject();
+	    testObject2.setType(testType);
+	    testObject2.setData(testData+testType);
+	   
+	    
+	    CartObject testObject3 = new CartObject();
+	    testObject3.setType(testType);
+	    testObject3.setData(testData+testType+testType);
+	   
+	    assertNull(first.getCartObjectCollection());
+	    
+		Collection<CartObject> testCol = new HashSet<CartObject>();
+		
+		testCol.add(testObject);
+		testCol.add(testObject2);
+		
+		addObjects(first.getId(), testCol);
+		addObject(second.getId(), testObject3);
+		
+		associateCart(second.getUserId(), first.getUserId(), first.getName());
+				
+		second = getCart(second.getId());
+		
+		try {
+			//This should throw exception
+			first = ocs.getCart(first.getId());
+		}catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(true);
+		}
+		
+		assertEquals(second.getUserId(), userId2);
+		assertEquals(second.getName(), name);
+		
+		assertTrue(second.getCartObjectCollection().contains(testObject));
+		
 	}
 	
 	private boolean cartContains(List<Cart> cList, Cart cart) {
@@ -416,7 +514,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 			 ocs.addObject(cartId, cartObject);
 		} catch (ApplicationException ae) {
 			ae.printStackTrace();
-			fail("Expire User Cart" +ae.getMessage());
+			fail("Add Object" +ae.getMessage());
 		}  catch (ValidatorException ae) {
 			ae.printStackTrace();
 			fail("Error During Validation" +ae.getMessage());
@@ -424,6 +522,16 @@ public class ObjectCartServiceImplTest extends TestCase{
 	
 	}
 	 
+	private void associateCart(String newUserId, String oldUserId, String cartName) {
+		
+		try {
+			 ocs.associateCart(newUserId, oldUserId, cartName);
+		} catch (ApplicationException ae) {
+			ae.printStackTrace();
+			fail("Associate Cart" +ae.getMessage());
+		}
+	}
+	
 	private void removeObject(Integer cartId, Integer objectId) {
 		
 		try {

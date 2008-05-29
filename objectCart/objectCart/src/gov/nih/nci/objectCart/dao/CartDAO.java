@@ -1,10 +1,8 @@
 package gov.nih.nci.objectCart.dao;
 
-import java.util.Collection;
 import java.util.List;
 
 import gov.nih.nci.objectCart.domain.Cart;
-import gov.nih.nci.objectCart.domain.CartObject;
 import gov.nih.nci.system.dao.DAO;
 import gov.nih.nci.system.dao.DAOException;
 

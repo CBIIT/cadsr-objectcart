@@ -10,6 +10,8 @@ package gov.nih.nci.objectCart.client;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +59,7 @@ public class ObjectCartClient {
 	 */	
 	public Cart createCart(String userId, String cartName) throws ObjectCartException {
 		try {
-			return appService.getNewCart(userId, cartName, csType);
+			return sanitize(appService.getNewCart(userId, cartName, csType));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to get new cart from ObjectCart service", ae);
@@ -95,7 +97,7 @@ public class ObjectCartClient {
 	 */
 	public Cart retrieveCart(String userId, String cartName) throws ObjectCartException {
 		try {
-			return appService.getCart(userId, cartName, csType);
+			return sanitize(appService.getCart(userId, cartName, csType));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to get user cart from ObjectCart service", ae);
@@ -111,7 +113,7 @@ public class ObjectCartClient {
 	 */
 	public List<Cart> retrieveUserCarts(String userId) throws ObjectCartException {
 		try {
-			return appService.getUserCarts(userId);
+			return sanitizeList(appService.getUserCarts(userId));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to get user carts from ObjectCart service", ae);
@@ -128,7 +130,7 @@ public class ObjectCartClient {
 	 */	
 	public Cart refreshCart(Cart cart) throws ObjectCartException {
 		try {
-			return appService.getCart(cart.getId());
+			return sanitize(appService.getCart(cart.getId()));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to refresh cart from ObjectCart service", ae);
@@ -146,7 +148,7 @@ public class ObjectCartClient {
 	 */	
 	public Cart storeObject(Cart cart, CartObject cObject) throws ObjectCartException{
 		try {
-			return appService.addObject(cart.getId(),cObject);
+			return sanitize(appService.addObject(cart.getId(),cObject));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException("Error while trying to store object to Cart using ObjectCart service", ae);
 		} catch (ValidatorException ae) {
@@ -166,7 +168,7 @@ public class ObjectCartClient {
 	 */
 	public Cart storeObjectCollection(Cart cart, Collection<CartObject> col) throws ObjectCartException{
 		try {
-			return appService.addObjects(cart.getId(),col);
+			return sanitize(appService.addObjects(cart.getId(),col));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException("Error while trying to store object to Cart using ObjectCart service", ae);
 		} catch (ValidatorException ae) {
@@ -262,7 +264,7 @@ public class ObjectCartClient {
 	 */
 	public Cart storeCustomObject(Cart cart, Class cl, String objectDisplayName, String nativeId, Object pOb, Serializer customSerializer) throws ObjectCartException {
 		CartObject cartObject = customSerializer.serializeObject(cl, objectDisplayName, nativeId, pOb);
-		return storeObject(cart, cartObject);
+		return sanitize(storeObject(cart, cartObject));
 	}
 
 	
@@ -289,7 +291,7 @@ public class ObjectCartClient {
 			String id = (String) key;
 			clist.add(customSerializer.serializeObject(classToSerialize, objectDisplayNames.get(id), id, objects.get(id)));
 		}
-		return storeObjectCollection(cart, clist);		
+		return sanitize(storeObjectCollection(cart, clist));		
 	}
 	
 	/**
@@ -304,7 +306,7 @@ public class ObjectCartClient {
 	 */
 	public Cart removeObject(Cart cart, CartObject ob) throws ObjectCartException {
 		try {
-			return appService.removeObject(cart.getId(),ob.getId());
+			return sanitize(appService.removeObject(cart.getId(),ob.getId()));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException("Error while trying to remove an object from Cart using ObjectCart service", ae);
 		}
@@ -328,7 +330,7 @@ public class ObjectCartClient {
 			for (CartObject c: col)
 				arr[counter++] = c.getId();
 
-			return appService.removeObjects(cart.getId(),arr);
+			return sanitize(appService.removeObjects(cart.getId(),arr));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException("Error while trying to remove collection of objects from Cart using ObjectCart service", ae);
 		}
@@ -355,10 +357,57 @@ public class ObjectCartClient {
 	
 	public Cart associateCart(Cart cart, String newId) throws ObjectCartException {
 		try {
-			return appService.associateCart(newId, cart.getUserId(), cart.getName());
+			return sanitize(appService.associateCart(newId, cart.getUserId(), cart.getName()));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException("Error while trying to associate cart using ObjectCart service", ae);
 		}
 
+	}
+	
+	public Cart setDefaultExpiration(Cart cart) throws ObjectCartException {
+		try {
+			return sanitize(appService.setExpiration(cart.getId()));
+		} catch (ApplicationException ae) {
+			throw new ObjectCartException("Error while trying to set cart expiration date using ObjectCart service", ae);
+		}
+	}
+	
+	public Cart setCartExpiration(Cart cart, Date expirationDate) throws ObjectCartException {
+		try {
+			return sanitize(appService.setExpiration(cart.getId(), expirationDate));
+		} catch (ApplicationException ae) {
+			throw new ObjectCartException("Error while trying to set cart expiration date to "+expirationDate.toString()+" using ObjectCart service", ae);
+		}
+	}
+	
+	private Cart sanitize(Cart cart) {
+		Cart newCart = new Cart();
+		Collection<CartObject> newCollection = new HashSet<CartObject>();
+		
+		newCart.setCreationDate(cart.getCreationDate());
+		newCart.setExpirationDate(cart.getExpirationDate());
+		newCart.setId(cart.getId());
+		newCart.setLastReadDate(cart.getLastReadDate());
+		newCart.setLastWriteDate(cart.getLastWriteDate());
+		newCart.setName(cart.getName());
+		newCart.setType(cart.getType());
+		newCart.setUserId(cart.getUserId());
+		
+		if (cart.getCartObjectCollection() != null) {
+			for (CartObject c: cart.getCartObjectCollection())
+				newCollection.add(c);
+		}
+		
+		newCart.setCartObjectCollection(newCollection);
+		return newCart;
+	}
+	
+	private List<Cart> sanitizeList(List<Cart> carts) {
+		List<Cart> newCartList = new ArrayList<Cart>();
+		
+		for (Cart c: carts)
+			newCartList.add(sanitize(c));
+		
+		return newCartList;
 	}
 }

@@ -57,7 +57,7 @@ public class CleanerDAO extends HibernateDaoSupport {
 		
 		Query updateActiveCarts = session.createQuery("update Cart set expirationDate = :nowPlusExpirationInterval" +
 				" where (lastWriteDate > :nowMinusTwiceSleep or lastReadDate > :nowMinusTwiceSleep) and expirationDate > :now");
-		System.out.println(now + " " +  nowPlusExpirationInterval + " " + nowMinusTwiceSleep);
+		
 		updateActiveCarts.setTimestamp("nowPlusExpirationInterval", nowPlusExpirationInterval);
 		updateActiveCarts.setTimestamp("nowMinusTwiceSleep", nowMinusTwiceSleep);
 		updateActiveCarts.setTimestamp("now", now);
@@ -67,7 +67,6 @@ public class CleanerDAO extends HibernateDaoSupport {
 		//CartObject cart_id FK constraint
 		Query cartQuery = session.createQuery("delete from Cart " +
 				"where expirationDate <=:expirationDate");
-		
 		
 		cartQuery.setTimestamp("expirationDate", now );		
 		

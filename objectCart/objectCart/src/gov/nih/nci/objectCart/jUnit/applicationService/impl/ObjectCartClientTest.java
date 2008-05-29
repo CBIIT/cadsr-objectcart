@@ -49,7 +49,7 @@ public class ObjectCartClientTest extends TestCase{
 		assertNotNull(cart.getId());
 		assertNotNull(cart.getCreationDate());
 		assertNotNull(cart.getLastWriteDate());
-		assertNotNull(cart.getExpirationDate());
+		//assertNotNull(cart.getExpirationDate());
 		
 		printCart(cart);
 		
@@ -57,7 +57,7 @@ public class ObjectCartClientTest extends TestCase{
 			cartManager.deleteCart(cart);
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Exception creating cart");
+			fail("Exception deleting cart");
 		}
 	}	
 	
@@ -81,7 +81,7 @@ public class ObjectCartClientTest extends TestCase{
 		assertNotNull(cart.getCreationDate());
 		assertNotNull(cart.getLastWriteDate());
 		assertNotNull(cart.getLastReadDate());
-		assertNotNull(cart.getExpirationDate());
+		//assertNotNull(cart.getExpirationDate());
 		
 		printCart(cart);
 		Cart secondCart = null;
@@ -90,7 +90,7 @@ public class ObjectCartClientTest extends TestCase{
 			cartManager.deleteCart(cart);
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Exception creating cart");
+			fail("Exception deleting cart");
 		}
 		
 		try {
@@ -123,7 +123,7 @@ public class ObjectCartClientTest extends TestCase{
 		assertNotNull(cart.getCreationDate());
 		assertNotNull(cart.getLastWriteDate());
 		assertNotNull(cart.getLastReadDate());
-		assertNotNull(cart.getExpirationDate());
+		//assertNotNull(cart.getExpirationDate());
 		
 		printCart(cart);
 		Cart secondCart = null;
@@ -142,7 +142,7 @@ public class ObjectCartClientTest extends TestCase{
 		assertNotNull(secondCart.getCreationDate());
 		assertNotNull(secondCart.getLastWriteDate());
 		assertNotNull(secondCart.getLastReadDate());
-		assertNotNull(secondCart.getExpirationDate());
+		//assertNotNull(secondCart.getExpirationDate());
 		
 		assertEquals(secondCart.getId(), cart.getId());
 		
@@ -174,7 +174,7 @@ public class ObjectCartClientTest extends TestCase{
 		assertNotNull(cart.getCreationDate());
 		assertNotNull(cart.getLastWriteDate());
 		assertNotNull(cart.getLastReadDate());
-		assertNotNull(cart.getExpirationDate());
+		//assertNotNull(cart.getExpirationDate());
 		
 		printCart(cart);
 		
@@ -208,7 +208,7 @@ public class ObjectCartClientTest extends TestCase{
 		assertNotNull(secondCart.getCreationDate());
 		assertNotNull(secondCart.getLastWriteDate());
 		assertNotNull(secondCart.getLastReadDate());
-		assertNotNull(secondCart.getExpirationDate());
+		//assertNotNull(secondCart.getExpirationDate());
 		
 		assertEquals(secondCart.getId(), cart.getId());
 		
@@ -238,7 +238,7 @@ public class ObjectCartClientTest extends TestCase{
 		assertNotNull(cart.getCreationDate());
 		assertNotNull(cart.getLastWriteDate());
 		assertNotNull(cart.getLastReadDate());
-		assertNotNull(cart.getExpirationDate());
+		//assertNotNull(cart.getExpirationDate());
 		
 		printCart(cart);
 		
@@ -281,7 +281,7 @@ public class ObjectCartClientTest extends TestCase{
 		assertNotNull(secondCart.getCreationDate());
 		assertNotNull(secondCart.getLastWriteDate());
 		assertNotNull(secondCart.getLastReadDate());
-		assertNotNull(secondCart.getExpirationDate());
+		//assertNotNull(secondCart.getExpirationDate());
 		
 		assertEquals(secondCart.getId(), cart.getId());
 		

@@ -2,6 +2,7 @@ package gov.nih.nci.objectCart.applicationService.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -149,12 +150,31 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 	}
 	
 	public Cart associateCart(String newUserId, String oldUserId, String cartName) throws ApplicationException {
+		Cart oldCart = new Cart();
+		oldCart.setName(cartName);
+		oldCart.setUserId(oldUserId);
+		
 		Cart newCart = new Cart();
 		newCart.setName(cartName);
-		newCart.setUserId(oldUserId);
+		newCart.setUserId(newUserId);
 		
-		return associateCart(newCart, newUserId);
+		return associateCart(newCart, oldCart);
 		
+	}
+	
+	public Cart setExpiration(Integer cartId) throws ApplicationException {
+		Cart cart = getCart(cartId);
+		int expiration;	
+		expiration = Integer.valueOf(PropertiesLoader.getProperty("cart.time.expiration.minutes"));
+		expiration = expiration*60*1000;
+		cart.setExpirationDate(new Date(expiration));
+		return storeCart(cart);
+	}
+	
+	public Cart setExpiration(Integer cartId, Date expirationDate) throws ApplicationException {
+		Cart cart = getCart(cartId);
+		cart.setExpirationDate(expirationDate);
+		return storeCart(cart);
 	}
 	
 	public void expireCart(Integer cartId) throws ApplicationException {
@@ -162,19 +182,35 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		expireCart(cart);
 	}
 	
-	private Cart associateCart(Cart cart, String newUserId) throws ApplicationException {
-		List<Cart> carts = cartSearch(cart);
+	private Cart associateCart(Cart newCart, Cart oldCart) throws ApplicationException {
+		List<Cart> newCarts = cartSearch(newCart);
+		List<Cart> oldCarts = cartSearch(oldCart);
 		
-		if (carts.size() > 1)
+		if (newCarts.size() > 1 || oldCarts.size() > 1)
 			throw new ApplicationException("More than one cart with that name/guestId pairing exists");
-		else if(carts.isEmpty())
-			throw new ApplicationException("No carts with that name/guestId pairing exists");
-		else 
-			cart = carts.get(0);
+		else if (oldCarts.isEmpty())
+			throw new ApplicationException("Trying to associate a non-existing cart");
+		else if (newCarts.isEmpty()) {
+			oldCart = oldCarts.get(0);
+			oldCart.setUserId(newCart.getUserId());
+			return storeCart(oldCart);
+		} else {
+			oldCart = oldCarts.get(0);
+			newCart = newCarts.get(0);
+			
+			//Prevents association to itself.
+			if (oldCart.getId().equals(newCart.getId()))
+				return oldCart;
+			
+			newCart.getCartObjectCollection().addAll(
+					merge(newCart.getCartObjectCollection(),
+						  oldCart.getCartObjectCollection()));
+			
+			expireCart(oldCart);
+			return storeCart(newCart);
+		}
+
 		
-		cart.setUserId(newUserId);
-		
-		return storeCart(cart);
 		
 	}
 
@@ -188,10 +224,9 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 	}
 
 	private Cart createCart(Cart newCart) throws ApplicationException {
-		int expirationInSeconds;	
-		expirationInSeconds = Integer.valueOf(PropertiesLoader.getProperty("cart.time.expiration.minutes"));
+		
 		Date now = now(0);		
-		newCart.setExpirationDate(now(expirationInSeconds*60*1000));
+		newCart.setExpirationDate(null);
 		newCart.setCreationDate(now);
 		newCart.setLastWriteDate(now);
 		newCart.setLastReadDate(now);
@@ -366,6 +401,14 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		}
 	}
 
+	public Collection<CartObject> merge(Collection<CartObject> current, Collection<CartObject> incoming) {	
+		
+		for (CartObject c: current)
+			incoming.remove(c);
+
+		return incoming;
+		
+	}
 	
 	private Date now(long add) {
 		return new Date(System.currentTimeMillis()+add);

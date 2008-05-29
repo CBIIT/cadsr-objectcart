@@ -1,6 +1,7 @@
 package gov.nih.nci.objectCart.applicationService;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import gov.nih.nci.objectCart.domain.Cart;
@@ -109,7 +110,7 @@ public interface ObjectCartService extends ApplicationService {
 	 * Convenience method to support guest carts for a particular application.  Mainly to support users that
 	 * are in the process of getting an ID with the SSO or whichever authentication system the over-arching
 	 * application is using.  Also supports temporary carts through the "guest" account.
-	 * It takes a new UserId, the cart name and a old userID that the existing guest cart will finally be associated with.
+	 * It takes a new UserId which will be the final userID, the cart name and an old userID, which is the guest ID.
 	 * Method returns the updated cart to the requester.
 	 * 
 	 * @param newUserId
@@ -190,4 +191,8 @@ public interface ObjectCartService extends ApplicationService {
 	 */
 	public CartObject retrieveObject(Integer cartId, Integer objectId)throws ApplicationException;
 
+	public Cart setExpiration(Integer cartId) throws ApplicationException;
+	
+	public Cart setExpiration(Integer cartId, Date expirationDate) throws ApplicationException;
+	
 }
