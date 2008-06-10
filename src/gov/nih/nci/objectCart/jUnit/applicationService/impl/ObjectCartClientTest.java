@@ -20,7 +20,7 @@ public class ObjectCartClientTest extends TestCase{
 		super.setUp();
 		
 		try {
-			cartManager = new ObjectCartClient("CDE Cart Classification: Test Classification");
+			cartManager = new ObjectCartClient();
 		} catch (Exception e) {
 			fail("Exception creating cart manager");
 		}		
@@ -100,8 +100,7 @@ public class ObjectCartClientTest extends TestCase{
 			e.printStackTrace();
 		}
 		
-		assertNull(secondCart);	
-			
+		assertNull(secondCart);			
 	}
 	
 	@Test
@@ -304,8 +303,8 @@ public class ObjectCartClientTest extends TestCase{
 		System.out.println(cart.getLastReadDate());
 		System.out.print("Expires:    ");
 		System.out.println(cart.getExpirationDate());
-		System.out.print("Type:");
-		System.out.println(cart.getType());
+		/*System.out.print("Type:");
+		System.out.println(cart.getType());*/
 		System.out.print("Contents:   ");
 		printContents(cart.getCartObjectCollection());
 		System.out.println("______________________");

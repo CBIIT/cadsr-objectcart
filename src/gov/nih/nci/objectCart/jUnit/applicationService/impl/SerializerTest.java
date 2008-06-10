@@ -22,7 +22,7 @@ public class SerializerTest extends TestCase{
 		super.setUp();
 
 		try {
-			cartManager = new ObjectCartClient("CDE Cart Classification: Test Classification");
+			cartManager = new ObjectCartClient();
 		} catch (Exception e) {
 			fail("Exception creating cart manager");
 		}		

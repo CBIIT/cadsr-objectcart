@@ -21,9 +21,8 @@
 	<parameter name="className" value="gov.nih.nci.system.webservice.WSQueryImpl"/>
 	<parameter name="allowedMethods" value="*"/>
 	<parameter name="extraClasses"
-	value="gov.nih.nci.objectCart.domain.Cart,gov.nih.nci.objectCart.domain.ClassificationScheme,gov.nih.nci.objectCart.domain.CartObject"/>	
-	<beanMapping xmlns:myNS="urn:domain.objectCart.nci.nih.gov"  qname="myNS:Cart" languageSpecificType="java:gov.nih.nci.objectCart.domain.Cart" />	
-	<beanMapping xmlns:myNS="urn:domain.objectCart.nci.nih.gov"  qname="myNS:ClassificationScheme" languageSpecificType="java:gov.nih.nci.objectCart.domain.ClassificationScheme" />	
+	value="gov.nih.nci.objectCart.domain.Cart,gov.nih.nci.objectCart.domain.CartObject"/>	
+	<beanMapping xmlns:myNS="urn:domain.objectCart.nci.nih.gov"  qname="myNS:Cart" languageSpecificType="java:gov.nih.nci.objectCart.domain.Cart" />		
 	<beanMapping xmlns:myNS="urn:domain.objectCart.nci.nih.gov"  qname="myNS:CartObject" languageSpecificType="java:gov.nih.nci.objectCart.domain.CartObject" />		
 	<beanMapping xmlns:myNS="urn:Character.lang.java"  qname="myNS:Character" languageSpecificType="java:java.lang.Character" />		
 </service>

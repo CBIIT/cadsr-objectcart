@@ -62,7 +62,11 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(second.getName(), first.getName());
 		assertEquals(second.getUserId(), first.getUserId());
 		assertTrue(second.getId().intValue() != first.getId().intValue());
-			
+		
+		
+		//Cleanup
+		
+		expireCart(second.getId());
 	}
 	
 	public void testCreateAndDoNotExpireCartUC(){
@@ -87,6 +91,10 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(second.getId(), first.getId());
 		//assertNotNull(first.getExpirationDate());
 		assertNotNull(first.getCreationDate());
+		
+		//Cleanup
+		expireCart(first.getId());
+
 	}
 	
 	@Test
@@ -110,6 +118,10 @@ public class ObjectCartServiceImplTest extends TestCase{
 		//assertNotNull(second.getExpirationDate());
 		assertNotNull(second.getCreationDate());
 		
+		
+		//Cleanup
+		expireCart(first.getId());
+		expireCart(second.getId());
 	}
 	
 	@Test
@@ -133,6 +145,10 @@ public class ObjectCartServiceImplTest extends TestCase{
 		
 		//Make sure we don't get same carts in both places
 		assertTrue(!((Cart)cartList.get(0)).equals((Cart)cartList.get(1)));
+		
+		//Cleanup
+		expireCart(first.getId());
+		expireCart(second.getId());
 	
 	}
 	
@@ -166,6 +182,8 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(retrievedObject.getData(),testData);
 		assertEquals(retrievedObject.getType(), testType);
 		
+		//Cleanup
+		expireCart(first.getId());
 		
 	}
 
@@ -225,6 +243,10 @@ public class ObjectCartServiceImplTest extends TestCase{
 		
 		assertEquals(remainingId, retrievedObject.getId());
 		assertTrue(retrievedObject.getId().intValue() != removedId.intValue());
+		
+		//Cleanup
+		expireCart(first.getId());
+		
 	}
 	
 	public void testRemoveObjects() {
@@ -278,6 +300,10 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertNotNull(third);
 		assertNotNull(third.getCartObjectCollection());
 		assertTrue(third.getCartObjectCollection().isEmpty());		
+		
+		//Cleanup
+		expireCart(first.getId());
+		
 	
 	}
 	
@@ -310,9 +336,12 @@ public class ObjectCartServiceImplTest extends TestCase{
 		for(CartObject c: col){
 			System.out.println(c.getId());
 		}
+		
+		//Cleanup
+		expireCart(first.getId());
 	}
 	
-	public void testClassification(){
+	/*public void testClassification(){
 		
 		String userId = (new Date(System.currentTimeMillis())).toString();
 	    String name = "First Cart name: " +userId;
@@ -341,7 +370,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 				
 		assertTrue(cartContains(firstList, first));
 		assertTrue(cartContains(secondList, second));
-	}
+	}*/
 	
 	public void testAssociateCart() {
 
@@ -387,6 +416,10 @@ public class ObjectCartServiceImplTest extends TestCase{
 		assertEquals(first.getName(), name);
 		
 		assertTrue(first.getCartObjectCollection().contains(testObject));
+		
+		//Cleanup
+		expireCart(first.getId());
+		expireCart(second.getId());
 		
 	}
 	
@@ -442,6 +475,45 @@ public class ObjectCartServiceImplTest extends TestCase{
 		
 		assertTrue(second.getCartObjectCollection().contains(testObject));
 		
+		//Cleanup
+		
+		expireCart(second.getId());
+		
+	}
+	
+	public void testGetObjectsByType() {
+
+		String userId = "Test Remove Objects" +System.currentTimeMillis();
+	    String name = "First Cart name: " +userId;
+	    Cart first = createCart(userId, name);
+	    String testData = "This is teh sserialized data of the object";
+		String testType = ":Test:CDE Cart Test";
+	    CartObject testObject = new CartObject();
+	    testObject.setType(testType);
+	    testObject.setData(testData);
+		   
+	    CartObject testObject2 = new CartObject();
+	    testObject2.setType(testType+"z");
+	    testObject2.setData(testData+testType);
+	   
+	    assertNull(first.getCartObjectCollection());
+	    
+		Collection<CartObject> testCol = new HashSet<CartObject>();
+		
+		testCol.add(testObject);
+		testCol.add(testObject2);
+		
+		addObjects(first.getId(), testCol);
+		
+		Collection<CartObject> col = getObjects(first.getId(), testType);
+		
+		for(CartObject c: col){
+			assertEquals(c.getType(), testType);
+			assertEquals(c.getData(), testData);
+		}
+		
+		//Cleanup
+		expireCart(first.getId());
 	}
 	
 	private boolean cartContains(List<Cart> cList, Cart cart) {
@@ -457,7 +529,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 	private Cart createCart(String userId, String cname) {
 		
 		try {
-			return ocs.getNewCart(userId, cname, "CDE Cart Classification: Test Classification");
+			return ocs.getNewCart(userId, cname);
 		} catch (ApplicationException ae) {
 			ae.printStackTrace();
 			fail("Create Cart" +ae.getMessage());
@@ -468,7 +540,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 	private Cart createAnotherClassificationCart(String userId, String cname) {
 		
 		try {
-			return ocs.getNewCart(userId, cname, "Another Test: Test Classification");
+			return ocs.getNewCart(userId, cname);
 		} catch (ApplicationException ae) {
 			ae.printStackTrace();
 			fail("Create Cart" +ae.getMessage());
@@ -476,7 +548,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 		} 
 	}
 	
-	private List<Cart> getCartsByClassification(String classificationType) {
+	/*private List<Cart> getCartsByClassification(String classificationType) {
 		
 		try {
 			return ocs.getClassificationSchemeCarts(classificationType);
@@ -485,7 +557,7 @@ public class ObjectCartServiceImplTest extends TestCase{
 			fail("get Carts by classification type" +ae.getMessage());
 			return null;
 		} 
-	}
+	}*/
 	
 	private void expireCart(Integer cartId) {
 		
@@ -584,7 +656,18 @@ public class ObjectCartServiceImplTest extends TestCase{
 			 return ocs.retrieveObjects(cartId);
 		} catch (ApplicationException ae) {
 			ae.printStackTrace();
-			fail("Get Existing Cart" +ae.getMessage());
+			fail("Get Objects:" +ae.getMessage());
+		} 
+		return null;
+	}
+	
+	private Collection<CartObject> getObjects(Integer cartId, String type) {
+		
+		try {
+			 return ocs.retrieveObjectsByType(cartId, type);
+		} catch (ApplicationException ae) {
+			ae.printStackTrace();
+			fail("Get Objects By Type:" +ae.getMessage());
 		} 
 		return null;
 	}
