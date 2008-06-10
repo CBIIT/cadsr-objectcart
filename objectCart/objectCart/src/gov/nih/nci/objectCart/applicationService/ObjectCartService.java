@@ -19,38 +19,38 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 public interface ObjectCartService extends ApplicationService {
 	
 	/**
-	 * Creates a new Cart at the data source using the userID, the cart name and the classification scheme type. The method performs a search for an existing
+	 * Creates a new Cart at the data source using the userID and the cart name. The method performs a search for an existing
 	 * cart with the same parameters.  If one is found, it will be returned otherwise it will create and return a new cart.
 	 * 
 	 * @param userId
 	 * @param cartName
-	 * @param classificationSchemeType
 	 * @return 
 	 * @throws ApplicationException
 	 */
-	public Cart getNewCart(String userId, String cartName, String classificationSchemeType) throws ApplicationException;
+	public Cart getNewCart(String userId, String cartName) throws ApplicationException;
 	
 	/**
-	 * Retrieves a list of Carts from the data source associated with a particular ClassificationScheme. The method performs a query by
+	 * DEPRECATED: Retrieves a list of Carts from the data source associated with a particular ClassificationScheme. The method performs a query by
 	 * example using a ClassificationScheme as an example.  It converts the result set into a List<Cart> and returns it to caller.  
 	 * 
 	 * @param classificationSchemeType
 	 * @return 
 	 * @throws ApplicationException
-	 */
+	 
 	public List<Cart> getClassificationSchemeCarts(String classificationSchemeType) throws ApplicationException;
-		
+	*/
+	
+	
 	/**
-	 * Retrieves a  Cart from the data source using the userId, cartName and the classification scheme type. The method performs a search for an existing
+	 * Retrieves a  Cart from the data source using the userId and cartName. The method performs a search for an existing
 	 * cart with that particular identifier.  If one is found, it will be returned otherwise an exception is thrown.
 	 * 
 	 * @param userId
 	 * @param cartName
-	 * @param classificationSchemeType
 	 * @return 
 	 * @throws ApplicationException
 	 */
-	public Cart getCart(String userId, String cartName, String classificationSchemeType) throws ApplicationException;
+	public Cart getCart(String userId, String cartName) throws ApplicationException;
 		
 	/**
 	 * Retrieves a  Cart from the data source using the unique cartId. The method performs a search for an existing

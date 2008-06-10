@@ -24,23 +24,20 @@ import gov.nih.nci.objectCart.util.ValidatorException;
 
 public class ObjectCartClient {
 	private ObjectCartService appService = null;
-	private String csType = "";
 
 
 	/**
 	 * Constructor: Creates a new ObjectCartClient by retrieving the ObjectCartService and
-	 * using it as a private member for all transactions.  Takes classificationScheme type
-	 * as the sole parameter, effectively binding this client to the particular classification
-	 * scheme. 
+	 * using it as a private member for all transactions.  
 	 * 
-	 * @param classificationSchemeType
 	 * @throws ObjectCartException
 	 */
-	public ObjectCartClient(String classificationSchemeType) throws ObjectCartException {
-		csType = classificationSchemeType;
+	public ObjectCartClient() throws ObjectCartException {
 		try {
 			appService = (ObjectCartService) ApplicationServiceProvider
-			.getApplicationService("objectCartServiceInfo");
+				.getApplicationService("objectCartServiceInfo");
+			
+			
 		} catch (Exception e) {
 			throw new ObjectCartException(
 					"ObjectCartClient: Error retrieving application service from provider.", e);
@@ -48,8 +45,28 @@ public class ObjectCartClient {
 	}
 
 	/**
-	 * Creates and returns a cart using the userId and cartName.  If a cart exists in
-	 * the specified classification scheme with that userId and cartName combination, 
+	 * Constructor: Creates a new ObjectCartClient by retrieving the ObjectCartService and
+	 * using it as a private member for all transactions.  Takes URL 
+	 * as the sole parameter, determining which particular URL this service will contact.
+	 * 
+	 * @param url
+	 * @throws ObjectCartException
+	 */
+	public ObjectCartClient(String url) throws ObjectCartException {
+		try {
+			appService = (ObjectCartService) ApplicationServiceProvider
+				.getApplicationService("objectCartServiceInfo", url);
+			
+			
+		} catch (Exception e) {
+			throw new ObjectCartException(
+					"ObjectCartClient: Error retrieving application service from provider.", e);
+		} 
+	}
+	
+	/**
+	 * Creates and returns a cart using the userId and cartName.  If a cart exists 
+	 * with that userId and cartName combination, 
 	 * the method returns the existing cart.
 	 * 
 	 * @param userId
@@ -59,7 +76,7 @@ public class ObjectCartClient {
 	 */	
 	public Cart createCart(String userId, String cartName) throws ObjectCartException {
 		try {
-			return sanitize(appService.getNewCart(userId, cartName, csType));
+			return sanitize(appService.getNewCart(userId, cartName));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to get new cart from ObjectCart service", ae);
@@ -97,7 +114,7 @@ public class ObjectCartClient {
 	 */
 	public Cart retrieveCart(String userId, String cartName) throws ObjectCartException {
 		try {
-			return sanitize(appService.getCart(userId, cartName, csType));
+			return sanitize(appService.getCart(userId, cartName));
 		} catch (ApplicationException ae) {
 			throw new ObjectCartException(
 					"Error while trying to get user cart from ObjectCart service", ae);
@@ -223,7 +240,7 @@ public class ObjectCartClient {
 	 * @return Object
 	 * @throws ObjectCartException
 	 */
-	public Object getPOJO(Class classToDeserialize, CartObject cObject) throws ObjectCartException {
+	public static Object getPOJO(Class classToDeserialize, CartObject cObject) throws ObjectCartException {
 		return POJOSerializer.getInstance().deserializeObject(classToDeserialize, cObject);
 	}
 
@@ -237,7 +254,7 @@ public class ObjectCartClient {
 	 * @return Collection<Object>
 	 * @throws ObjectCartException
 	 */	
-	public Collection<Object> getPOJOCollection(Class cl, Collection<CartObject> col) throws ObjectCartException {
+	public static Collection<Object> getPOJOCollection(Class cl, Collection<CartObject> col) throws ObjectCartException {
 		Collection<Object> clist = new ArrayList<Object>();
 		if (col != null) {
 			for (CartObject cob: col){
@@ -353,8 +370,26 @@ public class ObjectCartClient {
 		}
 
 	}
-
 	
+	
+	/**
+	 * This should be used when retrieving serialized objects.  Takes an existing cart and a type in form of a class. The method uses the service to retrieve CartObjects associated with the 
+	 * provided cart and with the matching type and returns them as collection to the requester.  
+	 * 
+	 * @param cart
+	 * @param type
+	 * @return Collection<CartObject>
+	 * @throws ObjectCartException
+	 */	
+	public Collection<CartObject> getObjectsByType(Cart cart, Class type) throws ObjectCartException {
+		try {
+			return appService.retrieveObjectsByType(cart.getId(), ":Serialized:"+type.toString());
+		} catch (ApplicationException ae) {
+			throw new ObjectCartException("Error while trying to remove an object to Cart using ObjectCart service", ae);
+		}
+
+	}
+
 	public Cart associateCart(Cart cart, String newId) throws ObjectCartException {
 		try {
 			return sanitize(appService.associateCart(newId, cart.getUserId(), cart.getName()));
@@ -390,7 +425,6 @@ public class ObjectCartClient {
 		newCart.setLastReadDate(cart.getLastReadDate());
 		newCart.setLastWriteDate(cart.getLastWriteDate());
 		newCart.setName(cart.getName());
-		newCart.setType(cart.getType());
 		newCart.setUserId(cart.getUserId());
 		
 		if (cart.getCartObjectCollection() != null) {

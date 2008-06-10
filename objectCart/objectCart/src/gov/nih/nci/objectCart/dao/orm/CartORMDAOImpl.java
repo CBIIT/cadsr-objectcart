@@ -15,6 +15,7 @@ import org.hibernate.cfg.Configuration;
 
 import gov.nih.nci.objectCart.dao.CartDAO;
 import gov.nih.nci.objectCart.domain.Cart;
+import gov.nih.nci.objectCart.domain.CartObject;
 import gov.nih.nci.objectCart.util.PropertiesLoader;
 import gov.nih.nci.security.acegi.authentication.CSMAuthenticationProvider;
 import gov.nih.nci.system.dao.DAOException;
@@ -125,11 +126,12 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 				query.append(" name = :name");
 				andCntr++;
 			}
+			/*
 			if (exampleCart.getType() != null && exampleCart.getType().length() > 0){
 				if (andCntr >0)
 					query.append(" and");
 				query.append(" type = :type");
-			}
+			}*/
 		}
 			query.append(" and (expirationDate > :expirationDate or expirationDate is null)");
 		
@@ -146,8 +148,8 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 					q.setString(param, exampleCart.getUserId());
 				if ("name".equals(param))
 					q.setString(param, exampleCart.getName());
-				if ("type".equals(param))
-					q.setString(param, exampleCart.getType());
+				/*if ("type".equals(param))
+					q.setString(param, exampleCart.getType());*/
 			}
 		}
 		
@@ -156,6 +158,50 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 		try
 		{
 			results = (List<Cart>)q.list();
+			
+		} catch (JDBCException ex){
+			log.error("JDBC Exception in ORMDAOImpl ", ex);
+			throw new DAOException("JDBC Exception in ORMDAOImpl ", ex);
+		} catch(org.hibernate.HibernateException hbmEx)	{
+			log.error(hbmEx.getMessage());
+			throw new DAOException("DAO:Hibernate problem ", hbmEx);
+		} catch(Exception e) {
+			log.error("Exception ", e);
+			throw new DAOException("Exception in ORMDAOImpl ", e);
+		} finally {
+			try
+			{						
+				t.commit();
+				session.close();
+			}
+			catch (Exception eSession)
+			{
+				log.error("Could not close the session - "+ eSession.getMessage());
+				throw new DAOException("Could not close the session  " + eSession);
+			}
+		}
+		return results;
+	}
+	
+	public List<CartObject> cartObjectSearchByType(Cart exampleCart, String type) throws DAOException, Exception {
+		List<CartObject> results = new ArrayList<CartObject>();
+		Session session = getSession();	
+
+		Transaction t = session.beginTransaction();
+		StringBuilder query = new StringBuilder();
+		query.append("from CartObject where");
+		query.append(" CART_ID = :cartId");
+		query.append(" and");
+		query.append(" type = :type");		
+		
+		Query q = session.createQuery(query.toString());
+
+		q.setInteger("cartId", exampleCart.getId());
+		q.setString("type", type);
+
+		try
+		{
+			results = (List<CartObject>) q.list();
 			
 		} catch (JDBCException ex){
 			log.error("JDBC Exception in ORMDAOImpl ", ex);

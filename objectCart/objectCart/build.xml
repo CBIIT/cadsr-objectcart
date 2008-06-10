@@ -151,11 +151,11 @@
 				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
 			</manifest>
 			<include name="gov/nih/nci/objectCart/client/**/*" />
-			<include name="gov/nih/nci/objectCart/applicationService/**/*" />
+			<include name="gov/nih/nci/objectCart/applicationService/*.*" />
 			<include name="gov/nih/nci/objectCart/util/ValidatorException.*"/>
 			<fileset dir="${src.dir}">
 				<include name="gov/nih/nci/objectCart/client/**/*" />
-				<include name="gov/nih/nci/objectCart/applicationService/**/*" />
+				<include name="gov/nih/nci/objectCart/applicationService/*.*" />
 				<include name="gov/nih/nci/objectCart/util/ValidatorException.*"/>
 			</fileset>
 			<fileset dir="${output.client.remote.dir}/conf">

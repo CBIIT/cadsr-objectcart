@@ -38,12 +38,11 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		super(classCache, systemProperties);		
 	}
 	
-	public Cart getNewCart(String userId, String cartName, String classificationSchemeType) throws ApplicationException {		
+	public Cart getNewCart(String userId, String cartName) throws ApplicationException {		
 		Cart newCart = new Cart();	
 		
 		newCart.setUserId(userId);
 		newCart.setName(cartName);	
-		newCart.setType(classificationSchemeType);
 		
 		List<Cart> carts = getNewCarts(newCart);
 
@@ -58,14 +57,14 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 
 	}
 
-	public List<Cart> getClassificationSchemeCarts(String classificationSchemeType) throws ApplicationException {
+	/*public List<Cart> getClassificationSchemeCarts(String classificationSchemeType) throws ApplicationException {
 		Cart exampleCart = new Cart();	
 		
 		exampleCart.setType(classificationSchemeType);
 
 		List<Cart> carts = cartSearch(exampleCart);
 		return carts;
-	}
+	}*/
 	
 	public Cart getCart(Integer cartId) throws ApplicationException {
 		Cart newCart = new Cart();
@@ -98,12 +97,11 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		return getCarts(newCart);	
 	}
 
-	public Cart getCart(String userId, String cartName, String classificationSchemeType) throws ApplicationException {
+	public Cart getCart(String userId, String cartName) throws ApplicationException {
 		Cart newCart = new Cart();	
 
 		newCart.setUserId(userId);
 		newCart.setName(cartName);
-		newCart.setType(classificationSchemeType);
 		
 		List<Cart> carts = getCarts(newCart);	
 		
@@ -167,7 +165,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		int expiration;	
 		expiration = Integer.valueOf(PropertiesLoader.getProperty("cart.time.expiration.minutes"));
 		expiration = expiration*60*1000;
-		cart.setExpirationDate(new Date(expiration));
+		cart.setExpirationDate(now(expiration));
 		return storeCart(cart);
 	}
 	
@@ -302,8 +300,16 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		}
 		return col;
 	}
+	
 	public Collection<CartObject> retrieveObjectsByType(Integer cartId, String type) throws ApplicationException {
+			
+		Cart cart = new Cart();
+		cart.setId(cartId);
+		cart = cartSearch(cart).get(0);
 		
+		return cartObjectSearchByType(cart, type);
+		
+		/*
 		Cart example = new Cart();
 		example.setId(cartId);
 		CartObject objectExample = new CartObject();
@@ -319,7 +325,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 			if (o instanceof CartObject)
 				col.add((CartObject)o);
 		}
-		return col;
+		return col;*/
 		
 	}
 	public CartObject retrieveObject(Integer cartId, Integer objectId)throws ApplicationException {
@@ -401,6 +407,31 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		}
 	}
 
+	private List<CartObject> cartObjectSearchByType(Cart cart, String type) throws ApplicationException, DAOException {
+		
+		CartDAO dao = (CartDAO) getClassCache().getDAOForClass(cart.getClass().getCanonicalName());
+	
+		if(dao == null)
+			throw new ApplicationException("Could not obtain DAO for: "+cart.getClass().getCanonicalName());
+		
+		try
+		{
+			List<CartObject> cartObjects = dao.cartObjectSearchByType(cart, type);
+			return cartObjects;
+			
+		} catch(DAOException daoException) {
+			log.error("Error while getting and storing Cart in DAO",daoException);
+			throw daoException;
+		} catch (ApplicationException e1) {
+			log.fatal("Unable to locate Service Locator :",e1);
+			throw new ApplicationException("Unable to locate Service Locator :",e1);
+		} catch(Exception exception) {
+			log.error("Exception while getting datasource information "+ exception.getMessage());
+			throw new ApplicationException("Exception in Base Delegate while getting datasource information: ", exception);
+		}
+		
+	}
+	
 	public Collection<CartObject> merge(Collection<CartObject> current, Collection<CartObject> incoming) {	
 		
 		for (CartObject c: current)

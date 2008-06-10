@@ -54,7 +54,7 @@ public class POJOSerializer implements Serializer {
 	private CartObject marshalObject(Class cl, String objectDisplayName, String nativeId, Object pOb) throws MarshalException, ValidationException{
 		
 		CartObject ob = new CartObject();
-		ob.setType(":Serialized:POJO:"+pOb.getClass());
+		ob.setType(":Serialized:"+pOb.getClass());
 		ob.setDisplayText(objectDisplayName);
 		ob.setNativeId(nativeId);
 		StringWriter writer = new StringWriter();
