@@ -100,6 +100,22 @@
 
 	</target>
 
+	<target name="qa" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+		<SDKecho message="${ant.project.name}: Deploying to DEV" />
+
+		<replace file="${orm.dir}/hibernate.cfg.xml">
+			<replacefilter token="@DB_CONNECTION_URL@" value="${QA_DB_CONNECTION_URL}" />
+			<replacefilter token="@DB_USERNAME@" value="${QA_DB_USERNAME}" />
+			<replacefilter token="@DB_PASSWORD@" value="${QA_DB_PASSWORD}" />
+			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
+		</replace>
+
+		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
+		</replace>
+	</target>
+	
 	<target name="dev" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
 		<SDKecho message="${ant.project.name}: Deploying to DEV" />
 
@@ -275,6 +291,6 @@
 
 	<target name="local-build" depends="local, dist, package-local-webapp, package-remote-client"/>
 	<target name="dev-build" depends="dev, dist, package-webapp, package-remote-client"/>
-
+	<target name="qa-build" depends="qa, dist, package-webapp, package-remote-client"/>
 
 </project>

@@ -5,9 +5,9 @@
 	
 		<!-- Properties for the session factory -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://cbiodb590:3644/object_cart</property>
+		<property name="connection.url">jdbc:mysql://cbiodb580.nci.nih.gov:3644/object_cart</property>
 		<property name="connection.username">object_cart</property>
-		<property name="connection.password">o3jC#490</property>
+		<property name="connection.password">o3jC#739</property>
 		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="c3p0.max_size">10</property>
 		<property name="c3p0.min_size">2</property>
