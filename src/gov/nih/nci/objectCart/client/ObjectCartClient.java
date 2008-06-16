@@ -55,7 +55,7 @@ public class ObjectCartClient {
 	public ObjectCartClient(String url) throws ObjectCartException {
 		try {
 			appService = (ObjectCartService) ApplicationServiceProvider
-				.getApplicationService("objectCartServiceInfo", url);
+				.getApplicationServiceFromUrl(url, "objectCartServiceInfo");
 			
 			
 		} catch (Exception e) {
