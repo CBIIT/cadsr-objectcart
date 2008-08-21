@@ -100,8 +100,40 @@
 
 	</target>
 
+	<target name="prod" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+			<SDKecho message="${ant.project.name}: Deploying to Production" />
+
+			<replace file="${orm.dir}/hibernate.cfg.xml">
+				<replacefilter token="@DB_CONNECTION_URL@" value="${PROD_DB_CONNECTION_URL}" />
+				<replacefilter token="@DB_USERNAME@" value="${PROD_DB_USERNAME}" />
+				<replacefilter token="@DB_PASSWORD@" value="${PROD_DB_PASSWORD}" />
+				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+				<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
+			</replace>
+
+			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+				<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
+			</replace>
+		</target>
+	
+	<target name="stage" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+			<SDKecho message="${ant.project.name}: Deploying to Stage" />
+
+			<replace file="${orm.dir}/hibernate.cfg.xml">
+				<replacefilter token="@DB_CONNECTION_URL@" value="${STAGE_DB_CONNECTION_URL}" />
+				<replacefilter token="@DB_USERNAME@" value="${STAGE_DB_USERNAME}" />
+				<replacefilter token="@DB_PASSWORD@" value="${STAGE_DB_PASSWORD}" />
+				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+				<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
+			</replace>
+
+			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+				<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
+			</replace>
+		</target>
+	
 	<target name="qa" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-		<SDKecho message="${ant.project.name}: Deploying to DEV" />
+		<SDKecho message="${ant.project.name}: Deploying to QA" />
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
 			<replacefilter token="@DB_CONNECTION_URL@" value="${QA_DB_CONNECTION_URL}" />
@@ -233,7 +265,7 @@
 
 	<target name="package-webapp" depends="dist">
 		<SDKecho message="${ant.project.name}: Packaging the server"/>
-		<war destfile="${dist.dir}/objectCart.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
 			<lib dir="${dist.dir}" includes="*.jar"/>
 			<lib dir="${lib.dir}" includes="*.jar"/>
 
@@ -292,5 +324,7 @@
 	<target name="local-build" depends="local, dist, package-local-webapp, package-remote-client"/>
 	<target name="dev-build" depends="dev, dist, package-webapp, package-remote-client"/>
 	<target name="qa-build" depends="qa, dist, package-webapp, package-remote-client"/>
+	<target name="stage-build" depends="stage, dist, package-webapp, package-remote-client"/>
+	<target name="prod-build" depends="prod, dist, package-webapp, package-remote-client"/>
 
 </project>
