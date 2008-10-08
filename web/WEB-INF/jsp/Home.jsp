@@ -89,7 +89,7 @@
 													<!-- banner begins -->
 													<tr>
 														<td class="bannerHome">
-															<img src="images/bannerHome.gif">
+															<img src="images/c_ca_core_big.gif">
 														</td>
 													</tr>
 													<!-- banner begins -->
@@ -110,69 +110,39 @@
 																				border="0" height="100%">
 																				<tr>
 																					<td class="welcomeTitle" height="20">
-																						<s:text name="home.welcome.title" />
+																						WELCOME TO THE OBJECT CART
 																					</td>
 																				</tr>
 																				<tr>
 																					<td class="welcomeContent" valign="top">
-																						<s:text name="home.welcome.intro" />
-																						<br>
-																						<br>
-																						<ul>
-																							<li>
-																								UML Modeling
-																							</li>
-																							<li>
-																								N-tier architecture with open API's
-																							</li>
-																							<li>
-																								Controlled vocabularies
-																							</li>
-																							<li>
-																								Registered metadata
-																							</li>
-																						</ul>
-
-																						A system built along these lines is said to be
-																						'semantically integrated', that is, there exists
-																						runtime metadata that describes every class and
-																						class attribute in the API.
-																						<br>
-																						<br>
-																						The SDK consists of three components. The
-																						<b>Semantic Connector</b> assists in the
-																						annotation of the UML with appropriate controlled
-																						vocabulary terms. The
-																						<b>UML Loader</b> registers the annotated model in
-																						the caDSR, a metadata repository, and the
-																						<b>Code Generator</b> creates the software system
-																						in Java.
-																						<br>
-																						<br>
+																						The Object Cart application is a an application built on top of the caCORE SDK with the purpose of providing shopping cart type operations for data objects.  
+																					    The Object Cart provides a client API that client applications can utilize to create instance of object "carts" to be able to store, retrieve, update, and delete data objects.  
+																						Both Java objects adhering to the JavaBean specification and XML documents representing data objects can be passed to the client API.  
+													
+																						The initial users of the Object Cart application are the CDE Browser and Forms Builder applications, allowing users to share their collections of objects 
+																						(Administered Components, CDEs, etc...) amongst the two applications while keeping the CDE Browser and Forms Builder decoupled.
+																						<br><br>
+																						
 																						References:
 																						<br>
 
 																						<ul>
 																							<li>
 																								<a
-																									href="http://gforge.nci.nih.gov/projects/cacoresdk/">caCORE
-																									SDK GForge site</a> - Contains news, information,
-																								documents, defects, feedback, and reports
+																									href="http://gforge.nci.nih.gov/projects/mdr/">MDR GForge site</a> - Contains news, information,
+																								documents, defects, feedback, and reports on ObjectCart.																							</li>
+																							<li>
+																								<a
+																									href="http://ncicb.nci.nih.gov/infrastructure/cacore_overview/objcart">ObjectCart Download site</a> - Contains documents,
+																								information, and downloads for the ObjectCart application.
 																							</li>
 																							<li>
 																								<a
-																									href="http://ncicb.nci.nih.gov/infrastructure/cacore_overview/cacoresdk">caCORE
-																									SDK Download site</a> - Contains documents,
-																								information, and downloads for the caCORE SDK
+																									href="ftp://ftp1.nci.nih.gov/pub/cacore/objcart/v1.0/objcart_10_notes.txt">ObjectCart 1.0 Release Notes</a> - Release Notes for all
+																								caCORE products for version 1.0
 																							</li>
 																							<li>
-																								<a
-																									href="ftp://ftp1.nci.nih.gov/pub/cacore/SDK/v4.0/caCORE_SDK_40_notes.txt">caCORE
-																									4.0 Release Notes</a> - Release Notes for all
-																								caCORE products for version 4.0
-																							</li>
-																							<li>
-																								<a href="docs/index.html">caCORE 4.0
+																								<a href="docs/index.html">ObjectCart 1.0
 																									javadocs</a>
 																							</li>
 																						</ul>
