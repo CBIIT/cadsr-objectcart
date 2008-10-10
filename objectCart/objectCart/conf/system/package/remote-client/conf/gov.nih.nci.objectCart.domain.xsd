@@ -28,6 +28,7 @@
     <xs:attribute name="lastReadDate" type="xs:dateTime" />
     <xs:attribute name="lastWriteDate" type="xs:dateTime" />
     <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="type" type="xs:string" />
     <xs:attribute name="userId" type="xs:string" />
   </xs:complexType>
 </xs:schema>
