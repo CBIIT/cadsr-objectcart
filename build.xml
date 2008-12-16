@@ -6,9 +6,8 @@
 	<!--***********************************************************************
 	*** Load the build properties from the file
 	*********************************************************************** -->
-	<property file="build.properties" />
+	<property file="anthill.properties" />
 	
-	<property name="objcartversion" value="10"/>
 	<property name="src.dir" value="src"/>
 	<property name="lib.dir" value="lib"/>
 	<property name="web.dir" value="web"/>
