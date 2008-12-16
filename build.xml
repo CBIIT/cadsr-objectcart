@@ -7,7 +7,29 @@
 	*** Load the build properties from the file
 	*********************************************************************** -->
 	<property file="build.properties" />
+	
+	<property name="objcartversion" value="10"/>
+	<property name="src.dir" value="src"/>
+	<property name="lib.dir" value="lib"/>
+	<property name="web.dir" value="web"/>
+	<property name="docs.dir" value="docs"/>
+	<property name="conf.dir" value="conf"/>
+	<property name="orm.dir" value="conf/ORM"/>
+	<property name="system.lib.dir" value="system/lib"/>
+	<property name="sql.dir" value="sql"/>
+	<property name="ds.dir" value="ds"/>
+	
+	<property name="build.dir" value="build"/>
+	<property name="build.classes.dir" value="${build.dir}/classes"/>
+	<property name="dist.dir" value="dist"/>
 
+	<property name="file.output.extension.client.name" value="extension-client-framework.jar"/>
+	<property name="file.output.extension.core.name" value="extension-core.jar"/>
+	<property name="file.output.cart.orm.name" value="objectCart-orm.jar"/>
+
+	<property name="output.client.remote.dir" value="dist/remote"/>
+	<property name="config.client.remote.dir" value="conf/system/package/remote-client/conf"/>	
+	
 	<!--***********************************************************************
 	*** Import utility script
 	*********************************************************************** -->
@@ -100,55 +122,34 @@
 
 	</target>
 
-	<target name="prod" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-			<SDKecho message="${ant.project.name}: Deploying to Production" />
-
-			<replace file="${orm.dir}/hibernate.cfg.xml">
-				<replacefilter token="@DB_CONNECTION_URL@" value="${PROD_DB_CONNECTION_URL}" />
-				<replacefilter token="@DB_USERNAME@" value="${PROD_DB_USERNAME}" />
-				<replacefilter token="@DB_PASSWORD@" value="${PROD_DB_PASSWORD}" />
-				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-				<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
-			</replace>
-
-			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-				<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
-			</replace>
+    <target name="prop-check" unless="check.props" description="Verifies the presence of all required properties.">
+        <fail>Missing one or more properties.</fail>
+    </target>
+	
+	<target name="anthill" depends="copy-hql, copy-remote" description="Setting up for anthill deployment">
+			<SDKecho message="${ant.project.name}: Deploying to ${TIER.NAME}" />
+		  <condition property="check.props">
+		        <and>
+		            <isset property="CADSR.DS.URL" />
+		            <isset property="CADSR.DS.USER" />
+		            <isset property="CADSR.DS.PSWD" />
+		            <isset property="CADSR.DS.TNS.ENTRY" />
+		            <isset property="TIER" />
+		            <isset property="TIER.UPPER" />
+		            <isset property="TIER.NAME" />
+		            <isset property="JBOSS.HOME.DIR" />
+		            <isset property="JBOSS.SERVER.DIR" />
+		            <isset property="JBOSS.CONF.DIR" />
+		            <isset property="JBOSS.DEPLOY.DIR" />
+		            <isset property="JBOSS.LOG.DIR" />
+		            <isset property="TOOL.ROOT.DIR" />
+		            <isset property="TOOL.LOG.DIR" />
+		            <isset property="SQL.EXE" />
+		        </and>
+		    </condition>
 		</target>
 	
-	<target name="stage" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-			<SDKecho message="${ant.project.name}: Deploying to Stage" />
-
-			<replace file="${orm.dir}/hibernate.cfg.xml">
-				<replacefilter token="@DB_CONNECTION_URL@" value="${STAGE_DB_CONNECTION_URL}" />
-				<replacefilter token="@DB_USERNAME@" value="${STAGE_DB_USERNAME}" />
-				<replacefilter token="@DB_PASSWORD@" value="${STAGE_DB_PASSWORD}" />
-				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-				<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
-			</replace>
-
-			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-				<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
-			</replace>
-		</target>
-	
-	<target name="qa" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-		<SDKecho message="${ant.project.name}: Deploying to QA" />
-
-		<replace file="${orm.dir}/hibernate.cfg.xml">
-			<replacefilter token="@DB_CONNECTION_URL@" value="${QA_DB_CONNECTION_URL}" />
-			<replacefilter token="@DB_USERNAME@" value="${QA_DB_USERNAME}" />
-			<replacefilter token="@DB_PASSWORD@" value="${QA_DB_PASSWORD}" />
-			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
-		</replace>
-
-		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
-		</replace>
-	</target>
-	
-	<target name="dev" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+	<target name="dev" depends="copy-hql, copy-remote" description="Setting up for developement deployment">
 		<SDKecho message="${ant.project.name}: Deploying to DEV" />
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
@@ -236,7 +237,7 @@
 	*********************************************************************** -->
 	<target name="package-local-webapp" depends="dist">
 		<SDKecho message="${ant.project.name}: Packaging the server"/>
-		<war destfile="${dist.dir}/objectCart-local.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
 			<lib dir="${dist.dir}" includes="*.jar"/>
 			<lib dir="${lib.dir}" includes="*.jar"/>
 			<lib dir="${system.lib.dir}" includes="*.jar">
@@ -320,11 +321,36 @@
 			</fileset>
 		</copy>
 	</target>
-
+		
+     <target name="replace-sql-token" description="Puts correct tier info in Tool Options SQL">
+		<replace file="${sql.dir}/tooloptions.sql">
+			<replacefilter token="@TIER@" value="${TIER}" />
+		</replace>
+	</target>
+	
+    <target name="set-tooloptions" depends="replace-sql-token" description="Execute set_options.sql">
+        <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${sql.dir}/tooloptions.sql</echo>
+        <exec dir="." executable="${SQL.EXE}" failonerror="true">
+            <arg line="-L ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${sql.dir}/tooloptions.sql" />
+        </exec>
+    </target>
+	
+	 <target name="deploy-binaries" depends="prop-check, set-tooloptions, dist, package-webapp, package-remote-client"  description="Deploys the executable product binaries.">
+        <echo>Deploying binaries to file system ...</echo>
+        <copy todir="${JBOSS.DEPLOY.DIR}">
+            <fileset dir="">
+                <include name="${ds.dir}/*-ds.xml" />
+            </fileset>
+        </copy>
+        <sleep seconds="15" />
+        <copy tofile="${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz">
+            <fileset file="${dist.dir}/objcart${objcartversion}.war" />
+        </copy>
+        <move file="${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz" tofile="${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war" />
+	 </target>
+	
+	<target name="anthill-build" if="check.props" depends="anthill, deploy-binaries"/>
 	<target name="local-build" depends="local, dist, package-local-webapp, package-remote-client"/>
 	<target name="dev-build" depends="dev, dist, package-webapp, package-remote-client"/>
-	<target name="qa-build" depends="qa, dist, package-webapp, package-remote-client"/>
-	<target name="stage-build" depends="stage, dist, package-webapp, package-remote-client"/>
-	<target name="prod-build" depends="prod, dist, package-webapp, package-remote-client"/>
 
 </project>
