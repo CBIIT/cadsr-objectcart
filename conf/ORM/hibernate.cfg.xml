@@ -4,18 +4,7 @@
 	<session-factory>
 	
 		<!-- Properties for the session factory -->
-		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://cbiodb580.nci.nih.gov:3644/object_cart</property>
-		<property name="connection.username">object_cart</property>
-		<property name="connection.password">o3jC#739</property>
-		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-		<property name="c3p0.max_size">10</property>
-		<property name="c3p0.min_size">2</property>
-		<property name="c3p0.timeout">5000</property>
-		<property name="c3p0.max_statements">100</property>
-		<property name="c3p0.idle_test_period">3000</property>
-		<property name="c3p0.acquire_increment">2</property>
-		<property name="c3p0.validate">false</property>
+		<property name="connection.datasource">java:/objcartAPI</property>
 		<property name="hibernate.show_sql">false</property>
 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="max_fetch_depth">1</property>
@@ -30,5 +19,3 @@
 		<mapping resource="gov/nih/nci/objectCart/domain/Cart.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>
-
-        
