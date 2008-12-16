@@ -69,9 +69,9 @@ public class GMETest extends TestCase {
 		SchemaFactory schemaFactory = SchemaFactory
 		.newInstance("http://www.w3.org/2001/XMLSchema");
 		try {
+			
 			File schema = Validator.getSchema("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata");
-
-
+			
 			System.out.println(schema);
 
 			factory.setSchema(
