@@ -136,17 +136,16 @@
 		        CADSR.DS.URL = ${CADSR.DS.URL}
 		        CADSR.DS.USER = ${CADSR.DS.USER}
 		        CADSR.DS.PSWD = ${CADSR.DS.PSWD}
-		        CADSR.DS.TNS.ENTRY=${CADSR.DS.TNS.ENTRY}
-		 		OBJCART.DS.URL= ${OBJCART.DS.URL} 
-		 		OBJCART.DS.USER= ${OBJCART.DS.USER} 
-		 		OBJCART.DS.PSWD= ${OBJCART.DS.PSWD}
+                CADSR.DS.TNS.ENTRY=${CADSR.DS.TNS.ENTRY}
+                OBJCART.DS.URL= ${OBJCART.DS.URL} 
+		 	    OBJCART.DS.USER= ${OBJCART.DS.USER} 
+		 	    OBJCART.DS.PSWD= ${OBJCART.DS.PSWD}
 		        DEPLOY.LOCATION = ${DEPLOY.LOCATION}
 		        JBOSS.HOME.DIR = ${JBOSS.HOME.DIR}
 		        JBOSS.SERVER.DIR = ${JBOSS.SERVER.DIR}
 		        JBOSS.CONF.DIR = ${JBOSS.CONF.DIR}
 		        JBOSS.DEPLOY.DIR = ${JBOSS.DEPLOY.DIR}
 		        JBOSS.LOG.DIR = ${JBOSS.LOG.DIR}
-		        JDEBUG = ${JDEBUG}
 		        SCP.USER = ${SCP.USER}
 		        SCP.HOST = ${SCP.HOST}
 		        SCP.PATH = ${SCP.PATH}
@@ -187,6 +186,9 @@
 		        </and>
 		    </condition>
 		
+	    <condition property="remote.deploy">
+	        <equals arg1="${DEPLOY.LOCATION}" arg2="remote" />
+	    </condition>
 		
 		</target>
 	
@@ -363,13 +365,15 @@
 		</copy>
 	</target>
 		
-     <target name="replace-sql-token" description="Puts correct tier info in Tool Options SQL">
-		<replace file="${sql.dir}/tooloptions.sql">
+    <target name="replace-sql-token" description="Puts correct tier info in Tool Options SQL">
+    	<SDKecho message="${ant.project.name}: Putting correct tier info in Tool Options SQL"/>
+    	<replace file="${sql.dir}/tooloptions.sql">
 			<replacefilter token="@TIER@" value="${TIER}" />
 		</replace>
 	</target>
 	
     <target name="set-tooloptions" depends="replace-sql-token" description="Execute set_options.sql">
+    	<SDKecho message="${ant.project.name}: Execute tooloptions.sql"/>
         <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${sql.dir}/tooloptions.sql</echo>
         <exec dir="." executable="${SQL.EXE}" failonerror="true">
             <arg line="-L ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${sql.dir}/tooloptions.sql" />
@@ -377,19 +381,17 @@
     </target>
 	
     <target name="set-ds-info" description="Puts correct DB info in DS XML file">
+    	<SDKecho message="${ant.project.name}: Putting correct DB info in DS XML file"/>
 		<replace file="${ds.dir}/objcart-ds.xml">
 			<replacefilter token="@OBJCART.DS.URL@" value="${OBJCART.DS.URL}" />
 			<replacefilter token="@OBJCART.DS.USER@" value="${OBJCART.DS.USER}" />
 			<replacefilter token="@OBJCART.DS.PSWD@" value="${OBJCART.DS.PSWD}" />
 		</replace>
 	</target>
-
-    <condition property="remote.deploy">
-        <equals arg1="${DEPLOY.LOCATION}" arg2="remote" />
-    </condition>
 	
-    <target name="deploy-binaries-remote" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" if="remote-deploy" description="Deploys the executable product binaries to API machine.">
-        <echo>mkdir ${SCP.PATH}/objcart</echo>
+    <target name="deploy-binaries-remote" if="remote-deploy" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" description="Deploys the executable product binaries to API machine.">
+    	<SDKecho message="${ant.project.name}: Deploying the executable product binaries to API machine."/>
+    	<echo>mkdir ${SCP.PATH}/objcart</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${SCP.PATH}/objcart" />
 
         <echo>Deploying binaries to remote file system "${SCP.USER}@${SCP.HOST}:${SCP.PATH}/objcart"</echo>
