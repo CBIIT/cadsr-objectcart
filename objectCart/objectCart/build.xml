@@ -184,12 +184,22 @@
 		        </and>
 		    </condition>
 		
-		    <condition property="remote.deploy" value="true" else="false" >
+		    <condition property="remote.deploy" >
 		        <equals arg1="${DEPLOY.LOCATION}" arg2="remote" casesensitive="false" trim="true"/>
 		    </condition> 
-			
+			<condition property="scp.pass" >
+				<isset property="SCP.PASSPHRASE" />
+			</condition> 
+			<condition property="scp.key" >
+				<not>
+					<isset property="SCP.PASSPHRASE" />
+				</not>
+			</condition> 
+		
 			<echo> Remote Deploy = ${remote.deploy} </echo>
 			<echo> Check Props = ${check.props} </echo>
+			<echo> scp.pass = ${scp.pass} </echo>
+			<echo> scp.key = ${scp.key} </echo>
 		
 		</target>
 	
@@ -390,13 +400,15 @@
 		</replace>
 	</target>
 	
-    <target name="deploy-binaries-remote" if="remote.deploy" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" description="Deploys the executable product binaries to API machine.">
+	<target name="deploy-binaries-remote" depends="deploy-binaries-remote-pass, deploy-binaries-remote-key"/>
+	
+    <target name="deploy-binaries-remote-pass" if="remote.deploy" unless="scp.key" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" description="Deploys the executable product binaries to API machine.">
     	<SDKecho message="${ant.project.name}: Deploying the executable product binaries to API machine."/>
     	<echo>mkdir ${SCP.PATH}/objcart</echo>
-        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${SCP.PATH}/objcart" />
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}"  trust="true" verbose="true" failonerror="false" command="mkdir -p ${SCP.PATH}/objcart" />
 
         <echo>Deploying binaries to remote file system "${SCP.USER}@${SCP.HOST}:${SCP.PATH}/objcart"</echo>
-        <scp todir="${SCP.USER}@${SCP.HOST}:${SCP.PATH}/objcart" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true">
+        <scp todir="${SCP.USER}@${SCP.HOST}:${SCP.PATH}/objcart" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" trust="true" verbose="true">
         	<fileset file="${dist.dir}/objcart${objcartversion}.war" />
         	<fileset dir="">
         	   <include name="${ds.dir}/objcart-ds.xml" />
@@ -404,15 +416,39 @@
         </scp>
     
         <echo>cp {SCP.PATH}/objcart/objcart-ds.xml ${JBOSS.DEPLOY.DIR}/.</echo>
-        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${SCP.PATH}/objcart/objcart-ds.xml ${JBOSS.DEPLOY.DIR}/." />
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" trust="true" verbose="true" command="cp ${SCP.PATH}/objcart/objcart-ds.xml ${JBOSS.DEPLOY.DIR}/." />
         
         <sleep seconds="15" />
 
         <echo>cp {SCP.PATH}/objcart/objcart${objcartversion}.war ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz</echo>
-        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${SCP.PATH}/objcart/objcart${objcartversion}.war ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz" />
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" trust="true" verbose="true" command="cp ${SCP.PATH}/objcart/objcart${objcartversion}.war ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz" />
         <echo>mv ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war</echo>
-        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="mv ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war" />
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" trust="true" verbose="true" command="mv ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war" />
     </target>
+	
+	<target name="deploy-binaries-remote-key" if="remote.deploy" unless="scp.pass" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" description="Deploys the executable product binaries to API machine.">
+	    	<SDKecho message="${ant.project.name}: Deploying the executable product binaries to API machine."/>
+	    	<echo>mkdir ${SCP.PATH}/objcart</echo>
+	        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${SCP.PATH}/objcart" />
+
+	        <echo>Deploying binaries to remote file system "${SCP.USER}@${SCP.HOST}:${SCP.PATH}/objcart"</echo>
+	        <scp todir="${SCP.USER}@${SCP.HOST}:${SCP.PATH}/objcart" port="${SCP.PORT}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true">
+	        	<fileset file="${dist.dir}/objcart${objcartversion}.war" />
+	        	<fileset dir="">
+	        	   <include name="${ds.dir}/objcart-ds.xml" />
+	        	</fileset>
+	        </scp>
+	    
+	        <echo>cp {SCP.PATH}/objcart/objcart-ds.xml ${JBOSS.DEPLOY.DIR}/.</echo>
+	        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${SCP.PATH}/objcart/objcart-ds.xml ${JBOSS.DEPLOY.DIR}/." />
+	        
+	        <sleep seconds="15" />
+
+	        <echo>cp {SCP.PATH}/objcart/objcart${objcartversion}.war ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz</echo>
+	        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${SCP.PATH}/objcart/objcart${objcartversion}.war ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz" />
+	        <echo>mv ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war</echo>
+	        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="mv ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war" />
+	 </target>
 	
 	 <target name="deploy-binaries" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" unless="remote.deploy" description="Deploys the executable product binaries.">
         <echo>Deploying binaries to file system ...</echo>
