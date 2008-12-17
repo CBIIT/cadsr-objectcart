@@ -358,7 +358,7 @@
     </target>
 	
     <target name="set-ds-info" description="Puts correct DB info in DS XML file">
-		<replace file="${ds.dir}/*-ds.xml">
+		<replace file="${ds.dir}/objcart-ds.xml">
 			<replacefilter token="@OBJCART.DS.URL@" value="${OBJCART.DS.URL}" />
 			<replacefilter token="@OBJCART.DS.USER@" value="${OBJCART.DS.USER}" />
 			<replacefilter token="@OBJCART.DS.PSWD@" value="${OBJCART.DS.PSWD}" />
@@ -369,7 +369,7 @@
         <echo>Deploying binaries to file system ...</echo>
         <copy todir="${JBOSS.DEPLOY.DIR}">
             <fileset dir="">
-                <include name="${ds.dir}/*-ds.xml" />
+                <include name="${ds.dir}/objcart-ds.xml" />
             </fileset>
         </copy>
         <sleep seconds="15" />
