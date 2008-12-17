@@ -297,7 +297,7 @@
 				<exclude name="servlet.jar"/>
 				<exclude name="commons-logging*.*"/>
 				<exclude name="xercesImpl*.*"/>
-
+				<exclude name="log4j*.*"/>
 
 			</lib>
 			<fileset dir="${conf.dir}/system/web">
@@ -379,8 +379,8 @@
         <move file="${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz" tofile="${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war" />
 	 </target>
 	
-	<target name="anthill-build" if="check.props" depends="anthill, deploy-binaries"/>
-	<target name="local-build" depends="local, dist, package-local-webapp, package-remote-client"/>
-	<target name="dev-build" depends="dev, dist, package-webapp, package-remote-client"/>
+	<target name="anthill-build" if="check.props" depends="clean, anthill, deploy-binaries"/>
+	<target name="local-build" depends="clean, local, dist, package-local-webapp, package-remote-client"/>
+	<target name="dev-build" depends="clean, dev, dist, package-webapp, package-remote-client"/>
 
 </project>
