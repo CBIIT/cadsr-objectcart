@@ -129,7 +129,24 @@
 	
 	<target name="anthill" depends="copy-hql, copy-remote" description="Setting up for anthill deployment">
 			<SDKecho message="${ant.project.name}: Deploying to ${TIER.NAME}" />
-
+		  
+		<echo> property= ${CADSR.DS.URL}</echo>
+	            <echo> property= ${CADSR.DS.USER} </echo>
+	            <echo> property= ${CADSR.DS.PSWD} </echo>
+	            <echo> property= ${CADSR.DS.TNS.ENTRY}</echo>
+	            <echo> property= ${OBJCART.DS.URL} </echo>
+	            <echo> property= ${OBJCART.DS.USER} </echo>
+	            <echo> property= ${OBJCART.DS.PSWD} </echo>
+	            <echo> property= ${TIER}" </echo>
+	            <echo> property= ${TIER.UPPER}" </echo>
+	            <echo> property= ${TIER.NAME}</echo>
+	            <echo> property= ${JBOSS.HOME.DIR}</echo>
+	            <echo> property= ${JBOSS.SERVER.DIR} </echo>
+	            <echo> property= ${JBOSS.CONF.DIR} </echo>
+	            <echo> property= ${JBOSS.DEPLOY.DIR} </echo>
+	            <echo> property= ${JBOSS.LOG.DIR} </echo>
+	            <echo> property= ${SQL.EXE} </echo>
+		
 		<condition property="check.props">
 		  	     <and>
 		            <isset property="CADSR.DS.URL" />
