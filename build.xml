@@ -186,7 +186,10 @@
 		
 		    <condition property="remote.deploy" value="true" else="false" >
 		        <equals arg1="${DEPLOY.LOCATION}" arg2="remote" casesensitive="false" trim="true"/>
-		    </condition>
+		    </condition> 
+			
+			<echo> Remote Deploy = ${remote.deploy} </echo>
+			<echo> Check Props = ${check.props} </echo>
 		
 		</target>
 	
