@@ -4,14 +4,14 @@
 <!--  JBoss Server Configuration                                           -->
 <!--                                                                       -->
 <!-- ===================================================================== -->
-<!-- $Id: objcart-ds.xml,v 1.1 2008-12-15 22:03:34 avdicd Exp $ -->
+<!-- $Id: objcart-ds.xml,v 1.2 2008-12-17 17:31:53 avdicd Exp $ -->
 <!-- ==================================================================== -->
 <!--  Datasource config originally from Steven Coy             -->
 <!-- ==================================================================== -->
 <datasources>
 	<local-tx-datasource>
 		<jndi-name>objcartAPI</jndi-name>
-		<connection-url>jdbc:mysql:@OBJCART.DS.URL@</connection-url>
+		<connection-url>jdbc:mysql://@OBJCART.DS.URL@</connection-url>
 		<driver-class>com.mysql.jdbc.Driver</driver-class>
 		<user-name>@OBJCART.DS.USER@</user-name>
 		<password>@OBJCART.DS.PSWD@</password>
