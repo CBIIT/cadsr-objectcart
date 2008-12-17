@@ -129,23 +129,35 @@
 	
 	<target name="anthill" depends="copy-hql, copy-remote" description="Setting up for anthill deployment">
 			<SDKecho message="${ant.project.name}: Deploying to ${TIER.NAME}" />
-		  
-		<echo> property= ${CADSR.DS.URL}</echo>
-	            <echo> property= ${CADSR.DS.USER} </echo>
-	            <echo> property= ${CADSR.DS.PSWD} </echo>
-	            <echo> property= ${CADSR.DS.TNS.ENTRY}</echo>
-	            <echo> property= ${OBJCART.DS.URL} </echo>
-	            <echo> property= ${OBJCART.DS.USER} </echo>
-	            <echo> property= ${OBJCART.DS.PSWD} </echo>
-	            <echo> property= ${TIER}" </echo>
-	            <echo> property= ${TIER.UPPER}" </echo>
-	            <echo> property= ${TIER.NAME}</echo>
-	            <echo> property= ${JBOSS.HOME.DIR}</echo>
-	            <echo> property= ${JBOSS.SERVER.DIR} </echo>
-	            <echo> property= ${JBOSS.CONF.DIR} </echo>
-	            <echo> property= ${JBOSS.DEPLOY.DIR} </echo>
-	            <echo> property= ${JBOSS.LOG.DIR} </echo>
-	            <echo> property= ${SQL.EXE} </echo>
+	         
+		 <echo>
+		        PROP.FILE = ${PROP.FILE}
+
+		        CADSR.DS.URL = ${CADSR.DS.URL}
+		        CADSR.DS.USER = ${CADSR.DS.USER}
+		        CADSR.DS.PSWD = ${CADSR.DS.PSWD}
+		        CADSR.DS.TNS.ENTRY=${CADSR.DS.TNS.ENTRY}
+		 		OBJCART.DS.URL= ${OBJCART.DS.URL} 
+		 		OBJCART.DS.USER= ${OBJCART.DS.USER} 
+		 		OBJCART.DS.PSWD= ${OBJCART.DS.PSWD}
+		        DEPLOY.LOCATION = ${DEPLOY.LOCATION}
+		        JBOSS.HOME.DIR = ${JBOSS.HOME.DIR}
+		        JBOSS.SERVER.DIR = ${JBOSS.SERVER.DIR}
+		        JBOSS.CONF.DIR = ${JBOSS.CONF.DIR}
+		        JBOSS.DEPLOY.DIR = ${JBOSS.DEPLOY.DIR}
+		        JBOSS.LOG.DIR = ${JBOSS.LOG.DIR}
+		        JDEBUG = ${JDEBUG}
+		        SCP.USER = ${SCP.USER}
+		        SCP.HOST = ${SCP.HOST}
+		        SCP.PATH = ${SCP.PATH}
+		        SCP.KEYFILE = ${SCP.KEYFILE}
+		        SCP.PASSPHRASE = ${SCP.PASSPHRASE}
+		        SCP.PORT = ${SCP.PORT}
+		        SQL.EXE = ${SQL.EXE}
+		        TIER = ${TIER}
+		        TIER.UPPER = ${TIER.UPPER}
+		        TIER.NAME = ${TIER.NAME}
+		    </echo>
 		
 		<condition property="check.props">
 		  	     <and>
@@ -164,6 +176,13 @@
 		            <isset property="JBOSS.CONF.DIR" />
 		            <isset property="JBOSS.DEPLOY.DIR" />
 		            <isset property="JBOSS.LOG.DIR" />
+		            <isset property="SCP.USER" />
+		            <isset property="SCP.HOST" /> 
+		            <isset property="SCP.PATH" />
+		            <isset property="SCP.KEYFILE" />
+		            <isset property="SCP.PORT" />
+		            <isset property="SCP.PASSPHRASE" />
+		            <isset property="DEPLOY.LOCATION" />
 		            <isset property="SQL.EXE" />
 		        </and>
 		    </condition>
@@ -364,8 +383,35 @@
 			<replacefilter token="@OBJCART.DS.PSWD@" value="${OBJCART.DS.PSWD}" />
 		</replace>
 	</target>
+
+    <condition property="remote.deploy">
+        <equals arg1="${DEPLOY.LOCATION}" arg2="remote" />
+    </condition>
 	
-	 <target name="deploy-binaries" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client"  description="Deploys the executable product binaries.">
+    <target name="deploy-binaries-remote" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" if="remote-deploy" description="Deploys the executable product binaries to API machine.">
+        <echo>mkdir ${SCP.PATH}/objcart</echo>
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${SCP.PATH}/objcart" />
+
+        <echo>Deploying binaries to remote file system "${SCP.USER}@${SCP.HOST}:${SCP.PATH}/objcart"</echo>
+        <scp todir="${SCP.USER}@${SCP.HOST}:${SCP.PATH}/objcart" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true">
+        	<fileset file="${dist.dir}/objcart${objcartversion}.war" />
+        	<fileset dir="">
+        	   <include name="${ds.dir}/objcart-ds.xml" />
+        	</fileset>
+        </scp>
+    
+        <echo>cp {SCP.PATH}/objcart/objcart-ds.xml ${JBOSS.DEPLOY.DIR}/.</echo>
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${SCP.PATH}/objcart/objcart-ds.xml ${JBOSS.DEPLOY.DIR}/." />
+        
+        <sleep seconds="15" />
+
+        <echo>cp {SCP.PATH}/objcart/objcart${objcartversion}.war ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz</echo>
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${SCP.PATH}/objcart/objcart${objcartversion}.war ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz" />
+        <echo>mv ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war</echo>
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="mv ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz ${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war" />
+    </target>
+	
+	 <target name="deploy-binaries" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" unless="remote.deploy" description="Deploys the executable product binaries.">
         <echo>Deploying binaries to file system ...</echo>
         <copy todir="${JBOSS.DEPLOY.DIR}">
             <fileset dir="">
@@ -379,7 +425,7 @@
         <move file="${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.waz" tofile="${JBOSS.DEPLOY.DIR}/objcart${objcartversion}.war" />
 	 </target>
 	
-	<target name="anthill-build" if="check.props" depends="clean, anthill, deploy-binaries"/>
+	<target name="anthill-build" if="check.props" depends="clean, anthill, deploy-binaries-remote, deploy-binaries"/>
 	<target name="local-build" depends="clean, local, dist, package-local-webapp, package-remote-client"/>
 	<target name="dev-build" depends="clean, dev, dist, package-webapp, package-remote-client"/>
 
