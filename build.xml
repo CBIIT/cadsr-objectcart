@@ -131,8 +131,6 @@
 			<SDKecho message="${ant.project.name}: Deploying to ${TIER.NAME}" />
 	         
 		 <echo>
-		        PROP.FILE = ${PROP.FILE}
-
 		        CADSR.DS.URL = ${CADSR.DS.URL}
 		        CADSR.DS.USER = ${CADSR.DS.USER}
 		        CADSR.DS.PSWD = ${CADSR.DS.PSWD}
@@ -158,7 +156,7 @@
 		        TIER.NAME = ${TIER.NAME}
 		    </echo>
 		
-		<condition property="check.props">
+			<condition property="check.props">
 		  	     <and>
 		            <isset property="CADSR.DS.URL" />
 		            <isset property="CADSR.DS.USER" />
@@ -186,9 +184,9 @@
 		        </and>
 		    </condition>
 		
-	    <condition property="remote.deploy">
-	        <equals arg1="${DEPLOY.LOCATION}" arg2="remote" />
-	    </condition>
+		    <condition property="remote.deploy" value="true" else="false" >
+		        <equals arg1="${DEPLOY.LOCATION}" arg2="remote" casesensitive="false" trim="true"/>
+		    </condition>
 		
 		</target>
 	
@@ -389,7 +387,7 @@
 		</replace>
 	</target>
 	
-    <target name="deploy-binaries-remote" if="remote-deploy" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" description="Deploys the executable product binaries to API machine.">
+    <target name="deploy-binaries-remote" if="remote.deploy" depends="prop-check, set-tooloptions, set-ds-info, dist, package-webapp, package-remote-client" description="Deploys the executable product binaries to API machine.">
     	<SDKecho message="${ant.project.name}: Deploying the executable product binaries to API machine."/>
     	<echo>mkdir ${SCP.PATH}/objcart</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${SCP.PATH}/objcart" />
