@@ -56,11 +56,29 @@ public class CleanerDAO extends HibernateDaoSupport {
 		Timestamp nowPlusExpirationInterval = new Timestamp(now.getTime()+expirationInterval*60*1000);
 		
 		Query updateActiveCarts = session.createQuery("update Cart set expirationDate = :nowPlusExpirationInterval" +
-				" where (lastWriteDate > :nowMinusTwiceSleep or lastReadDate > :nowMinusTwiceSleep) and expirationDate > :now");
+				" where (lastWriteDate > :nowMinusTwiceSleep or lastReadDate > :nowMinusTwiceSleep) and expirationDate > :now ");
 		
 		updateActiveCarts.setTimestamp("nowPlusExpirationInterval", nowPlusExpirationInterval);
 		updateActiveCarts.setTimestamp("nowMinusTwiceSleep", nowMinusTwiceSleep);
 		updateActiveCarts.setTimestamp("now", now);
+		
+		/* GF 28500 */
+		//Timestamp nowMinus24Hrs = new Timestamp(now.getTime() - 1440*60*1000);		
+		//Timestamp nowPlusThirtyDays = new Timestamp(now.getTime() - 30*24*60*1000);
+		String emptyCartSql = "UPDATE cart c left join cart_object co on c.id = co.cart_id " +
+				" set expiration_Date = NOW() where" +
+				" (c.user_Id like 'PublicUser%') and " +
+				" (c.last_write_date < DATE_SUB(NOW(), INTERVAL 1 DAY) OR  c.last_read_date < DATE_SUB(NOW(), INTERVAL 1 DAY)) and" +
+				" (c.expiration_Date is null) and (co.id is null)";
+		Query expPublicCarts = session.createSQLQuery(emptyCartSql);		
+		
+		String nonEmptyCartSql = "UPDATE cart c left join cart_object co on c.id = co.cart_id " +
+		" set expiration_Date = DATE_ADD(NOW(), INTERVAL 30 DAY) where" +
+		" (c.user_Id like 'PublicUser%') and " +
+		" (c.last_write_date < DATE_SUB(NOW(), INTERVAL 1 DAY) OR  c.last_read_date < DATE_SUB(NOW(), INTERVAL 1 DAY)) and" +
+		" (c.expiration_Date is null) and (co.id is not null)";
+		Query expNonEmptyPublicCarts = session.createSQLQuery(nonEmptyCartSql);				
+		/* GF 28500 */
 		
 		//Now delete expired carts
 		//REQUIRES ON-DELETE Cascade support in underlying database on the 
@@ -72,6 +90,14 @@ public class CleanerDAO extends HibernateDaoSupport {
 		
 		try
 		{	
+			/* GF 28500 */
+			int expResults = expPublicCarts.executeUpdate();
+			if (expResults > 0)
+				log.debug("Expiration date set for "+expResults+" PublicUser carts");			
+			int expNEPCResults = expNonEmptyPublicCarts.executeUpdate();
+			if (expNEPCResults > 0)
+				log.debug("Expiration date set for "+expNEPCResults+" PublicUser carts");			
+			/* GF 28500 */
 			int resetResults = updateActiveCarts.executeUpdate();
 			if (resetResults > 0)
 				log.debug("Reset expiration date for "+resetResults+"active carts");
