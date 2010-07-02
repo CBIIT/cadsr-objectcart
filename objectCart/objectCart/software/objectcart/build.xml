@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="System" basedir="." default="local-build">
+
+	<description>Build script for building the runtime system</description>
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="build.properties" />
+
+	<!--***********************************************************************
+	*** Import utility script
+	*********************************************************************** -->
+	<import file="build-utils.xml" />
+
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+	<path id="classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${system.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
+	<path id="basedir.path">
+		<pathelement path="${basedir}" />
+	</path>
+
+	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
+
+
+	<!--***********************************************************************
+	*** Prepares the directory structure
+	*********************************************************************** -->
+	<target name="init">
+		<SDKecho message="${ant.project.name}: Preparing directories" />
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<!--***********************************************************************
+	*** Condition determining if clean is possible or not
+	*********************************************************************** -->
+	<target name="prepare-clean-condition">
+		<SDKecho message="${ant.project.name}: Checking the condition for cleaning" />
+		<condition property="clean-condition-met">
+			<available file="${src.dir}" type="dir" />
+		</condition>
+	</target>
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files
+	*********************************************************************** -->
+	<target name="clean" description="Cleans the generated directories and files" depends="prepare-clean-condition" if="clean-condition-met">
+		<SDKecho message="${ant.project.name}: Cleaning directories and files" />
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<!--***********************************************************************
+	*** Compiles source code
+	*********************************************************************** -->
+	<target name="compile" depends="init" description="Compiles source code">
+		<SDKecho message="${ant.project.name}: Compiling source code" />
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true">
+			<classpath refid="classpath" />
+			<exclude name="gov/nih/nci/objectCart/jUnit/**/*"/>
+		</javac>
+		<copy todir="${build.classes.dir}">
+			<fileset dir="${src.dir}" includes="gov/nih/nci/system/web/struts/action/package.properties" />
+		</copy>
+	</target>
+
+
+	<!--***********************************************************************
+	*** Prepares for deployment on particular tier
+	*********************************************************************** -->
+	<target name="copy-hql">
+		<SDKecho message="${ant.project.name}: Copying HQL config" />
+		<copy todir="${orm.dir}" overwrite="true">
+			<fileset dir="${conf.dir}">
+				<include name="hibernate.cfg.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-remote">
+		<SDKecho message="${ant.project.name}: Copying remote-client config" />
+		<mkdir dir="${output.client.remote.dir}"/>
+		<mkdir dir="${output.client.remote.dir}/conf"/>
+		<mkdir dir="${output.client.remote.dir}/lib"/>
+
+		<copy todir="${output.client.remote.dir}/conf">
+			<fileset dir="${config.client.remote.dir}"/>
+		</copy>
+
+	</target>
+
+	<target name="prod" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+			<SDKecho message="${ant.project.name}: Deploying to Production" />
+
+			<replace file="${orm.dir}/hibernate.cfg.xml">
+				<replacefilter token="@DB_CONNECTION_URL@" value="${PROD_DB_CONNECTION_URL}" />
+				<replacefilter token="@DB_USERNAME@" value="${PROD_DB_USERNAME}" />
+				<replacefilter token="@DB_PASSWORD@" value="${PROD_DB_PASSWORD}" />
+				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+				<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
+			</replace>
+
+			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+				<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
+			</replace>
+		</target>
+	
+	<target name="stage" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+			<SDKecho message="${ant.project.name}: Deploying to Stage" />
+
+			<replace file="${orm.dir}/hibernate.cfg.xml">
+				<replacefilter token="@DB_CONNECTION_URL@" value="${STAGE_DB_CONNECTION_URL}" />
+				<replacefilter token="@DB_USERNAME@" value="${STAGE_DB_USERNAME}" />
+				<replacefilter token="@DB_PASSWORD@" value="${STAGE_DB_PASSWORD}" />
+				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+				<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
+			</replace>
+
+			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+				<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
+			</replace>
+		</target>
+	
+	<target name="qa" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+		<SDKecho message="${ant.project.name}: Deploying to QA" />
+
+		<replace file="${orm.dir}/hibernate.cfg.xml">
+			<replacefilter token="@DB_CONNECTION_URL@" value="${QA_DB_CONNECTION_URL}" />
+			<replacefilter token="@DB_USERNAME@" value="${QA_DB_USERNAME}" />
+			<replacefilter token="@DB_PASSWORD@" value="${QA_DB_PASSWORD}" />
+			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
+		</replace>
+
+		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
+		</replace>
+	</target>
+	
+	<target name="dev" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+		<SDKecho message="${ant.project.name}: Deploying to DEV" />
+
+		<replace file="${orm.dir}/hibernate.cfg.xml">
+			<replacefilter token="@DB_CONNECTION_URL@" value="${DEV_DB_CONNECTION_URL}" />
+			<replacefilter token="@DB_USERNAME@" value="${DEV_DB_USERNAME}" />
+			<replacefilter token="@DB_PASSWORD@" value="${DEV_DB_PASSWORD}" />
+			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
+		</replace>
+
+		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+			<replacefilter token="@SERVER_URL@" value="${DEV_SERVER_URL}" />
+		</replace>
+	</target>
+
+	<target name="local" depends="copy-hql, copy-remote" description="Setting up for local deployment">
+		<SDKecho message="${ant.project.name}: Deploying to local environment" />
+		<property name="local" value="true"/>
+
+		<replace file="${orm.dir}/hibernate.cfg.xml">
+			<replacefilter token="@DB_CONNECTION_URL@" value="${LOCAL_DB_CONNECTION_URL}" />
+			<replacefilter token="@DB_USERNAME@" value="${LOCAL_DB_USERNAME}" />
+			<replacefilter token="@DB_PASSWORD@" value="${LOCAL_DB_PASSWORD}" />
+			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
+		</replace>
+
+		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+			<replacefilter token="@SERVER_URL@" value="${LOCAL_SERVER_URL}" />
+		</replace>
+
+	</target>
+
+	<!--***********************************************************************
+	*** Create distributable package
+	*********************************************************************** -->
+	<target name="dist" depends="compile" description="Prepates distribution files">
+		<SDKecho message="${ant.project.name}: Creating distributable package" />
+
+		<jar destfile="${lib.dir}\${file.output.cart.orm.name}" basedir="${orm.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+			</manifest>
+		</jar>
+
+		<jar destfile="${dist.dir}\${file.output.extension.client.name}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+			</manifest>
+			<include name="gov/nih/nci/objectCart/client/**/*" />
+			<include name="gov/nih/nci/objectCart/applicationService/*.*" />
+			<include name="gov/nih/nci/objectCart/util/ValidatorException.*"/>
+			<fileset dir="${src.dir}">
+				<include name="gov/nih/nci/objectCart/client/**/*" />
+				<include name="gov/nih/nci/objectCart/applicationService/*.*" />
+				<include name="gov/nih/nci/objectCart/util/ValidatorException.*"/>
+			</fileset>
+			<fileset dir="${output.client.remote.dir}/conf">
+				<include name="log4j.properties"/>
+			</fileset>
+		</jar>
+
+		<jar destfile="${dist.dir}\${file.output.extension.core.name}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+			</manifest>
+			<include name="gov/nih/nci/objectCart/dao/**/*" />
+			<include name="gov/nih/nci/objectCart/dao/orm/**/*" />
+			<include name="gov/nih/nci/objectCart/applicationService/impl/**/*" />
+			<include name="gov/nih/nci/objectCart/util/**/*" />
+			<include name="gov/nih/nci/objectCart/util/xml/**/*" />
+			<fileset dir="${src.dir}">
+				<include name="gov/nih/nci/objectCart/dao/**/*" />
+				<include name="gov/nih/nci/objectCart/dao/orm/**/*" />
+				<include name="gov/nih/nci/objectCart/applicationService/impl/**/*" />
+				<include name="gov/nih/nci/objectCart/util/**/*" />
+				<include name="gov/nih/nci/objectCart/util/xml/**/*" />
+			</fileset>
+		</jar>
+
+	</target>
+
+	<!--***********************************************************************
+	*** Create server war
+	*********************************************************************** -->
+	<target name="package-local-webapp" depends="dist">
+		<SDKecho message="${ant.project.name}: Packaging the server"/>
+		<war destfile="${dist.dir}/objectCart-local.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+			<lib dir="${dist.dir}" includes="*.jar"/>
+			<lib dir="${lib.dir}" includes="*.jar"/>
+			<lib dir="${system.lib.dir}" includes="*.jar">
+				<exclude name="${server-exclude-list}"/>
+				<exclude name="servlet.jar"/>
+				<exclude name="commons-logging*.*"/>
+				<exclude name="xercesImpl*.*"/>
+			</lib>
+			<fileset dir="${conf.dir}/system/package/local-client/conf">
+				<include name="*.xml"/>
+			</fileset>
+			<fileset dir="${conf.dir}/system/web">
+				<include name="**/*" />
+				<exclude name="**/web.xml" />
+			</fileset>
+
+			<fileset dir="${web.dir}">
+				<include name="**/*" />
+			</fileset>
+			
+			<fileset dir=".">
+				<include name="docs/**/*" />
+			</fileset>
+		</war>
+	</target>
+
+	<target name="package-webapp" depends="dist">
+		<SDKecho message="${ant.project.name}: Packaging the server"/>
+		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+			<lib dir="${dist.dir}" includes="*.jar"/>
+			<lib dir="${lib.dir}" includes="*.jar"/>
+
+			<lib dir="${system.lib.dir}" includes="*.jar">
+				<exclude name="${server-exclude-list}"/>
+				<exclude name="servlet.jar"/>
+				<exclude name="commons-logging*.*"/>
+				<exclude name="xercesImpl*.*"/>
+
+
+			</lib>
+			<fileset dir="${conf.dir}/system/web">
+				<include name="**/*" />
+				<exclude name="**/web.xml" />
+			</fileset>
+
+			<fileset dir="${web.dir}">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir=".">
+				<include name="docs/**/*" />
+			</fileset>
+		</war>
+	</target>
+
+	<target name="package-remote-client" depends="dist">
+		<SDKecho message="${ant.project.name}: Packaging the remote client" />
+
+		<copy todir="${output.client.remote.dir}">
+			<fileset dir="${dist.dir}">
+				<include name="${file.output.extension.client.name}"/>
+			</fileset>
+			<fileset dir="${lib.dir}" includes="objectCart-beans.jar" />
+		</copy>
+		<copy todir="${output.client.remote.dir}/conf">
+			<fileset dir="${config.client.remote.dir}"/>
+		</copy>
+		<copy todir="${output.client.remote.dir}/lib">
+			<fileset dir="${system.lib.dir}">
+				<include name="acegi*.*"/>
+				<include name="asm*.*"/>
+				<include name="antlr*.*"/>
+				<include name="cglib*.*"/>
+				<include name="commons-codec*.*"/>
+				<include name="commons-collection*.*"/>
+				<include name="commons-logging*.*"/>
+				<include name="hibernate*.*"/>
+				<include name="log4j*.*"/>
+				<include name="spring*.*"/>
+				<include name="castor*.*"/>
+				<include name="xercesImpl*.*"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="local-build" depends="local, dist, package-local-webapp, package-remote-client"/>
+	<target name="dev-build" depends="dev, dist, package-webapp, package-remote-client"/>
+	<target name="qa-build" depends="qa, dist, package-webapp, package-remote-client"/>
+	<target name="stage-build" depends="stage, dist, package-webapp, package-remote-client"/>
+	<target name="prod-build" depends="prod, dist, package-webapp, package-remote-client"/>
+
+</project>
