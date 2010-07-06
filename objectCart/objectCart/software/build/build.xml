@@ -68,8 +68,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 	<!-- Properties that relate to how to call build targets from sub-projects-->
 	<!-- Working directory passed to Ant tasks -->
-	<property name="ObjectCart-api.base.dir" value="${software.dir}/ObjectCart" />
-	<property name="ObjectCart-webapp.base.dir" value="${software.dir}/ObjectCart" />
+	<property name="ObjectCart-api.base.dir" value="${software.dir}/objectcart" />
+	<property name="ObjectCart-webapp.base.dir" value="${software.dir}/objectcart" />
 
 	<!-- Build file names relative working dir above, if the basedir of the sub-project ant script is ".." you should set the *.basdir to and the build file should include the dir and build file name from the *.base.dir -->
 	<property name="ObjectCart-webapp.build.file" value="build.xml" />
