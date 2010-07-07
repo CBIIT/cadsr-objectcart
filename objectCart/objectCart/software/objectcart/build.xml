@@ -236,7 +236,7 @@
 	*********************************************************************** -->
 	<target name="package-local-webapp" depends="dist">
 		<SDKecho message="${ant.project.name}: Packaging the server"/>
-		<war destfile="${dist.dir}/objectCart-local.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+		<war destfile="${dist.dir}/ObjectCart.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
 			<lib dir="${dist.dir}" includes="*.jar"/>
 			<lib dir="${lib.dir}" includes="*.jar"/>
 			<lib dir="${system.lib.dir}" includes="*.jar">
@@ -265,7 +265,7 @@
 
 	<target name="package-webapp" depends="dist">
 		<SDKecho message="${ant.project.name}: Packaging the server"/>
-		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+		<war destfile="${dist.dir}/ObjectCart.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
 			<lib dir="${dist.dir}" includes="*.jar"/>
 			<lib dir="${lib.dir}" includes="*.jar"/>
 
