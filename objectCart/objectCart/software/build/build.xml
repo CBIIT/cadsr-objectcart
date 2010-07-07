@@ -399,6 +399,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<available file="${cagrid-target.src.url}"/>
 			</not>
 			<then>
+				<mkdir dir="${cagrid.target.co.dir}"/>
 				<svn-co
 					svn.checkout.url="${cagrid-target.src.url}"
 					svn.checkout.dir="${cagrid.target.co.dir}"
@@ -867,7 +868,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		</copy>
 	</target>
 
-	<target name="database:gencl" description="Upgrades database using BDA Datbase Upgrade process." unless="exclude.database"
+	<target name="database:gencl" description="Upgrades database using BDA Database Upgrade process." unless="exclude.database"
 		depends="
 			database:prep
 			">

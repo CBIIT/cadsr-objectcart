@@ -64,7 +64,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="db-install.dir.dest" location="${working.dir}/${db-install.dist.relative.dir}" />
 	<property name="db-upgrade.dir.dest" location="${working.dir}/${db-upgrade.dist.relative.dir}" />
 	<property name="jboss-conf.dir.src" location="${basedir}/${jboss-conf.dist.relative.dir}" />
-	<property name="jboss-conf.dir.dest" location="${working.dir}/${jboss-conf.dist.relative.dir}" />	
+	<property name="jboss-conf.dir.dest" location="${working.dir}/${jboss-conf.dist.relative.dir}" />
 
 	<!-- *-ds.xml and WAR -->
 	<property name="ObjectCart-webapp.dir.dist" location="${basedir}/${ObjectCart-webapp.dist.relative.dir}" />
@@ -122,7 +122,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<echo message="application.base.path=${application.base.path}"/>
 		<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
 		<jboss-version
-			/>		
+			/>
 	</target>
 
 	<target name="install:jboss:init" depends="common:init:pre">
@@ -180,7 +180,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<target name="common:init" depends="common:init:pre">
 		<!-- ObjectCart-webapp can use either Oracle or MySQL or PostgreSQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
 		<echoproperties prefix="database"/>
-		<switch value="${database.type}">			
+		<switch value="${database.type}">
 			<case value="mysql">
 				<property name="database.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 				<property name="database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
@@ -956,12 +956,12 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	</target>
 
 	<target name="upgrade:jboss:readers:bda" if="jboss.exists">
-        
-		<!-- Make sure the ${properties.file} has at least the following props -->
+        <!--
+		#### Make sure the ${properties.file} has at least the following props ###
 		<properties-exist
 			properties.list="application.base.path,jboss.home,jboss.server.name"
 			/>
-		<!-- Set these -->
+		#### Set these ###
 		<osfamily property="os.family"/>
 		<if>
 			<or>
@@ -978,8 +978,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<property name="jboss.server.hostname" value="${env.COMPUTERNAME}"/>
 			</then>
 		</if>
-		<!-- Begin JBoss Readers -->
-		<!-- Reader reqiures that you have only one data source defined in each *-ds.xml file -->
+		#### Begin JBoss Readers ###
+		#### Reader reqiures that you have only one data source defined in each *-ds.xml file ###
 		<jboss-read-dbconfig
 			jboss.home="${read.jboss.home}"
 			jboss.ds-xml.file="objectcart-ds.xml"
@@ -987,16 +987,15 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<jboss-read-ldapconfig
 			jboss.home="${read.jboss.home}"
 			/>
-		<jboss-read-bindings-file-location
-			jboss.home="${read.jboss.home}"
-			/>
+		-->
+		<jboss-read-bindings-file-location jboss.home="${read.jboss.home}" />
 		<if>
-			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<equals arg1="${jboss.major.version}" arg2="4" />
 			<then>
-				<jboss-read-ports
-					/>
+				<jboss-read-ports />
 			</then>
 		</if>
+		<!--
 		<if>
 			<equals arg1="${jboss.major.version}" arg2="5"/>
 			<then>
@@ -1004,7 +1003,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				/>
 			</then>
 		</if>
-		<!-- Setting this variable will cause install to copy it into place if using CM/DAC, not modified in NCM -->
+		#### Setting this variable will cause install to copy it into place if using CM/DAC, not modified in NCM ###
 		<var name="jboss.ssl.keystore.dir" value="${working.dir}/keys/jboss"/>
 		<if>
 			<equals arg1="${jboss.major.version}" arg2="4"/>
@@ -1044,14 +1043,14 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 					/>
 			</then>
 		</if>
-		<!-- for tier installs, should be done first, since it is set first it will be the one used if it exists -->
+		#### for tier installs, should be done first, since it is set first it will be the one used if it exists ###
 		<jboss-read-java_opts
 			jboss.bin.dir="${read.jboss.home}/server/${jboss.server.name}/bin"
 			/>
 		<jboss-read-java_opts
 			jboss.home="${read.jboss.home}"
 			/>
-		<!-- will have to add code to install:post:jboss to copy this back if exists -->
+		#### will have to add code to install:post:jboss to copy this back if exists ###
 		<property name="copied.jboss.log4j.dir" value="${working.dir}/copied-log4j"/>
 		<if>
 			<equals arg1="${jboss.major.version}" arg2="4"/>
@@ -1073,7 +1072,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 					/>
 			</then>
 		</if>
-		<grid-read-index-url
+		#### <grid-read-index-url
 			grid.wsrf.dir="${read.jboss.home}/server/${jboss.server.name}/deploy/wsrf.war"
 			/>
 		<if>
@@ -1095,16 +1094,18 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 					/>
 			</then>
 		</if>
-		<!-- will have to add code to install:post:jboss to copy this back if exists -->
-		<!-- no longer needed
+		###
+		#### will have to add code to install:post:jboss to copy this back if exists ###
+		#### no longer needed
 		<grid-copy-service-metadata
 			copied.service-metadata.dir="${copied.service-metadata.dir}"
 			/>
-		-->
+		
 		<grid-read-poc
 			grid.wsrf.dir="${read.jboss.home}/server/${jboss.server.name}/deploy/wsrf.war"
 			grid.service.name="Sample"
 			/>
+		###
 		<read-property-from-properties-service
 			jboss.home="${read.jboss.home}"
 			property.name="property1"
@@ -1113,11 +1114,12 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			jboss.home="${read.jboss.home}"
 			property.name="property2"
 			/>
+		-->
 	</target>
 
 	<target name="upgrade:post:jboss">
 		<if>
-			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<equals arg1="${jboss.major.version}" arg2="4" />
 			<then>
 				<copy file="${copied.jboss.log4j.dir}/log4j.xml" todir="${jboss.home}/server/${jboss.server.name}/conf"/>
 			</then>
