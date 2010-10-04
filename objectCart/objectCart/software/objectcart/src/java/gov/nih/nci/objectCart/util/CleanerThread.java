@@ -23,7 +23,9 @@ public class CleanerThread extends Thread {
 		
 		while (true) {
 			try {
+				log.info("Cleaner running");
 				cleaner.clean();
+				log.info("Cleaner stopped");
 				Thread.sleep(secs*1000);
 			} catch (InterruptedException ie){
 				log.fatal(ie.getMessage());
