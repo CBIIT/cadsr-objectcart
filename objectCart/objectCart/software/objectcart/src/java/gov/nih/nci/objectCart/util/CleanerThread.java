@@ -5,28 +5,26 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import org.apache.log4j.Logger;
 
 public class CleanerThread extends Thread {
-	private long secs = 600;
+	private int sleepTime = 60;
 	private static Logger log = Logger.getLogger(CleanerThread.class.getName());
 	
 	public void run() {
-		long temp = 0;
+		
 		CleanerDAO cleaner = new CleanerDAO();
 		try {
-			temp = Long.valueOf(PropertiesLoader.getProperty("cart.cleaner.sleep.seconds"));
+			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.cleaner.sleep.minutes"));  //Get property value
+			sleepTime = temp;  //set to sleep time
 		} catch (Exception ae) {
 			log.error(ae);
 			ae.printStackTrace();
 		}
-		
-		if (temp != 0)
-			secs = temp;
 		
 		while (true) {
 			try {
 				log.info("Cleaner running");
 				cleaner.clean();
 				log.info("Cleaner stopped");
-				Thread.sleep(secs*1000);
+				Thread.sleep(sleepTime*60*1000);  //Put thread to sleep, converting minutes to milliseconds
 			} catch (InterruptedException ie){
 				log.fatal(ie.getMessage());
 				ie.printStackTrace();	

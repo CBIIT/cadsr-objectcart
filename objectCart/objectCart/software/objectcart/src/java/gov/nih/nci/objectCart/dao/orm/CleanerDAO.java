@@ -39,129 +39,110 @@ public class CleanerDAO extends HibernateDaoSupport {
 		Transaction tx = session.beginTransaction();
 		
 		//Check for unexpired carts that have been active within the expiration interval and reset expiration time.
-		long expirationInterval = 5760;
-		long sleepTime = 600;
+		int expirationInterval = 4*24*60;  //Four days, in minutes
+		int sleepTime = 60;  //One hour, in minutes
 		
 		//Defaults
-		int publicEmptyExpirationDays = 0;
-		int publicFullExpirationDays = 30;
-		int publicEmptyActivityDays = 1;
-		int publicFullActivityDays = 1;
+		int publicEmptyExpirationDays = 4*24*60;
+		String emptyExpirationSQL = "DATE_ADD(NOW(), INTERVAL "+publicEmptyExpirationDays+" MINUTE)";
+		
+		int publicFullExpirationDays = 30*24*60;  //30 days, in minutes
+		String fullExpirationSQL = "DATE_ADD(NOW(), INTERVAL "+publicFullExpirationDays+" MINUTE)";
+		
+		
 		
 		try {
-			long temp = Long.valueOf(PropertiesLoader.getProperty("cart.time.expiration.minutes"));
+			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.time.expiration.minutes"));
 			expirationInterval = temp;
 		} catch (Exception e) { log.error(e); }
 		
 		try {
-			long temp = Long.valueOf(PropertiesLoader.getProperty("cart.cleaner.sleep.seconds"));
+			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.cleaner.sleep.minutes"));
 			sleepTime = temp;
 		} catch (Exception e) { log.error(e); }
 		
 		try {
-			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.public.empty.expiration.days"));
+			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.public.empty.expiration.minutes"));
 			publicEmptyExpirationDays = temp;
 		} catch (Exception e) { log.error(e); }
 		
 		try {
-			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.public.full.expiration.days"));
+			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.public.full.expiration.minutes"));
 			publicFullExpirationDays = temp;
 		} catch (Exception e) { log.error(e); }
 		
-		try {
-			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.public.empty.activity.days"));
-			publicEmptyActivityDays = temp;
-		} catch (Exception e) { log.error(e); }
 		
-		try {
-			int temp = Integer.valueOf(PropertiesLoader.getProperty("cart.public.full.activity.days"));
-			publicFullActivityDays = temp;
-		} catch (Exception e) { log.error(e); }
-		
+		//Timestamps are in milliseconds
 		Timestamp now = new Timestamp(System.currentTimeMillis());	
-		Timestamp nowMinusTwiceSleep = new Timestamp(now.getTime()-sleepTime*2*1000);
-		Timestamp nowPlusExpirationInterval = new Timestamp(now.getTime()+expirationInterval*60*1000);
+		Timestamp nowMinusTwiceSleep = new Timestamp(now.getTime()-sleepTime*60*1000*2);  //Converting minutes to milliseconds
+		Timestamp nowPlusExpirationInterval = new Timestamp(now.getTime()+expirationInterval*60*1000);  //Converting minutes to milliseconds
 		
 		Query updateActiveCarts = session.createQuery("update Cart set expirationDate = :nowPlusExpirationInterval" +
-				" where (lastWriteDate > :nowMinusTwiceSleep or lastReadDate > :nowMinusTwiceSleep) and expirationDate > :now ");
+				" where (lastWriteDate > :nowMinusTwiceSleep or lastReadDate > :nowMinusTwiceSleep) and expirationDate > :now and expirationDate < :nowPlusExpirationInterval");
 		
 		updateActiveCarts.setTimestamp("nowPlusExpirationInterval", nowPlusExpirationInterval);
 		updateActiveCarts.setTimestamp("nowMinusTwiceSleep", nowMinusTwiceSleep);
 		updateActiveCarts.setTimestamp("now", now);
 		
-		/* GF 28500 */
-		//Timestamp nowMinus24Hrs = new Timestamp(now.getTime() - 1440*60*1000);		
-		//Timestamp nowPlusThirtyDays = new Timestamp(now.getTime() - 30*24*60*1000);
-		
-		//Defaults
-		String emptyExpirationSQL = "NOW()";
-		String emptyActivitySQL= "INTERVAL 1 DAY";
-		String fullExpirationSQL = "DATE_ADD(NOW(), INTERVAL 30 DAY)";
-		String fullActivitySQL = "INTERVAL 1 DAY";
-		
-		if (publicEmptyExpirationDays > 0 && publicEmptyExpirationDays < 365)
-			emptyExpirationSQL = "DATE_ADD(NOW(), INTERVAL "+ publicEmptyExpirationDays+" DAY)";
+
+		if (publicEmptyExpirationDays > 0 && publicEmptyExpirationDays < 365*24*60)				//Check expiration is within a year
+			emptyExpirationSQL = "DATE_ADD(NOW(), INTERVAL "+ publicEmptyExpirationDays+" MINUTE)";
 		else if (publicEmptyExpirationDays == 0)
 			emptyExpirationSQL = "NOW()";
 		
-		if (publicFullExpirationDays > 0 && publicFullExpirationDays < 365)
-			fullExpirationSQL = "DATE_ADD(NOW(), INTERVAL "+ publicFullExpirationDays+" DAY)";
+		if (publicFullExpirationDays > 0 && publicFullExpirationDays < 365)						//Check expiration is within a year
+			fullExpirationSQL = "DATE_ADD(NOW(), INTERVAL "+ publicFullExpirationDays+" MINUTE)";
 		else if (publicFullExpirationDays == 0)
 			fullExpirationSQL = "NOW()";
-		
-		if (publicEmptyActivityDays > 0 && publicEmptyActivityDays < 365)
-			emptyActivitySQL = "INTERVAL "+ publicEmptyActivityDays+" DAY";
-			
-		if (publicFullActivityDays > 0 && publicFullActivityDays < 365)
-			fullActivitySQL = "INTERVAL "+ publicFullActivityDays+" DAY";
 
 		
-		
-		String emptyCartSql = "UPDATE cart c left join cart_object co on c.id = co.cart_id " +
-				" set expiration_Date = "+emptyExpirationSQL+" where" +
+		//Set expiration date to emptyExpirationSQL if the user starts with 'PublicUser' and the current expiration date is null
+		String initializeSessionCartSql = "UPDATE cart c left join cart_object co on c.id = co.cart_id " +
+				" set expiration_Date = "+emptyExpirationSQL+" where" +  
 				" (c.user_Id like 'PublicUser%') and " +
-				" (c.last_write_date < DATE_SUB(NOW(), "+emptyActivitySQL+") OR  c.last_read_date < DATE_SUB(NOW(), INTERVAL 1 DAY)) and" +
-				" (c.expiration_Date is null) and (co.id is null)";
-		Query expPublicCarts = session.createSQLQuery(emptyCartSql);		
+				" (c.expiration_Date is null)";
 		
+		Query initPublicCarts = session.createSQLQuery(initializeSessionCartSql);		
+		
+		//Set expiration date to fullExpiration if the user starts with 'PublicUser' and the current expiration date is null and the cart has items
 		String nonEmptyCartSql = "UPDATE cart c left join cart_object co on c.id = co.cart_id " +
 		" set expiration_Date = "+fullExpirationSQL+" where" +
 		" (c.user_Id like 'PublicUser%') and " +
-		" (c.last_write_date < DATE_SUB(NOW(), "+fullActivitySQL+") OR  c.last_read_date < DATE_SUB(NOW(), INTERVAL 1 DAY)) and" +
 		" (c.expiration_Date is null) and (co.id is not null)";
 		Query expNonEmptyPublicCarts = session.createSQLQuery(nonEmptyCartSql);				
-		/* GF 28500 */
 		
-		//Now delete expired carts
+		
+		//Now delete expired carts (carts where expiration date is in the past)
 		//REQUIRES ON-DELETE Cascade support in underlying database on the 
 		//CartObject cart_id FK constraint
-		Query cartQuery = session.createQuery("delete from Cart " +
-				"where expirationDate <=:expirationDate");
+		Query deleteCartQuery = session.createQuery("delete from Cart " +
+				"where expirationDate <=:now");
 		
-		cartQuery.setTimestamp("expirationDate", now );		
+		deleteCartQuery.setTimestamp("now", now );  
 		
 		try
 		{	
+			int resetResults = updateActiveCarts.executeUpdate();
+				if (resetResults > 0)
+					log.debug("Reset expiration date for "+resetResults+"active carts");
+				log.debug("Reset expiration date for "+resetResults+"active carts");
 			/* GF 28500 */
-			int expResults = expPublicCarts.executeUpdate();
+			int expResults = initPublicCarts.executeUpdate();
 			if (expResults > 0)
 				log.debug("Expiration date set for "+expResults+" PublicUser carts");			
 			int expNEPCResults = expNonEmptyPublicCarts.executeUpdate();
 			if (expNEPCResults > 0)
 				log.debug("Expiration date set for "+expNEPCResults+" PublicUser carts");			
 			/* GF 28500 */
-			int resetResults = updateActiveCarts.executeUpdate();
-			if (resetResults > 0)
-				log.debug("Reset expiration date for "+resetResults+"active carts");
-			int results = cartQuery.executeUpdate();
+			
+			int results = deleteCartQuery.executeUpdate();
 			if (results > 0)
 				log.debug("Deleted "+results+" carts at "+now.toString());
 			
 		} catch (JDBCException ex){
 			log.error("JDBC Exception in ORMDAOImpl ", ex);
 			ex.printStackTrace();
-			System.out.println(emptyCartSql);
-			System.out.println(nonEmptyCartSql);
+
 		} catch(org.hibernate.HibernateException hbmEx)	{
 			log.error(hbmEx.getMessage());
 			hbmEx.printStackTrace();
