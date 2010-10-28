@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.objectCart/4.0/gov.nih.nci.objectCart.domain" targetNamespace="gme://caCORE.objectCart/4.0/gov.nih.nci.objectCart.domain" elementFormDefault="qualified">
+  <xs:element name="CartObject" type="CartObject" />
+  <xs:complexType name="CartObject">
+    <xs:sequence />
+    <xs:attribute name="data" type="xs:string" />
+    <xs:attribute name="dateAdded" type="xs:dateTime" />
+    <xs:attribute name="displayText" type="xs:string" />
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="nativeId" type="xs:string" />
+    <xs:attribute name="relatedId" type="xs:integer" />
+    <xs:attribute name="type" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="Cart" type="Cart" />
+  <xs:complexType name="Cart">
+    <xs:sequence>
+      <xs:element name="cartObjectCollection" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="CartObject" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="creationDate" type="xs:dateTime" />
+    <xs:attribute name="expirationDate" type="xs:dateTime" />
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="lastReadDate" type="xs:dateTime" />
+    <xs:attribute name="lastWriteDate" type="xs:dateTime" />
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="type" type="xs:string" />
+    <xs:attribute name="userId" type="xs:string" />
+  </xs:complexType>
+</xs:schema>
+
