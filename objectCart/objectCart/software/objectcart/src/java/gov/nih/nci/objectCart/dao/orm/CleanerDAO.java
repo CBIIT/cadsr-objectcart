@@ -104,11 +104,11 @@ public class CleanerDAO extends HibernateDaoSupport {
 		
 		Query initPublicCarts = session.createSQLQuery(initializeSessionCartSql);		
 		
-		//Set expiration date to fullExpiration if the user starts with 'PublicUser', the cart has not been active (read or written to) in the last day and the cart has items
+		//Set expiration date to fullExpiration if the user starts with 'PublicUser', the cart has been active (read or written to) in the last day and the cart has items
 		String nonEmptyCartSql = "UPDATE cart c left join cart_object co on c.id = co.cart_id " +
 		" set expiration_Date = "+fullExpirationSQL+" where" +
 		" (c.user_Id like 'PublicUser%') and " +
-		" (c.last_write_date < DATE_SUB(NOW(), INTERVAL 1 DAY) OR c.last_read_date < DATE_SUB(NOW(), INTERVAL 1 DAY)) and" +
+		" (c.last_write_date > DATE_SUB(NOW(), INTERVAL "+ (sleepTime * 2)+" MINUTE) OR c.last_read_date > DATE_SUB(NOW(), INTERVAL "+ (sleepTime * 2) +" MINUTE)) and" +
 		" (co.id is not null)";
 		Query expNonEmptyPublicCarts = session.createSQLQuery(nonEmptyCartSql);				
 		
