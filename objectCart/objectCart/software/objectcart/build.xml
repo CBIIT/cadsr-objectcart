@@ -22,7 +22,6 @@
 		</fileset>
 		<fileset dir="${system.lib.dir}">
 			<include name="*.jar" />
-			<exclude name="log4*.jar"/>
 		</fileset>
 	</path>
 
