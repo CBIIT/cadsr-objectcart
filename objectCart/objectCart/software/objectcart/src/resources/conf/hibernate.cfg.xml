@@ -4,7 +4,8 @@
 	<session-factory>
 	
 		<!-- Properties for the session factory -->
-		<property name="connection.driver_class">@DB_DRIVER@</property>
+		<property name="connection.datasource">java:/objcartAPI</property>
+		<!--  <property name="connection.driver_class">@DB_DRIVER@</property>
 		<property name="connection.url">@DB_CONNECTION_URL@</property>
 		<property name="connection.username">@DB_USERNAME@</property>
 		<property name="connection.password">@DB_PASSWORD@</property>
@@ -15,7 +16,7 @@
 		<property name="c3p0.max_statements">100</property>
 		<property name="c3p0.idle_test_period">3000</property>
 		<property name="c3p0.acquire_increment">2</property>
-		<property name="c3p0.validate">false</property>
+		<property name="c3p0.validate">false</property> -->
 		<property name="hibernate.show_sql">false</property>
 		<property name="dialect">@DB_HIBERNATE_DIALECT@</property>
 		<property name="max_fetch_depth">1</property>

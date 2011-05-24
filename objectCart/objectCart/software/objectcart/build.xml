@@ -22,6 +22,7 @@
 		</fileset>
 		<fileset dir="${system.lib.dir}">
 			<include name="*.jar" />
+			<exclude name="log4*.jar"/>
 		</fileset>
 	</path>
 
@@ -104,11 +105,7 @@
 			<SDKecho message="${ant.project.name}: Deploying to Production" />
 
 			<replace file="${orm.dir}/hibernate.cfg.xml">
-				<replacefilter token="@DB_CONNECTION_URL@" value="${PROD_DB_CONNECTION_URL}" />
-				<replacefilter token="@DB_USERNAME@" value="${PROD_DB_USERNAME}" />
-				<replacefilter token="@DB_PASSWORD@" value="${PROD_DB_PASSWORD}" />
 				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-				<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
 			</replace>
 
 			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
@@ -120,11 +117,7 @@
 			<SDKecho message="${ant.project.name}: Deploying to Stage" />
 
 			<replace file="${orm.dir}/hibernate.cfg.xml">
-				<replacefilter token="@DB_CONNECTION_URL@" value="${STAGE_DB_CONNECTION_URL}" />
-				<replacefilter token="@DB_USERNAME@" value="${STAGE_DB_USERNAME}" />
-				<replacefilter token="@DB_PASSWORD@" value="${STAGE_DB_PASSWORD}" />
 				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-				<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
 			</replace>
 
 			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
@@ -136,11 +129,7 @@
 		<SDKecho message="${ant.project.name}: Deploying to QA" />
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
-			<replacefilter token="@DB_CONNECTION_URL@" value="${QA_DB_CONNECTION_URL}" />
-			<replacefilter token="@DB_USERNAME@" value="${QA_DB_USERNAME}" />
-			<replacefilter token="@DB_PASSWORD@" value="${QA_DB_PASSWORD}" />
 			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
 		</replace>
 
 		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
@@ -152,11 +141,7 @@
 		<SDKecho message="${ant.project.name}: Deploying to DEV" />
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
-			<replacefilter token="@DB_CONNECTION_URL@" value="${DEV_DB_CONNECTION_URL}" />
-			<replacefilter token="@DB_USERNAME@" value="${DEV_DB_USERNAME}" />
-			<replacefilter token="@DB_PASSWORD@" value="${DEV_DB_PASSWORD}" />
 			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
 		</replace>
 
 		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
@@ -169,11 +154,7 @@
 		<property name="local" value="true"/>
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
-			<replacefilter token="@DB_CONNECTION_URL@" value="${LOCAL_DB_CONNECTION_URL}" />
-			<replacefilter token="@DB_USERNAME@" value="${LOCAL_DB_USERNAME}" />
-			<replacefilter token="@DB_PASSWORD@" value="${LOCAL_DB_PASSWORD}" />
 			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />
 		</replace>
 
 		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
@@ -236,7 +217,7 @@
 	*********************************************************************** -->
 	<target name="package-local-webapp" depends="dist">
 		<SDKecho message="${ant.project.name}: Packaging the server"/>
-		<war destfile="${dist.dir}/ObjectCart.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
 			<lib dir="${dist.dir}" includes="*.jar"/>
 			<lib dir="${lib.dir}" includes="*.jar"/>
 			<lib dir="${system.lib.dir}" includes="*.jar">
@@ -244,6 +225,7 @@
 				<exclude name="servlet.jar"/>
 				<exclude name="commons-logging*.*"/>
 				<exclude name="xercesImpl*.*"/>
+				<exclude name="log4*.jar"/>
 			</lib>
 			<fileset dir="${conf.dir}/system/package/local-client/conf">
 				<include name="*.xml"/>
@@ -265,7 +247,7 @@
 
 	<target name="package-webapp" depends="dist">
 		<SDKecho message="${ant.project.name}: Packaging the server"/>
-		<war destfile="${dist.dir}/ObjectCart.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
+		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
 			<lib dir="${dist.dir}" includes="*.jar"/>
 			<lib dir="${lib.dir}" includes="*.jar"/>
 
@@ -274,7 +256,7 @@
 				<exclude name="servlet.jar"/>
 				<exclude name="commons-logging*.*"/>
 				<exclude name="xercesImpl*.*"/>
-
+				<exclude name="log4*.jar"/>
 
 			</lib>
 			<fileset dir="${conf.dir}/system/web">
