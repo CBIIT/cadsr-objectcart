@@ -243,6 +243,7 @@
 				<include name="docs/**/*" />
 			</fileset>
 		</war>
+		<copy todir="${dist.dir}"> <fileset dir="${ds.dir}"><include name="objcart-ds.xml"/></fileset> </copy>
 	</target>
 
 	<target name="package-webapp" depends="dist">
@@ -271,6 +272,7 @@
 				<include name="docs/**/*" />
 			</fileset>
 		</war>
+		<copy todir="${dist.dir}"> <fileset dir="${ds.dir}"><include name="objcart-ds.xml"/></fileset> </copy>
 	</target>
 
 	<target name="package-remote-client" depends="dist">
