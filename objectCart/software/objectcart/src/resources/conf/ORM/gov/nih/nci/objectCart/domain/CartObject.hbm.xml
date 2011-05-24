@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="gov.nih.nci.objectCart.domain">
+	<class name="CartObject" table="CART_OBJECT" lazy="false" polymorphism="explicit">
+		<cache usage="read-write" />
+		<id name="id" type="integer" column="ID">
+			<generator class="identity" />
+		</id>
+		<!-- Attributes mapping for the CartObject class -->
+		<property name="data" type="string" column="DATA"/>
+		<property name="dateAdded" type="java.util.Date" column="DATE_ADDED"/>
+		<property name="displayText" type="string" column="DISPLAY_TEXT"/>
+		<property name="nativeId" type="string" column="NATIVE_ID"/>
+		<property name="relatedId" type="integer" column="RELATED_ID"/>
+		<property name="type" type="string" column="TYPE"/>
+		<!-- Associations mapping for the CartObject class -->
+	</class>
+</hibernate-mapping>
