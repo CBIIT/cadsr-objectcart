@@ -3,6 +3,20 @@
 
 	<description>Build script for building the runtime system</description>
 
+	<property name="src.dir" location="${basedir}/src/java" />
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="web.dir" location="${basedir}/src/web" />
+	<property name="docs.dir" location="${basedir}/src/web/docs" />
+	<property name="conf.dir" location="${basedir}/src/resources/conf" />
+	<property name="ds.dir" location="${basedir}/src/resources/ds" />
+	<property name="orm.dir" location="${basedir}/src/resources/conf/ORM" />
+	<property name="system.lib.dir" location="${basedir}/lib/system" />
+	<property name="build.dir" location="${basedir}/build" />
+	<property name="build.classes.dir" location="${basedir}/build/classes" />
+	<property name="dist.dir" location="${basedir}/dist" />
+	
+
+
 	<!--***********************************************************************
 	*** Load the build properties from the file
 	*********************************************************************** -->
@@ -16,6 +30,9 @@
 	<!--***********************************************************************
 	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
 	*********************************************************************** -->
+
+
+
 	<path id="classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -101,29 +118,29 @@
 	</target>
 
 	<target name="prod" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-			<SDKecho message="${ant.project.name}: Deploying to Production" />
+		<SDKecho message="${ant.project.name}: Deploying to Production" />
 
-			<replace file="${orm.dir}/hibernate.cfg.xml">
-				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-			</replace>
+		<replace file="${orm.dir}/hibernate.cfg.xml">
+			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+		</replace>
 
-			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-				<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
-			</replace>
-		</target>
-	
+		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
+		</replace>
+	</target>
+
 	<target name="stage" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-			<SDKecho message="${ant.project.name}: Deploying to Stage" />
+		<SDKecho message="${ant.project.name}: Deploying to Stage" />
 
-			<replace file="${orm.dir}/hibernate.cfg.xml">
-				<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-			</replace>
+		<replace file="${orm.dir}/hibernate.cfg.xml">
+			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
+		</replace>
 
-			<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-				<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
-			</replace>
-		</target>
-	
+		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
+			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
+		</replace>
+	</target>
+
 	<target name="qa" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
 		<SDKecho message="${ant.project.name}: Deploying to QA" />
 
@@ -135,7 +152,7 @@
 			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
 		</replace>
 	</target>
-	
+
 	<target name="dev" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
 		<SDKecho message="${ant.project.name}: Deploying to DEV" />
 
@@ -237,12 +254,22 @@
 			<fileset dir="${web.dir}">
 				<include name="**/*" />
 			</fileset>
-			
+
 			<fileset dir=".">
 				<include name="docs/**/*" />
 			</fileset>
 		</war>
-		<copy todir="${dist.dir}"> <fileset dir="${ds.dir}"><include name="objcart-ds.xml"/></fileset> </copy>
+		<copy todir="${dist.dir}/jboss">
+			<fileset dir="${ds.dir}">
+				<include name="objcart-ds.xml"/>
+			</fileset>
+		</copy>
+		<copy todir="${dist.dir}/jboss">
+			<fileset dir="${lib.dir}/system">
+				<include name="mysql-connector-java-5.1.13.jar"/>
+			</fileset>
+		</copy>
+
 	</target>
 
 	<target name="package-webapp" depends="dist">
@@ -271,7 +298,12 @@
 				<include name="docs/**/*" />
 			</fileset>
 		</war>
-		<copy todir="${dist.dir}"> <fileset dir="${ds.dir}"><include name="objcart-ds.xml"/></fileset> </copy>
+		<copy todir="${dist.dir}/jboss">
+			<fileset dir="${ds.dir}">
+				<include name="objcart-ds.xml"/>
+			</fileset>
+		</copy>
+
 	</target>
 
 	<target name="package-remote-client" depends="dist">
