@@ -55,7 +55,7 @@ public class POJOSerializer implements Serializer {
 		
 		CartObject ob = new CartObject();
 		ob.setType(":Serialized:"+pOb.getClass());
-		ob.setDisplayName(objectDisplayName);
+		ob.setDisplayText(objectDisplayName);
 		ob.setNativeId(nativeId);
 		StringWriter writer = new StringWriter();
 		Marshaller.marshal(pOb, writer);

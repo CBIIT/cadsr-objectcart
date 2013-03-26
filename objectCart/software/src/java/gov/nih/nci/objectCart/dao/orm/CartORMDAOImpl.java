@@ -74,7 +74,8 @@ public class CartORMDAOImpl extends ORMDAOImpl implements CartDAO {
 		Transaction t = session.beginTransaction();
 		try
 		{
-			newCart.setLastActive(new Date(System.currentTimeMillis()));
+			newCart.setLastWriteDate(new Date(System.currentTimeMillis()));
+
 			session.update(newCart);
 
 		} catch (JDBCException ex){

@@ -1,4 +1,5 @@
-<%@taglib prefix="s" uri="/struts-tags"%>
+<%@taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="sx" uri="/struts-dojo-tags" %>
 <%@ page import="org.acegisecurity.ui.AbstractProcessingFilter"%>
 <%@ page
 	import="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter"%>
@@ -41,7 +42,8 @@
 			isAuthenticated = true;
 		}
 	}
-	//out.println("userName: " + userName);	
+	//out.println("userName: " + userName);
+	boolean webinterfaceDisabled=jspUtils.isWebInterfaceDisabled();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -89,7 +91,7 @@
 													<!-- banner begins -->
 													<tr>
 														<td class="bannerHome">
-															<img src="images/c_ca_core_big.gif">
+															<img src="images/bannerHome.gif" alt="caCORE SDK Logo">
 														</td>
 													</tr>
 													<!-- banner begins -->
@@ -161,10 +163,24 @@
 																				<!-- login/continue form begins -->
 																				<tr>
 																					<td valign="top">
-
-
 																						<%
-																						if (isSecurityEnabled && !isAuthenticated) {
+																						if (webinterfaceDisabled) {
+																						%>
+																						<table summary="" cellpadding="2" cellspacing="0"
+																							border="0" width="100%" class="sidebarSection">
+																							<tr>
+																								<td class="sidebarTitle" height="20">
+																									SELECT CRITERIA
+																								</td>
+																							</tr>
+																							<tr>
+																								<td class="sidebarContent" align="center">
+																									WebInterface is Disabled
+																								</td>
+																							</tr>
+																						</table>
+																						<%
+																						} else if (isSecurityEnabled && !isAuthenticated) {
 																						%>
 
 																						<table summary="" cellpadding="2" cellspacing="0"
@@ -204,7 +220,7 @@
 																												</td>
 																												<td class="formFieldLogin">
 																													<s:textfield name="j_username"
-																														value="<%=lastUserKey%>"
+																														value="%{lastUserKey}"
 																														cssClass="formField" size="14" />
 																												</td>
 																											</tr>
@@ -273,6 +289,10 @@
 																							<tr>
 																								<td class="sidebarContent">
 																									<ul>
+																										<li>
+																											508 Compliance
+																										</li>
+
 																										<li>
 																											New User Interface
 																										</li>

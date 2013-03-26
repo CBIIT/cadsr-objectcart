@@ -78,7 +78,7 @@ public class CleanerDAO extends HibernateDaoSupport {
 		Timestamp nowPlusExpirationInterval = new Timestamp(now.getTime()+expirationInterval*60*1000);  //Converting minutes to milliseconds
 		
 		Query updateActiveCarts = session.createQuery("update Cart set expirationDate = :nowPlusExpirationInterval" +
-				" where (lastActive > :nowMinusTwiceSleep or lastReadDate > :nowMinusTwiceSleep) and expirationDate > :now and expirationDate < :nowPlusExpirationInterval");
+				" where (lastWriteDate > :nowMinusTwiceSleep or lastReadDate > :nowMinusTwiceSleep) and expirationDate > :now and expirationDate < :nowPlusExpirationInterval");
 		
 		updateActiveCarts.setTimestamp("nowPlusExpirationInterval", nowPlusExpirationInterval);
 		updateActiveCarts.setTimestamp("nowMinusTwiceSleep", nowMinusTwiceSleep);
