@@ -224,15 +224,15 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		
 		Date now = now(0);		
 		newCart.setExpirationDate(null);
-		newCart.setCreationTime(now);
-		newCart.setLastActive(now);
-		//newCart.setLastReadDate(now);
+		newCart.setCreationDate(now);
+		newCart.setLastWriteDate(now);
+		newCart.setLastReadDate(now);
 		return storeCart(newCart);
 	}
 	
 	private Cart storeCart(Cart cart) throws ApplicationException, DAOException {
 		
-		cart.setLastActive(now(0));
+		cart.setLastWriteDate(now(0));
 		CartDAO dao = (CartDAO) getClassCache().getDAOForClass(cart.getClass().getCanonicalName());
 		
 		if(dao == null)
@@ -354,7 +354,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 		
 	private Cart updateCart(Cart cart) throws ApplicationException, DAOException {
 		
-		cart.setLastActive(now(0));
+		cart.setLastWriteDate(now(0));
 		CartDAO dao = (CartDAO) getClassCache().getDAOForClass(cart.getClass().getCanonicalName());
 	
 		if(dao == null)
@@ -388,7 +388,7 @@ public class ObjectCartServiceImpl extends ApplicationServiceImpl implements Obj
 			List<Cart> carts = dao.cartSearch(cart);
 			
 			for (Cart c: carts){
-			//	c.setLastReadDate(now(0));
+				c.setLastReadDate(now(0));
 				updateCart(c);
 			}
 			

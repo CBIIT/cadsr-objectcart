@@ -419,11 +419,11 @@ public class ObjectCartClient {
 		Cart newCart = new Cart();
 		Collection<CartObject> newCollection = new HashSet<CartObject>();
 		
-		newCart.setCreationTime(cart.getCreationTime());
+		newCart.setCreationDate(cart.getCreationDate());
 		newCart.setExpirationDate(cart.getExpirationDate());
 		newCart.setId(cart.getId());
-		newCart.setLastActive(cart.getLastActive());
-		//newCart.setLastWriteDate(cart.getLastWriteDate());
+		newCart.setLastReadDate(cart.getLastReadDate());
+		newCart.setLastWriteDate(cart.getLastWriteDate());
 		newCart.setName(cart.getName());
 		newCart.setUserId(cart.getUserId());
 		
