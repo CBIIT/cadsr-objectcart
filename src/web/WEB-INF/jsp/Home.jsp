@@ -117,7 +117,7 @@
 																				</tr>
 																				<tr>
 																					<td class="welcomeContent" valign="top">
-																						The Object Cart application is a an application built on top of the caCORE SDK with the purpose of providing shopping cart type operations for data objects.  
+																						The Object Cart application is an application built on top of the caCORE SDK with the purpose of providing shopping cart type operations for data objects.  
 																					    The Object Cart provides a client API that client applications can utilize to create instance of object "carts" to be able to store, retrieve, update, and delete data objects.  
 																						Both Java objects adhering to the JavaBean specification and XML documents representing data objects can be passed to the client API.  
 													
