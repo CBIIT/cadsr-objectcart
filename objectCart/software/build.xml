@@ -303,6 +303,11 @@
 				<include name="objcart-ds.xml"/>
 			</fileset>
 		</copy>
+		<copy todir="${dist.dir}/jboss">
+					<fileset dir="${lib.dir}/system">
+						<include name="mysql-connector-java-5.1.13.jar"/>
+					</fileset>
+				</copy>
 
 	</target>
 
