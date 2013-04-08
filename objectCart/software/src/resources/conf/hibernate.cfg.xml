@@ -17,6 +17,9 @@
 		<property name="c3p0.idle_test_period">3000</property>
 		<property name="c3p0.acquire_increment">2</property>
 		<property name="c3p0.validate">false</property> -->
+		<property name="hibernate.connection.useUnicode"> true</property>
+		<property name="hibernate.connection.characterEncoding"> UTF-8 </property> 
+		
 		<property name="hibernate.show_sql">false</property>
 		<property name="dialect">@DB_HIBERNATE_DIALECT@</property>
 		<property name="max_fetch_depth">1</property>
