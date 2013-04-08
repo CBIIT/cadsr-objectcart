@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="System" basedir="." default="local-build">
+<project name="System" basedir="." default="dist">
 
 	<description>Build script for building the runtime system</description>
 
@@ -49,6 +49,25 @@
 
 	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
 
+	<property name="TIER" value="-${tiername}" />
+	<filter token="TIER" value="${TIER}" />
+	    <filter token="TIER.UPPER" value="${TIER.UPPER}" />
+	    <filter token="TIER.NAME" value="${TIER.NAME}" />
+	<condition property="TIER.NAME" value="DEVELOPMENT" >
+	        <equals arg1="${TIER.UPPER}" arg2="DEV"/>
+	    </condition>	
+	    <condition property="TIER.NAME" value="QA" >
+	        <equals arg1="${TIER.UPPER}" arg2="QA"/>
+	    </condition>	
+	    <condition property="TIER.NAME" value="STAGE" >
+	        <equals arg1="${TIER.UPPER}" arg2="STAGE"/>
+	    </condition>	
+	        <condition property="TIER.NAME" value="SANDBOX" >
+	            <equals arg1="${TIER.UPPER}" arg2="SANDBOX"/>
+	        </condition>	
+	    <condition property="TIER.NAME" value="PRODUCTION" >
+	        <equals arg1="${TIER.UPPER}" arg2="PROD"/>
+	    </condition>	
 
 	<!--***********************************************************************
 	*** Prepares the directory structure
@@ -116,8 +135,9 @@
 		</copy>
 
 	</target>
+	
 
-	<target name="prod" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
+	<!--<target name="prod" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
 		<SDKecho message="${ant.project.name}: Deploying to Production" />
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
@@ -163,10 +183,10 @@
 		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
 			<replacefilter token="@SERVER_URL@" value="${DEV_SERVER_URL}" />
 		</replace>
-	</target>
+	</target>-->
 
-	<target name="local" depends="copy-hql, copy-remote" description="Setting up for local deployment">
-		<SDKecho message="${ant.project.name}: Deploying to local environment" />
+	<target name="deploy" depends="copy-hql, copy-remote" description="Setting up for deployment">
+		<SDKecho message="${ant.project.name}: Deploying to ${TIER.NAME} environment" />
 		<property name="local" value="true"/>
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
@@ -174,7 +194,7 @@
 		</replace>
 
 		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-			<replacefilter token="@SERVER_URL@" value="${LOCAL_SERVER_URL}" />
+			<replacefilter token="@SERVER_URL@" value="${TIER.NAME}_SERVER_URL}" />
 		</replace>
 
 	</target>
@@ -182,7 +202,7 @@
 	<!--***********************************************************************
 	*** Create distributable package
 	*********************************************************************** -->
-	<target name="dist" depends="compile" description="Prepates distribution files">
+	<target name="-build-jar" depends="compile" description="Prepates distribution files">
 		<SDKecho message="${ant.project.name}: Creating distributable package" />
 
 		<jar destfile="${lib.dir}\${file.output.cart.orm.name}" basedir="${orm.dir}">
@@ -231,7 +251,7 @@
 	<!--***********************************************************************
 	*** Create server war
 	*********************************************************************** -->
-	<target name="package-local-webapp" depends="dist">
+	<!--<target name="package-local-webapp" depends="dist">
 		<SDKecho message="${ant.project.name}: Packaging the server"/>
 		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
 			<lib dir="${dist.dir}" includes="*.jar"/>
@@ -270,9 +290,9 @@
 			</fileset>
 		</copy>
 
-	</target>
+	</target>-->
 
-	<target name="package-webapp" depends="dist">
+	<target name="package-webapp" depends="-build-jar">
 		<SDKecho message="${ant.project.name}: Packaging the server"/>
 		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
 			<lib dir="${dist.dir}" includes="*.jar"/>
@@ -311,7 +331,7 @@
 
 	</target>
 
-	<target name="package-remote-client" depends="dist">
+	<target name="package-remote-client" depends="-build-jar">
 		<SDKecho message="${ant.project.name}: Packaging the remote client" />
 
 		<copy todir="${output.client.remote.dir}">
@@ -341,10 +361,10 @@
 		</copy>
 	</target>
 
-	<target name="local-build" depends="local, dist, package-local-webapp, package-remote-client"/>
-	<target name="dev-build" depends="dev, dist, package-webapp, package-remote-client"/>
+	<target name="dist" depends="deploy, -build-jar, package-webapp, package-remote-client"/>
+	<!--<target name="dev-build" depends="dev, dist, package-webapp, package-remote-client"/>
 	<target name="qa-build" depends="qa, dist, package-webapp, package-remote-client"/>
 	<target name="stage-build" depends="stage, dist, package-webapp, package-remote-client"/>
-	<target name="prod-build" depends="prod, dist, package-webapp, package-remote-client"/>
+	<target name="prod-build" depends="prod, dist, package-webapp, package-remote-client"/>-->
 
 </project>
