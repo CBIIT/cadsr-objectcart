@@ -14,7 +14,7 @@
 	<property name="build.dir" location="${basedir}/build" />
 	<property name="build.classes.dir" location="${basedir}/build/classes" />
 	<property name="dist.dir" location="${basedir}/dist" />
-	
+
 
 
 	<!--***********************************************************************
@@ -50,24 +50,28 @@
 	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
 
 	<property name="TIER" value="-${tiername}" />
+
+	<property name="OBJCART.DS.URL" value="${OBJCART.DS.TNS.HOST}:${OBJCART.DS.TNS.PORT}:${OBJCART.DS.TNS.SID}" />
+	<property name="OBJCART.DS.USER" value="${OBJCART.DS.USER}" />
+	<property name="OBJCART.DS.PSWD" value="${OBJCART.DS.PSWD}" />
 	<filter token="TIER" value="${TIER}" />
-	    <filter token="TIER.UPPER" value="${TIER.UPPER}" />
-	    <filter token="TIER.NAME" value="${TIER.NAME}" />
-	<condition property="TIER.NAME" value="DEVELOPMENT" >
-	        <equals arg1="${TIER.UPPER}" arg2="DEV"/>
-	    </condition>	
-	    <condition property="TIER.NAME" value="QA" >
-	        <equals arg1="${TIER.UPPER}" arg2="QA"/>
-	    </condition>	
-	    <condition property="TIER.NAME" value="STAGE" >
-	        <equals arg1="${TIER.UPPER}" arg2="STAGE"/>
-	    </condition>	
-	        <condition property="TIER.NAME" value="SANDBOX" >
-	            <equals arg1="${TIER.UPPER}" arg2="SANDBOX"/>
-	        </condition>	
-	    <condition property="TIER.NAME" value="PRODUCTION" >
-	        <equals arg1="${TIER.UPPER}" arg2="PROD"/>
-	    </condition>	
+	<filter token="TIER.UPPER" value="${TIER.UPPER}" />
+	<filter token="TIER.NAME" value="${TIER.NAME}" />
+	<condition property="TIER.NAME" value="DEVELOPMENT">
+		<equals arg1="${TIER.UPPER}" arg2="DEV" />
+	</condition>
+	<condition property="TIER.NAME" value="QA">
+		<equals arg1="${TIER.UPPER}" arg2="QA" />
+	</condition>
+	<condition property="TIER.NAME" value="STAGE">
+		<equals arg1="${TIER.UPPER}" arg2="STAGE" />
+	</condition>
+	<condition property="TIER.NAME" value="SANDBOX">
+		<equals arg1="${TIER.UPPER}" arg2="SANDBOX" />
+	</condition>
+	<condition property="TIER.NAME" value="PRODUCTION">
+		<equals arg1="${TIER.UPPER}" arg2="PROD" />
+	</condition>
 
 	<!--***********************************************************************
 	*** Prepares the directory structure
@@ -104,7 +108,7 @@
 		<SDKecho message="${ant.project.name}: Compiling source code" />
 		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true">
 			<classpath refid="classpath" />
-			<exclude name="gov/nih/nci/objectCart/jUnit/**/*"/>
+			<exclude name="gov/nih/nci/objectCart/jUnit/**/*" />
 		</javac>
 		<copy todir="${build.classes.dir}">
 			<fileset dir="${src.dir}" includes="gov/nih/nci/system/web/struts/action/package.properties" />
@@ -126,68 +130,19 @@
 
 	<target name="copy-remote">
 		<SDKecho message="${ant.project.name}: Copying remote-client config" />
-		<mkdir dir="${output.client.remote.dir}"/>
-		<mkdir dir="${output.client.remote.dir}/conf"/>
-		<mkdir dir="${output.client.remote.dir}/lib"/>
+		<mkdir dir="${output.client.remote.dir}" />
+		<mkdir dir="${output.client.remote.dir}/conf" />
+		<mkdir dir="${output.client.remote.dir}/lib" />
 
 		<copy todir="${output.client.remote.dir}/conf">
-			<fileset dir="${config.client.remote.dir}"/>
+			<fileset dir="${config.client.remote.dir}" />
 		</copy>
 
 	</target>
-	
-
-	<!--<target name="prod" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-		<SDKecho message="${ant.project.name}: Deploying to Production" />
-
-		<replace file="${orm.dir}/hibernate.cfg.xml">
-			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-		</replace>
-
-		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
-		</replace>
-	</target>
-
-	<target name="stage" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-		<SDKecho message="${ant.project.name}: Deploying to Stage" />
-
-		<replace file="${orm.dir}/hibernate.cfg.xml">
-			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-		</replace>
-
-		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
-		</replace>
-	</target>
-
-	<target name="qa" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-		<SDKecho message="${ant.project.name}: Deploying to QA" />
-
-		<replace file="${orm.dir}/hibernate.cfg.xml">
-			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-		</replace>
-
-		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-			<replacefilter token="@SERVER_URL@" value="${QA_SERVER_URL}" />
-		</replace>
-	</target>
-
-	<target name="dev" depends="copy-hql, copy-remote" description="Setting up for develpement deployment">
-		<SDKecho message="${ant.project.name}: Deploying to DEV" />
-
-		<replace file="${orm.dir}/hibernate.cfg.xml">
-			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
-		</replace>
-
-		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-			<replacefilter token="@SERVER_URL@" value="${DEV_SERVER_URL}" />
-		</replace>
-	</target>-->
 
 	<target name="deploy" depends="copy-hql, copy-remote" description="Setting up for deployment">
 		<SDKecho message="${ant.project.name}: Deploying to ${TIER.NAME} environment" />
-		<property name="local" value="true"/>
+		<property name="local" value="true" />
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
 			<replacefilter token="@DB_HIBERNATE_DIALECT@" value="${DB_DIALECT}" />
@@ -217,14 +172,14 @@
 			</manifest>
 			<include name="gov/nih/nci/objectCart/client/**/*" />
 			<include name="gov/nih/nci/objectCart/applicationService/*.*" />
-			<include name="gov/nih/nci/objectCart/util/ValidatorException.*"/>
+			<include name="gov/nih/nci/objectCart/util/ValidatorException.*" />
 			<fileset dir="${src.dir}">
 				<include name="gov/nih/nci/objectCart/client/**/*" />
 				<include name="gov/nih/nci/objectCart/applicationService/*.*" />
-				<include name="gov/nih/nci/objectCart/util/ValidatorException.*"/>
+				<include name="gov/nih/nci/objectCart/util/ValidatorException.*" />
 			</fileset>
 			<fileset dir="${output.client.remote.dir}/conf">
-				<include name="log4j.properties"/>
+				<include name="log4j.properties" />
 			</fileset>
 		</jar>
 
@@ -251,21 +206,21 @@
 	<!--***********************************************************************
 	*** Create server war
 	*********************************************************************** -->
-	<!--<target name="package-local-webapp" depends="dist">
-		<SDKecho message="${ant.project.name}: Packaging the server"/>
+	
+	<target name="package-webapp" depends="-build-jar">
+		<SDKecho message="${ant.project.name}: Packaging the server" />
 		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
-			<lib dir="${dist.dir}" includes="*.jar"/>
-			<lib dir="${lib.dir}" includes="*.jar"/>
+			<lib dir="${dist.dir}" includes="*.jar" />
+			<lib dir="${lib.dir}" includes="*.jar" />
+
 			<lib dir="${system.lib.dir}" includes="*.jar">
-				<exclude name="${server-exclude-list}"/>
-				<exclude name="servlet.jar"/>
-				<exclude name="commons-logging*.*"/>
-				<exclude name="xercesImpl*.*"/>
-				<exclude name="log4*.jar"/>
+				<exclude name="${server-exclude-list}" />
+				<exclude name="servlet.jar" />
+				<exclude name="commons-logging*.*" />
+				<exclude name="xercesImpl*.*" />
+				<exclude name="log4*.jar" />
+
 			</lib>
-			<fileset dir="${conf.dir}/system/package/local-client/conf">
-				<include name="*.xml"/>
-			</fileset>
 			<fileset dir="${conf.dir}/system/web">
 				<include name="**/*" />
 				<exclude name="**/web.xml" />
@@ -274,60 +229,20 @@
 			<fileset dir="${web.dir}">
 				<include name="**/*" />
 			</fileset>
-
 			<fileset dir=".">
 				<include name="docs/**/*" />
 			</fileset>
 		</war>
 		<copy todir="${dist.dir}/jboss">
 			<fileset dir="${ds.dir}">
-				<include name="objcart-ds.xml"/>
+				<include name="objcart-ds.xml" />
 			</fileset>
 		</copy>
 		<copy todir="${dist.dir}/jboss">
 			<fileset dir="${lib.dir}/system">
-				<include name="mysql-connector-java-5.1.13.jar"/>
+				<include name="mysql-connector-java-5.1.13.jar" />
 			</fileset>
 		</copy>
-
-	</target>-->
-
-	<target name="package-webapp" depends="-build-jar">
-		<SDKecho message="${ant.project.name}: Packaging the server"/>
-		<war destfile="${dist.dir}/objcart${objcartversion}.war" webxml="${conf.dir}/system/web/WEB-INF/web.xml">
-			<lib dir="${dist.dir}" includes="*.jar"/>
-			<lib dir="${lib.dir}" includes="*.jar"/>
-
-			<lib dir="${system.lib.dir}" includes="*.jar">
-				<exclude name="${server-exclude-list}"/>
-				<exclude name="servlet.jar"/>
-				<exclude name="commons-logging*.*"/>
-				<exclude name="xercesImpl*.*"/>
-				<exclude name="log4*.jar"/>
-
-			</lib>
-			<fileset dir="${conf.dir}/system/web">
-				<include name="**/*" />
-				<exclude name="**/web.xml" />
-			</fileset>
-
-			<fileset dir="${web.dir}">
-				<include name="**/*" />
-			</fileset>
-			<fileset dir=".">
-				<include name="docs/**/*" />
-			</fileset>
-		</war>
-		<copy todir="${dist.dir}/jboss">
-			<fileset dir="${ds.dir}">
-				<include name="objcart-ds.xml"/>
-			</fileset>
-		</copy>
-		<copy todir="${dist.dir}/jboss">
-					<fileset dir="${lib.dir}/system">
-						<include name="mysql-connector-java-5.1.13.jar"/>
-					</fileset>
-				</copy>
 
 	</target>
 
@@ -336,35 +251,30 @@
 
 		<copy todir="${output.client.remote.dir}">
 			<fileset dir="${dist.dir}">
-				<include name="${file.output.extension.client.name}"/>
+				<include name="${file.output.extension.client.name}" />
 			</fileset>
 			<fileset dir="${lib.dir}" includes="objectCart-beans.jar" />
 		</copy>
 		<copy todir="${output.client.remote.dir}/conf">
-			<fileset dir="${config.client.remote.dir}"/>
+			<fileset dir="${config.client.remote.dir}" />
 		</copy>
 		<copy todir="${output.client.remote.dir}/lib">
 			<fileset dir="${system.lib.dir}">
-				<include name="acegi*.*"/>
-				<include name="asm*.*"/>
-				<include name="antlr*.*"/>
-				<include name="cglib*.*"/>
-				<include name="commons-codec*.*"/>
-				<include name="commons-collection*.*"/>
-				<include name="commons-logging*.*"/>
-				<include name="hibernate*.*"/>
-				<include name="log4j*.*"/>
-				<include name="spring*.*"/>
-				<include name="castor*.*"/>
-				<include name="xercesImpl*.*"/>
+				<include name="acegi*.*" />
+				<include name="asm*.*" />
+				<include name="antlr*.*" />
+				<include name="cglib*.*" />
+				<include name="commons-codec*.*" />
+				<include name="commons-collection*.*" />
+				<include name="commons-logging*.*" />
+				<include name="hibernate*.*" />
+				<include name="log4j*.*" />
+				<include name="spring*.*" />
+				<include name="castor*.*" />
+				<include name="xercesImpl*.*" />
 			</fileset>
 		</copy>
 	</target>
 
-	<target name="dist" depends="deploy, -build-jar, package-webapp, package-remote-client"/>
-	<!--<target name="dev-build" depends="dev, dist, package-webapp, package-remote-client"/>
-	<target name="qa-build" depends="qa, dist, package-webapp, package-remote-client"/>
-	<target name="stage-build" depends="stage, dist, package-webapp, package-remote-client"/>
-	<target name="prod-build" depends="prod, dist, package-webapp, package-remote-client"/>-->
-
-</project>
+	<target name="dist" depends="deploy, -build-jar, package-webapp, package-remote-client" />
+	</project>
