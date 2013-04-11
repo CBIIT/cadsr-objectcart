@@ -144,7 +144,7 @@
 	</target>
 
 	<target name="deploy" depends="copy-hql, copy-remote" description="Setting up for deployment">
-		<SDKecho message="${ant.project.name}: Deploying to ${TIER.NAME} environment" />
+		<SDKecho message="${ant.project.name}: Deploying to Target environment" />
 		<property name="local" value="true" />
 
 		<replace file="${orm.dir}/hibernate.cfg.xml">
