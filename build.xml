@@ -51,7 +51,7 @@
 	
 	<property name="TIER" value="-${tiername}" />
 
-		<property name="OBJCART.DS.URL" value="${OBJCART.DS.HOST}:${OBJCART.DS.PORT}:${OBJCART.DS.SID}" />
+		<property name="OBJCART.DS.URL" value="${OBJCART.DS.URL}" />
 		<property name="OBJCART.DS.USER" value="${OBJCART.DS.USER}" />
 		<property name="OBJCART.DS.PSWD" value="${OBJCART.DS.PSWD}" />
 	<filter token="OBJCART.DS.URL" value="${OBJCART.DS.URL}" />
