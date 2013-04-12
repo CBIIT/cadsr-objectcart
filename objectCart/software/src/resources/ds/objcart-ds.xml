@@ -11,10 +11,10 @@
 <datasources>
 	<local-tx-datasource>
 		<jndi-name>objcartAPI</jndi-name>
-		<connection-url>jdbc:mysql://cbiodb590.nci.nih.gov:3644/object_cart</connection-url>
+		<connection-url>jdbc:mysql://@OBJCART.DS.URL@</connection-url>
 		<driver-class>com.mysql.jdbc.Driver</driver-class>
-		<user-name>object_cart</user-name>
-		<password>o3jC#490</password>
+		<user-name>@OBJCART.DS.USER@</user-name>
+		<password>@OBJCART.DS.PSWD@</password>
 		<exception-sorter-class-name>com.mysql.jdbc.integration.jboss.ExtendedMysqlExceptionSorter</exception-sorter-class-name>		
 		<check-valid-connection-sql>select count(*) from dual</check-valid-connection-sql>
    		<blocking-timeout-millis>10000</blocking-timeout-millis>
