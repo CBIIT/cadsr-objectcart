@@ -15,12 +15,24 @@
 	<property name="build.classes.dir" location="${basedir}/build/classes" />
 	<property name="dist.dir" location="${basedir}/dist" />
 
+	<scriptdef language="javascript" name="upper">
+	            <attribute name="string" /> 
+	            <attribute name="to" />
+
+	            project.setProperty( attributes.get( "to" ),
+	                                 attributes.get( "string" ).toUpperCase() );
+	        </scriptdef>
+
 
 
 	<!--***********************************************************************
 	*** Load the build properties from the file
 	*********************************************************************** -->
-	<property file="build.properties" />
+	
+	
+	             <!--    <property file="build.properties" />
+	                   <echo message="loaded build.properties" />-->
+	            
 
 	<!--***********************************************************************
 	*** Import utility script
@@ -41,6 +53,20 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="classpath" />
+	        
+	        <if>
+	                <isset property="tiername" />
+	                <then>
+	                        <!-- if tiername is defined, load tier specific properties for tier based installation -->
+	                        <property file="${tiername}.properties" />
+	                </then>
+	                <else>
+	                        <property file="local.build.properties" />
+	                        <property name="tiername" value="dev" /> 
+	                </else>
+	        </if>
+
 
 	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
 	<path id="basedir.path">
@@ -49,32 +75,36 @@
 
 	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
 	
-	<property name="TIER" value="-${tiername}" />
+	  <upper string="${tiername}" to="TIER.UPPER" />
+	        <property name="TIER" value="-${tiername}" />
+	 <condition property="TIER.NAME" value="DEVELOPMENT" >
+	        <equals arg1="${TIER.UPPER}" arg2="DEV"/>
+	    </condition>        
+	    <condition property="TIER.NAME" value="QA" >
+	        <equals arg1="${TIER.UPPER}" arg2="QA"/>
+	    </condition>        
+	    <condition property="TIER.NAME" value="STAGE" >
+	        <equals arg1="${TIER.UPPER}" arg2="STAGE"/>
+	    </condition>        
+	        <condition property="TIER.NAME" value="SANDBOX" >
+	            <equals arg1="${TIER.UPPER}" arg2="SANDBOX"/>
+	        </condition>    
+	    <condition property="TIER.NAME" value="PRODUCTION" >
+	        <equals arg1="${TIER.UPPER}" arg2="PROD"/>
+	    </condition>  
+	<filter token="TIER" value="${TIER}" />
+	    <filter token="TIER.UPPER" value="${TIER.UPPER}" />
+	    <filter token="TIER.NAME" value="${TIER.NAME}" />
 
-		<property name="OBJCART.DS.URL" value="${OBJCART.DS.URL}" />
+
+
+		<property name="OBJCART.DS.URL" value="${OBJCART.DS.HOST}:${OBJCART.DS.PORT}/object_cart" />
 		<property name="OBJCART.DS.USER" value="${OBJCART.DS.USER}" />
 		<property name="OBJCART.DS.PSWD" value="${OBJCART.DS.PSWD}" />
 	<filter token="OBJCART.DS.URL" value="${OBJCART.DS.URL}" />
 	<filter token="OBJCART.DS.USER" value="${OBJCART.DS.USER}" />
 	<filter token="OBJCART.DS.PSWD" value="${OBJCART.DS.PSWD}" />
-		<filter token="TIER" value="${TIER}" />
-		<filter token="TIER.UPPER" value="${TIER.UPPER}" />
-		<filter token="TIER.NAME" value="${TIER.NAME}" />
-		<condition property="TIER.NAME" value="DEVELOPMENT">
-			<equals arg1="${TIER.UPPER}" arg2="DEV" />
-		</condition>
-		<condition property="TIER.NAME" value="QA">
-			<equals arg1="${TIER.UPPER}" arg2="QA" />
-		</condition>
-		<condition property="TIER.NAME" value="STAGE">
-			<equals arg1="${TIER.UPPER}" arg2="STAGE" />
-		</condition>
-		<condition property="TIER.NAME" value="SANDBOX">
-			<equals arg1="${TIER.UPPER}" arg2="SANDBOX" />
-		</condition>
-		<condition property="TIER.NAME" value="PRODUCTION">
-			<equals arg1="${TIER.UPPER}" arg2="PROD" />
-		</condition>
+		
 
 	<!--***********************************************************************
 	*** Prepares the directory structure
@@ -239,8 +269,12 @@
 		<copy todir="${dist.dir}/jboss">
 			<fileset dir="${ds.dir}">
 				<include name="objcart-ds.xml" />
+				
 			</fileset>
 		</copy>
+		<replace file="${dist.dir}/jboss/objcart-ds.xml" token="@OBJCART.DS.URL@" value="${OBJCART.DS.URL}" />
+		<replace file="${dist.dir}/jboss/objcart-ds.xml" token="@OBJCART.DS.USER@" value="${OBJCART.DS.USER}" />
+		<replace file="${dist.dir}/jboss/objcart-ds.xml" token="@OBJCART.DS.PSWD@" value="${OBJCART.DS.PSWD}" />
 		<copy todir="${dist.dir}/jboss">
 			<fileset dir="${lib.dir}/system">
 				<include name="mysql-connector-java-5.1.13.jar" />
