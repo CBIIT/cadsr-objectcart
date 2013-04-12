@@ -91,7 +91,8 @@
 													<!-- banner begins -->
 													<tr>
 														<td class="bannerHome">
-															<img src="images/bannerHome.gif" alt="caCORE SDK Logo">
+															<img src="images/c_ca_core_big.gif">
+
 														</td>
 													</tr>
 													<!-- banner begins -->
