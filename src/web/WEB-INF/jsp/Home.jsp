@@ -135,16 +135,16 @@
 																								documents, defects, feedback, and reports on ObjectCart.																							</li>
 																							<li>
 																								<a
-																									href="http://ncicb.nci.nih.gov/infrastructure/cacore_overview/objcart">ObjectCart Download site</a> - Contains documents,
+																									href="http://ncicb.nci.nih.gov/download/objectcartapilicenseagreement.jsp">ObjectCart Download site</a> - Contains documents,
 																								information, and downloads for the ObjectCart application.
 																							</li>
 																							<li>
 																								<a
-																									href="ftp://ftp1.nci.nih.gov/pub/cacore/objcart/v1.0/objcart_10_notes.txt">ObjectCart 1.0 Release Notes</a> - Release Notes for all
+																									href="https://wiki.nci.nih.gov/display/caDSR/Object+Cart+API+1.0.2+Release+Notes">ObjectCart 1.0.2 Release Notes</a> - Release Notes for all
 																								caCORE products for version 1.0
 																							</li>
 																							<li>
-																								<a href="docs/index.html">ObjectCart 1.0
+																								<a href="docs/index.html">ObjectCart 1.0.2
 																									javadocs</a>
 																							</li>
 																						</ul>
