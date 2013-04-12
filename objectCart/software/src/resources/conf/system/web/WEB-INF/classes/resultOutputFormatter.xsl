@@ -56,7 +56,7 @@
 											<tr>
 												<td height="50" align="left">
 													<a href="#">
-														<img src="images/sdkLogoSmall.gif" alt="Application Logo"
+														<img src="images/c_ca_core_02.gif" alt="Application Logo"
 															hspace="10" border="0" />
 													</a>
 												</td>
