@@ -21,7 +21,7 @@
 		<property name="hibernate.connection.characterEncoding"> UTF-8 </property> 
 		
 		<property name="hibernate.show_sql">false</property>
-		<property name="dialect">@DB_HIBERNATE_DIALECT@</property>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="max_fetch_depth">1</property>
 		<property name="cglib.use_reflection_optimizer">false</property>
 		<property name="jdbc.batch_versioned_data">true</property>
