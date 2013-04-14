@@ -5,10 +5,10 @@
 	
 		<!-- Properties for the session factory -->
 		<property name="connection.datasource">java:/objcartAPI</property>
-		<!--  <property name="connection.driver_class">@DB_DRIVER@</property>
-		<property name="connection.url">@DB_CONNECTION_URL@</property>
-		<property name="connection.username">@DB_USERNAME@</property>
-		<property name="connection.password">@DB_PASSWORD@</property>
+		 <property name="connection.url">jdbc:mysql://cbiodb590.nci.nih.gov:3644/object_cart</property> 
+  <property name="connection.username">object_cart</property> 
+  <property name="connection.password">o3jC#490</property> 
+
 		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="c3p0.max_size">10</property>
 		<property name="c3p0.min_size">2</property>
@@ -16,14 +16,14 @@
 		<property name="c3p0.max_statements">100</property>
 		<property name="c3p0.idle_test_period">3000</property>
 		<property name="c3p0.acquire_increment">2</property>
-		<property name="c3p0.validate">false</property> -->
+		<property name="c3p0.validate">false</property> 
 		<property name="hibernate.connection.useUnicode"> true</property>
 		<property name="hibernate.connection.characterEncoding"> UTF-8 </property> 
 		
 		<property name="hibernate.show_sql">false</property>
 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="max_fetch_depth">1</property>
-		<property name="cglib.use_reflection_optimizer">false</property>
+		<property name="bytecode.use_reflection_optimizer">false</property>
 		<property name="jdbc.batch_versioned_data">true</property>
 		<property name="jdbc.use_streams_for_binary">true</property>
 		<property name="cache.use_query_cache">false</property>
