@@ -48,7 +48,7 @@
 		*********************************************************************** -->
 		
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="classpath" />
-	<!--<property name="tiername" value="stage" />-->
+	<property name="tiername" value="qa" />
 	        <if>
 	                <isset property="tiername" />
 	                <then>
@@ -58,7 +58,7 @@
 	                </then>
 	                <else>
 	                        <property file="local.build.properties" />
-	                        <property name="tiername" value="dev" />
+	                        <!--<property name="tiername" value="dev" />-->
 	                </else>
 	        </if>
 
