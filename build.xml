@@ -48,17 +48,17 @@
 		*********************************************************************** -->
 		
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="classpath" />
-	<property name="tiername" value="qa" />
+	<property name="tier" value="qa" />
 	        <if>
-	                <isset property="tiername" />
+	                <isset property="tier" />
 	                <then>
-	                        <!-- if tiername is defined, load tier specific properties for tier based installation -->
+	                        <!-- if tier is defined, load tier specific properties for tier based installation -->
 	                	
-	                        <property file="${tiername}.properties" />
+	                        <property file="${tier}.properties" />
 	                </then>
 	                <else>
 	                        <property file="local.build.properties" />
-	                        <!--<property name="tiername" value="dev" />-->
+	                        <!--<property name="tier" value="dev" />-->
 	                </else>
 	        </if>
 
@@ -151,7 +151,7 @@
 			
 
 		<replace file="${output.client.remote.dir}/conf/application-config-client.xml">
-			<replacefilter token="@SERVER_URL@" value="${TIER.NAME}_SERVER_URL}" />
+			<replacefilter token="@SERVER_URL@" value="${TIER}_SERVER_URL}" />
 		</replace>
 
 	</target>
