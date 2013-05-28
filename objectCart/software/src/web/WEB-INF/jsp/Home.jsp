@@ -132,16 +132,16 @@
 																						<ul>
 																							<li>
 																								<a
-																									href="http://gforge.nci.nih.gov/projects/mdr/">MDR GForge site</a> - Contains news, information,
+																									href="http://gforge.nci.nih.gov/projects/mdr/" target="_blank">MDR GForge site</a> - Contains news, information,
 																								documents, defects, feedback, and reports on ObjectCart.																							</li>
 																							<li>
 																								<a
-																									href="http://ncicb.nci.nih.gov/download/objectcartapilicenseagreement.jsp">ObjectCart Download site</a> - Contains documents,
+																									href="http://ncicb.nci.nih.gov/download/objectcartapilicenseagreement.jsp" target="_blank">ObjectCart Download site</a> - Contains documents,
 																								information, and downloads for the ObjectCart application.
 																							</li>
 																							<li>
 																								<a
-																									href="https://wiki.nci.nih.gov/display/caDSR/Object+Cart+API+1.0.2+Release+Notes">ObjectCart 1.0.2 Release Notes</a> - Release Notes for all
+																									href="https://wiki.nci.nih.gov/display/caDSR/Object+Cart+API+1.0.2+Release+Notes" target="_blank">ObjectCart 1.0.2 Release Notes</a> - Release Notes for all
 																								caCORE products for version 1.0
 																							</li>
 																							<li>
