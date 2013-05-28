@@ -5,9 +5,9 @@
 	
 		<!-- Properties for the session factory -->
 		<property name="connection.datasource">java:/objcartAPI</property>
-		<!--   <property name="connection.url">jdbc:mysql://cbiodb590.nci.nih.gov:3644/object_cart</property> 
-  <property name="connection.username">object_cart</property> 
-  <property name="connection.password">o3jC#490</property> 
+		<!--   <property name="connection.url">@DB_CONNECTION_URL@</property> 
+  <property name="connection.username">@DB_USERNAME@</property> 
+  <property name="connection.password">@DB_PASSWORD@</property> 
 
 		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="c3p0.max_size">10</property>
