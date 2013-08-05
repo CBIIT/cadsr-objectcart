@@ -1,3 +1,10 @@
+<%--L
+  Copyright Ekagra Software Technologies Ltd, SAIC-F
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-objectcart/LICENSE.txt for details.
+L--%>
+
 <%@ page import="org.acegisecurity.context.SecurityContextHolder" %>
 <%@ page import="org.acegisecurity.Authentication" %>
 <%@ page import="org.acegisecurity.ui.AccessDeniedHandlerImpl" %>
