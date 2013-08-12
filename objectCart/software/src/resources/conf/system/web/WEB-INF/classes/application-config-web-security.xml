@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--L
-  Copyright Ekagra Software Technologies Ltd, SAIC-F
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC, SAIC-Frederick
 
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-objectcart/LICENSE.txt for details.
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
 L-->
 
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
@@ -21,6 +22,7 @@ L-->
 				/http/remoteauthenticationmanager/**=sessionContextIntegrationFilter
 				/services/**=sessionContextIntegrationFilter
 				/home.action/**=sessionContextIntegrationFilter,logoutFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter
+				/reset.action/**=logoutFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter
 				/http/applicationservice/**=sessionContextIntegrationFilter,x509ProcessingFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor
 				/gethtml/**=sessionContextIntegrationFilter,logoutFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor
 				/getxml/**=sessionContextIntegrationFilter,logoutFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor

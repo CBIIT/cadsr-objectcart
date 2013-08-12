@@ -1,8 +1,9 @@
 <%--L
-  Copyright Ekagra Software Technologies Ltd, SAIC-F
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC, SAIC-Frederick
 
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-objectcart/LICENSE.txt for details.
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
 L--%>
 
 <%@ page contentType="text/html; charset=UTF-8" %>

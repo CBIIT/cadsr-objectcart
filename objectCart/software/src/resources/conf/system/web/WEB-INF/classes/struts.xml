@@ -1,8 +1,9 @@
 <!--L
-  Copyright Ekagra Software Technologies Ltd, SAIC-F
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC, SAIC-Frederick
 
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-objectcart/LICENSE.txt for details.
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
 L-->
 
 <!DOCTYPE struts PUBLIC
@@ -22,6 +23,11 @@ L-->
 		<action name="Login!*" method="{1}" class="gov.nih.nci.system.web.struts.action.Login">
 			<result name="input" type="chain">Home</result>
 			<result type="chain">ShowDynamicTree</result>
+		</action>
+
+		<action name="reset" class="gov.nih.nci.system.web.struts.action.LoginReset">
+			<result name="input" type="chain">Home</result>
+			<result>WEB-INF/jsp/Home.jsp</result>
 		</action>
 
 		<action name="ShowDynamicTree"

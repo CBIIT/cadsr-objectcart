@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--L
-  Copyright Ekagra Software Technologies Ltd, SAIC-F
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC, SAIC-Frederick
 
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-objectcart/LICENSE.txt for details.
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
 L-->
 
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
@@ -14,22 +15,22 @@ L-->
 	<!--                  -->
 	<!-- Exposed services -->
 	<!--                  -->
-	<bean name="/applicationService"	class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
-		<property name="serviceInterface" value="gov.nih.nci.objectCart.applicationService.ObjectCartService"/>
-		<property name="service"><ref bean="ApplicationServiceImpl" /></property>
+	<bean name="/applicationService" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+		<property name="serviceInterface" value="gov.nih.nci.system.applicationservice.ApplicationService" />
+		<property name="service" ref="ApplicationService" />
 	</bean>
 
-	<!--@SECURITY_START@
+	<!--
 	<bean name="/remoteAuthenticationManager"	class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
 		<property name="serviceInterface" value="org.acegisecurity.providers.rcp.RemoteAuthenticationManager"/>
 		<property name="service">
-			<bean class="org.acegisecurity.providers.rcp.RemoteAuthenticationManagerImpl">
+			<bean class="gov.nih.nci.system.security.acegi.rcp.providers.SDKRemoteAuthenticationManagerImpl">
 				<property name="authenticationManager">
 					<ref bean="authenticationManager"/>
 				</property>
 			</bean>
 		</property>
 	</bean>
-	@SECURITY_END@-->
+	-->
 	
 </beans>
