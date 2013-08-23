@@ -14,16 +14,16 @@
   <parameter name="allowedMethods" value="getVersion"/>
   <parameter name="className" value="org.apache.axis.Version"/>
 </service>
-<service name="exampleService" style="java:RPC" use="literal">
+<service name="objectCartService" style="java:RPC" use="literal">
 	<requestFlow>
 		<handler type="SecuritySOAPHandler" />
 	</requestFlow>
 	<parameter name="className" value="gov.nih.nci.system.webservice.WSQueryImpl"/>
 	<parameter name="allowedMethods" value="*"/>
 	<parameter name="extraClasses"
-	value="gov.nih.nci.objectCart.domain.CartObject,gov.nih.nci.objectCart.domain.Cart"/>	
-	<beanMapping xmlns:myNS="urn:domain.objectCart.nci.nih.gov"  qname="myNS:CartObject" languageSpecificType="java:gov.nih.nci.objectCart.domain.CartObject" />	
+	value="gov.nih.nci.objectCart.domain.Cart,gov.nih.nci.objectCart.domain.CartObject"/>	
 	<beanMapping xmlns:myNS="urn:domain.objectCart.nci.nih.gov"  qname="myNS:Cart" languageSpecificType="java:gov.nih.nci.objectCart.domain.Cart" />		
+	<beanMapping xmlns:myNS="urn:domain.objectCart.nci.nih.gov"  qname="myNS:CartObject" languageSpecificType="java:gov.nih.nci.objectCart.domain.CartObject" />		
 	<beanMapping xmlns:myNS="urn:Character.lang.java"  qname="myNS:Character" languageSpecificType="java:java.lang.Character" />		
 </service>
 <transport name="http">

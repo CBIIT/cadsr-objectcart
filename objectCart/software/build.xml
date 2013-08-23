@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--L
-  Copyright Ekagra Software Technologies Ltd, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-objectcart/LICENSE.txt for details.
-L-->
-
 <project name="System" basedir="." default="dist">
 
 	<description>Build script for building the runtime system</description>
@@ -56,7 +48,7 @@ L-->
 		*********************************************************************** -->
 		
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="classpath" />
-	<!--<property name="tiername" value="qa" />-->
+	<property name="tiername" value="qa" />
 	        <if>
 	                <isset property="tiername" />
 	                <then>
@@ -66,7 +58,7 @@ L-->
 	                </then>
 	                <else>
 	                        <property file="local.build.properties" />
-	                        <property name="tiername" value="dev" />
+	                        <!--<property name="tiername" value="dev" />-->
 	                </else>
 	        </if>
 
