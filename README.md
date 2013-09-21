@@ -1,7 +1,9 @@
 Welcome to the caDSR Object Cart Project!
 =====================================
 
-The Object Cart application provides shopping cart-type operations for caDSR data objects. Items in the Object Cart can be searched and viewed in HTML or XML using the Object Cart Browser.
+The caDSR Object Cart application provides shopping cart-type operations for caDSR data objects. Items in the Object Cart can be searched and viewed in HTML or XML using the Object Cart Browser.
+
+The caDSR Object Cart is developed in Java and requires Apache Ant for building.
 
 The caDSR Object Cart is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
