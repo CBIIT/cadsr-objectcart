@@ -13,7 +13,7 @@ You will find more details about the caDSR Object Cart in the following links:
  * [Community Wiki] (https://wiki.nci.nih.gov/x/jA2y)
  * [Code Repository] (https://github.com/NCIP/cadsr-objectcart)
  * [Issue Tracker] (https://gforge.nci.nih.gov/tracker/?group_id=369)
- * [Downloads] (http://gforge.nci.nih.gov/frs/?group_id=369)
+ * [Installation Package] (http://gforge.nci.nih.gov/frs/?group_id=369)
  * [Documentation] (https://gforge.nci.nih.gov/docman/?group_id=369)
  
  
