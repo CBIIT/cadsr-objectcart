@@ -15,11 +15,7 @@ You will find more details about the caDSR Object Cart in the following links:
  * [Issue Tracker] (https://gforge.nci.nih.gov/tracker/?group_id=369)
  * [Installation Package] (http://gforge.nci.nih.gov/frs/?group_id=369)
  * [Documentation] (https://gforge.nci.nih.gov/docman/?group_id=369)
- 
- 
-An NCI hosted instance of caDSR Object Cart is publicly available at:
-
-[Production Instance] (http://objcart.nci.nih.gov) 
+ * [NCI Instance] (http://objcart.nci.nih.gov) 
 
 
 Please join us in further developing and improving the caDSR Object Cart project.
