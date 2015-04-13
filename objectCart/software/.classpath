@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="test/lib/hamcrest-all-1.3.jar"/>
+	<classpathentry kind="lib" path="test/lib/junit-4.4.jar"/>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="lib" path="lib/system/acegi-security-1.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/system/ant-contrib-1.0b3.jar"/>
 	<classpathentry kind="lib" path="lib/system/antlr-2.7.6.jar"/>
@@ -62,7 +65,7 @@
 	<classpathentry kind="lib" path="lib/system/org.springframework.core-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/system/org.springframework.expression-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/system/org.springframework.jdbc-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/system/org.springframework.orm-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/system/org.springframework.orm-3.0.5.RELEASE.jar" sourcepath="/Users/tanj3/.m2/repository/org/springframework/spring-orm/3.0.5.RELEASE/spring-orm-3.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="lib/system/org.springframework.transaction-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/system/org.springframework.web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/system/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
@@ -103,5 +106,7 @@
 	<classpathentry kind="lib" path="lib/sdk-system-web-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/sdk-system-ws-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/wsrf_core_stubs.jar"/>
+	<classpathentry kind="lib" path="test/lib/mockito-all-1.9.5.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
