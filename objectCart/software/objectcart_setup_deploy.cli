@@ -1,0 +1,3 @@
+connect
+
+deploy --force /local/content/cadsrobjectcart/objcart10.war                                                                                                                                 

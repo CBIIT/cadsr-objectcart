@@ -12,7 +12,8 @@ L-->
 	<session-factory>
 	
 		<!-- Properties for the session factory -->
-		<property name="connection.datasource">java:/objcartAPI</property>
+		<!-- <property name="connection.datasource">java:/objcartAPI</property> -->
+		<property name="connection.datasource">java:jboss/datasources/ObjectCartDS</property>
 		<!--   <property name="connection.url">@DB_CONNECTION_URL@</property> 
   <property name="connection.username">@DB_USERNAME@</property> 
   <property name="connection.password">@DB_PASSWORD@</property> 
