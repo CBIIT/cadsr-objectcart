@@ -172,11 +172,9 @@
 																						Download site</a> - Contains documents, information,
 																					and downloads for the ObjectCart application.</li>
 																				<li><a
-																					href="https://wiki.nci.nih.gov/display/caDSR/Object+Cart+API+1.0.2.1+Release+Notes">ObjectCart
-																						1.0.2.1 Release Notes</a> - Release Notes for all caCORE
-																					products for version 1.0</li>
-																				<li><a href="docs/index.html">ObjectCart
-																						1.0.2.1 javadocs</a></li>
+																					href="https://wiki.nci.nih.gov/display/caDSR/Object+Cart+API+1.2+Release+Notes">ObjectCart
+																						1.2 Release Notes</a> - Release Notes for all caCORE products for version 1.0</li>
+																				<li><a href="docs/index.html">ObjectCart 1.2 javadocs</a></li>
 																			</ul>
 																		</td>
 																	</tr>
