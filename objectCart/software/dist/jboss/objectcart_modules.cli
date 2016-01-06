@@ -4,8 +4,8 @@ connect
 # configure datasource
 # is the driver in standalone.xml?
 # if not, add
-if (outcome != success) of /subsystem=datasources/jdbc-driver=mysql:read-resource 
-    /subsystem=datasources/jdbc-driver=mysql:add( \
+if (outcome != success) of /subsystem=datasources/jdbc-driver=oracle:read-resource 
+    /subsystem=datasources/jdbc-driver=oracle:add( \
     driver-name=mysql, \
     driver-module-name=com.mysql.driver, \
     driver-xa-datasource-class-name=com.mysql.jdbc.Driver) {allow-resource-service-restart=true}
@@ -17,10 +17,10 @@ if (outcome != success) of /subsystem=datasources/data-source=ObjectCartDS:read-
 data-source add \
 	—name=ObjectCartDS \
 	--driver-name=mysql \
-	--connection-url=jdbc:mysql://@OBJCART.DS.HOST@:3644/object_cart \
+	--connection-url=jdbc:mysql://ncidb-d115.nci.nih.gov:3644/object_cart \
 	--jndi-name=java:jboss/datasources/ObjectCartDS \
-	--user-name=@OBJCART.DS.USER@ \
-	--password=@OBJCART.DS.PSWD@ \
+	--user-name=object_cart \
+	--password=o3jC#490 \
 	--use-ccm=true \
 	--max-pool-size=100 \ 
 	--blocking-timeout-wait-millis=5000 
