@@ -15,7 +15,7 @@ end-if
 # if not, add
 if (outcome != success) of /subsystem=datasources/data-source=ObjectCartDS:read-resource
 data-source add \
-	—name=ObjectCartDS \
+	--name=ObjectCartDS \
 	--driver-name=mysql \
 	--connection-url=jdbc:mysql://@OBJCART.DS.HOST@:3644/object_cart \
 	--jndi-name=java:jboss/datasources/ObjectCartDS \

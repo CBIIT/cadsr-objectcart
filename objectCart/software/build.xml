@@ -236,6 +236,7 @@
 				<filter token="OBJCART.DS.HOST" value="${OBJCART.DS.HOST}" />
 				<filter token="OBJCART.DS.USER" value="${OBJCART.DS.USER}" />
 				<filter token="OBJCART.DS.PSWD" value="${OBJCART.DS.PSWD}" />
+				<filter token="logLevel" value="${logLevel}" />
 			</filterset>
 		</copy>
 

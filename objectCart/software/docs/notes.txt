@@ -1,0 +1,4 @@
+The Form Cart in Form Builder application provides the functionality to add and remove forms 
+from the logged in user’s Object Cart. This is provided by connecting to the Object Cart application 
+through an HTTP imterface. This HTTP URL to the Object Cart application is configured in the 
+SBREXT.TOOL_OPT_VIEW_EXT table with TOOL_NAME as ObjectCartAPI.
