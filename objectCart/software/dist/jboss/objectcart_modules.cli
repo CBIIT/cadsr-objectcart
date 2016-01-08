@@ -4,8 +4,8 @@ connect
 # configure datasource
 # is the driver in standalone.xml?
 # if not, add
-if (outcome != success) of /subsystem=datasources/jdbc-driver=oracle:read-resource 
-    /subsystem=datasources/jdbc-driver=oracle:add( \
+if (outcome != success) of /subsystem=datasources/jdbc-driver=mysql:read-resource 
+    /subsystem=datasources/jdbc-driver=mysql:add( \
     driver-name=mysql, \
     driver-module-name=com.mysql.driver, \
     driver-xa-datasource-class-name=com.mysql.jdbc.Driver) {allow-resource-service-restart=true}
@@ -15,7 +15,7 @@ end-if
 # if not, add
 if (outcome != success) of /subsystem=datasources/data-source=ObjectCartDS:read-resource
 data-source add \
-	—name=ObjectCartDS \
+	--name=ObjectCartDS \
 	--driver-name=mysql \
 	--connection-url=jdbc:mysql://ncidb-d115.nci.nih.gov:3644/object_cart \
 	--jndi-name=java:jboss/datasources/ObjectCartDS \
@@ -29,7 +29,7 @@ end-if
 if (outcome != success) of /subsystem=logging/size-rotating-file-handler=OBJECTCART:read-resource
 /subsystem=logging:write-attribute(name=use-deployment-logging-config, value=false)
 /subsystem=logging:write-attribute(name=add-logging-api-dependencies,value=true)
-/subsystem=logging/size-rotating-file-handler=OBJECTCART:add(level=@logLevel@, file={"relative-to"=>"jboss.server.log.dir", "path"=>"objectcart.log"}, append=false, autoflush=true)
+/subsystem=logging/size-rotating-file-handler=OBJECTCART:add(level=DEBUG, file={"relative-to"=>"jboss.server.log.dir", "path"=>"objectcart.log"}, append=false, autoflush=true)
 /subsystem=logging/size-rotating-file-handler=OBJECTCART:write-attribute(name="formatter", value="%d [%t] %-5p [%c : %L] %m%n") 
 /subsystem=logging/size-rotating-file-handler=OBJECTCART:write-attribute(name="rotate-size", value="1m")
 /subsystem=logging/size-rotating-file-handler=OBJECTCART:write-attribute(name="max-backup-index", value="10")
