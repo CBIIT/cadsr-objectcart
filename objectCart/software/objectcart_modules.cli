@@ -17,7 +17,7 @@ if (outcome != success) of /subsystem=datasources/data-source=ObjectCartDS:read-
 data-source add \
 	--name=ObjectCartDS \
 	--driver-name=mysql \
-	--connection-url=jdbc:mysql://@OBJCART.DS.HOST@:3644/object_cart \
+	--connection-url=jdbc:mysql://@OBJCART.DS.HOST@:@OBJCART.DS.PORT@/object_cart \
 	--jndi-name=java:jboss/datasources/ObjectCartDS \
 	--user-name=@OBJCART.DS.USER@ \
 	--password=@OBJCART.DS.PSWD@ \
@@ -38,4 +38,8 @@ end-if
 
 if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.objectCart:read-resource
 /subsystem=logging/logger=gov.nih.nci.objectCart:add(use-parent-handlers=false,handlers=["OBJECTCART", "CONSOLE"])
+end-if
+
+if (outcome != success) of /subsystem=undertow/servlet-container=default/setting=session-cookie:read-resource
+/subsystem=undertow/servlet-container=default/setting=session-cookie:add(http-only=true,secure=true)
 end-if
