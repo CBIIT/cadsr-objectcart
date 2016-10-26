@@ -35,6 +35,12 @@ if (outcome != success) of /subsystem=logging/size-rotating-file-handler=OBJECTC
 /subsystem=logging/size-rotating-file-handler=OBJECTCART:write-attribute(name="max-backup-index", value="10")
 end-if
 
+# received from Jacob including adding a MySQL connection checker
+/subsystem=datasources/data-source=ObjectCartDS:write-attribute(name=background-validation,value=true)
+/subsystem=datasources/data-source=ObjectCartDS:write-attribute(name=idle-timeout-minutes,value=15)
+/subsystem=datasources/data-source=ObjectCartDS:write-attribute(name=background-validation-millis,value=900000)
+/subsystem=datasources/data-source=ObjectCartDS:write-attribute(name=valid-connection-checker-class-name, value=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker)
+
 
 if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.objectCart:read-resource
 /subsystem=logging/logger=gov.nih.nci.objectCart:add(use-parent-handlers=false,handlers=["OBJECTCART", "CONSOLE"])
