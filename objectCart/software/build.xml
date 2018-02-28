@@ -209,7 +209,7 @@
 				<exclude name="commons-logging*.*" />
 				<exclude name="xercesImpl*.*" />
 				<exclude name="log4*.jar" />
-				<exclude name="asm-3.1.jar" />
+				<exclude name="asm-3.3.1.jar" />
 			</lib>
 			<fileset dir="${conf.dir}/system/web">
 				<include name="**/*" />

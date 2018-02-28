@@ -11,9 +11,7 @@
 	<classpathentry kind="lib" path="lib/system/axis-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/system/backport-util-concurrent-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/system/c3p0-0.9.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/system/castor-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/system/castor-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/system/cglib-2.1_3.jar"/>
 	<classpathentry kind="lib" path="lib/system/clm-4.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/system/cog-axis-4.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/system/cog-jglobus-4.0.3.jar"/>
@@ -106,9 +104,9 @@
 	<classpathentry kind="lib" path="lib/system/struts2-core-2.3.34.jar"/>
 	<classpathentry kind="lib" path="lib/system/struts2-dojo-plugin-2.3.34.jar"/>
 	<classpathentry kind="lib" path="lib/system/xwork-core-2.3.34.jar"/>
-	<classpathentry kind="lib" path="lib/system/asm-3.3.jar"/>
-	<classpathentry kind="lib" path="lib/system/asm-commons-3.3.jar"/>
-	<classpathentry kind="lib" path="lib/system/asm-tree-3.3.jar"/>
 	<classpathentry kind="lib" path="lib/system/javassist-3.11.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/system/asm-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/system/asm-3.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/system/cglib-2.1_3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
