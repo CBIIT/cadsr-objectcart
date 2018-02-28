@@ -17,10 +17,10 @@ if (outcome != success) of /subsystem=datasources/data-source=ObjectCartDS:read-
 data-source add \
 	--name=ObjectCartDS \
 	--driver-name=mysql \
-	--connection-url=jdbc:mysql://ncidb-d115.nci.nih.gov:3644/object_cart \
+	--connection-url=jdbc:mysql://:/object_cart \
 	--jndi-name=java:jboss/datasources/ObjectCartDS \
-	--user-name=object_cart \
-	--password=o3jC#490 \
+	--user-name= \
+	--password= \
 	--use-ccm=true \
 	--max-pool-size=100 \ 
 	--blocking-timeout-wait-millis=5000 
@@ -29,13 +29,23 @@ end-if
 if (outcome != success) of /subsystem=logging/size-rotating-file-handler=OBJECTCART:read-resource
 /subsystem=logging:write-attribute(name=use-deployment-logging-config, value=false)
 /subsystem=logging:write-attribute(name=add-logging-api-dependencies,value=true)
-/subsystem=logging/size-rotating-file-handler=OBJECTCART:add(level=DEBUG, file={"relative-to"=>"jboss.server.log.dir", "path"=>"objectcart.log"}, append=false, autoflush=true)
+/subsystem=logging/size-rotating-file-handler=OBJECTCART:add(level=${logLevel}, file={"relative-to"=>"jboss.server.log.dir", "path"=>"objectcart.log"}, append=false, autoflush=true)
 /subsystem=logging/size-rotating-file-handler=OBJECTCART:write-attribute(name="formatter", value="%d [%t] %-5p [%c : %L] %m%n") 
 /subsystem=logging/size-rotating-file-handler=OBJECTCART:write-attribute(name="rotate-size", value="1m")
 /subsystem=logging/size-rotating-file-handler=OBJECTCART:write-attribute(name="max-backup-index", value="10")
 end-if
 
+# received from Jacob including adding a MySQL connection checker
+/subsystem=datasources/data-source=ObjectCartDS:write-attribute(name=background-validation,value=true)
+/subsystem=datasources/data-source=ObjectCartDS:write-attribute(name=idle-timeout-minutes,value=15)
+/subsystem=datasources/data-source=ObjectCartDS:write-attribute(name=background-validation-millis,value=900000)
+/subsystem=datasources/data-source=ObjectCartDS:write-attribute(name=valid-connection-checker-class-name, value=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker)
+
 
 if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.objectCart:read-resource
 /subsystem=logging/logger=gov.nih.nci.objectCart:add(use-parent-handlers=false,handlers=["OBJECTCART", "CONSOLE"])
+end-if
+
+if (outcome != success) of /subsystem=undertow/servlet-container=default/setting=session-cookie:read-resource
+/subsystem=undertow/servlet-container=default/setting=session-cookie:add(http-only=true,secure=true)
 end-if

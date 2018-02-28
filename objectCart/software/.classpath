@@ -8,8 +8,6 @@
 	<classpathentry kind="lib" path="lib/system/ant-contrib-1.0b3.jar"/>
 	<classpathentry kind="lib" path="lib/system/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib/system/aopalliance-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/system/asm-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/system/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/axis-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/system/backport-util-concurrent-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/system/c3p0-0.9.1.2.jar"/>
@@ -25,17 +23,14 @@
 	<classpathentry kind="lib" path="lib/system/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/commons-configuration-1.8.jar"/>
 	<classpathentry kind="lib" path="lib/system/commons-discovery-0.2.jar"/>
-	<classpathentry kind="lib" path="lib/system/commons-fileupload-1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/commons-io-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/system/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/system/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/csmapi-5.0.jar"/>
 	<classpathentry kind="lib" path="lib/system/cxf-2.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/system/dom4j-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/system/ehcache-2.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/system/ejb3-persistence-1.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/system/freemarker-2.3.19.jar"/>
 	<classpathentry kind="lib" path="lib/system/geronimo-activation_1.1_spec-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/geronimo-annotation_1.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/GlobalModelExchange.jar"/>
@@ -56,7 +51,6 @@
 	<classpathentry kind="lib" path="lib/system/mmbase-1.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/system/mysql-connector-java-5.1.13.jar"/>
 	<classpathentry kind="lib" path="lib/system/neethi-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/system/ognl-3.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/system/org.springframework.aop-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/system/org.springframework.asm-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/system/org.springframework.beans-3.0.5.RELEASE.jar"/>
@@ -77,14 +71,11 @@
 	<classpathentry kind="lib" path="lib/system/slf4j-api-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/system/slf4j-log4j12-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/system/stax2-api-3.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/system/struts2-core-2.3.16.3.jar"/>
-	<classpathentry kind="lib" path="lib/system/struts2-dojo-plugin-2.3.16.3.jar"/>
 	<classpathentry kind="lib" path="lib/system/wsdl4j-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/xalan-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/system/xercesImpl-2.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/system/xml-resolver-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/system/xmlschema-core-2.0.jar"/>
-	<classpathentry kind="lib" path="lib/system/xwork-core-2.3.16.3.jar"/>
 	<classpathentry kind="lib" path="lib/activation.jar"/>
 	<classpathentry kind="lib" path="lib/addressing-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/axis.jar"/>
@@ -108,5 +99,16 @@
 	<classpathentry kind="lib" path="lib/wsrf_core_stubs.jar"/>
 	<classpathentry kind="lib" path="test/lib/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/system/commons-fileupload-1.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/system/commons-lang3-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/system/freemarker-2.3.22.jar"/>
+	<classpathentry kind="lib" path="lib/system/ognl-3.0.21.jar"/>
+	<classpathentry kind="lib" path="lib/system/struts2-core-2.3.34.jar"/>
+	<classpathentry kind="lib" path="lib/system/struts2-dojo-plugin-2.3.34.jar"/>
+	<classpathentry kind="lib" path="lib/system/xwork-core-2.3.34.jar"/>
+	<classpathentry kind="lib" path="lib/system/asm-3.3.jar"/>
+	<classpathentry kind="lib" path="lib/system/asm-commons-3.3.jar"/>
+	<classpathentry kind="lib" path="lib/system/asm-tree-3.3.jar"/>
+	<classpathentry kind="lib" path="lib/system/javassist-3.11.0.GA.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
