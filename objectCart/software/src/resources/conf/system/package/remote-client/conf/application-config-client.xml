@@ -7,8 +7,13 @@
   See http://ncip.github.com/cadsr-objectcart/LICENSE.txt for details.
 L-->
 
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	<bean id="objectCartServiceInfo" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
@@ -20,7 +25,7 @@ L-->
 		</constructor-arg>
 	</bean>
 	
-	<bean id="interceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy" singleton="true">
+	<bean id="interceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy" scope="singleton">
 		<property name="proxyFactory">
 			<bean class="gov.nih.nci.system.client.proxy.ProxyHelperImpl"/>
 		</property>
