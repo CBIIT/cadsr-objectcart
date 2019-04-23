@@ -1,6 +1,8 @@
 connect
 
 #1 add the jdbc module it doesn't matter if it's already there
+module add --name=com.mysql.driver --resources=/local/content/cadsrobjectcart/jboss/mysql-connector-java-5.1.13.jar --dependencies=javax.api,javax.transaction.api
+
 # configure datasource
 # is the driver in standalone.xml?
 # if not, add
@@ -8,7 +10,8 @@ if (outcome != success) of /subsystem=datasources/jdbc-driver=mysql:read-resourc
     /subsystem=datasources/jdbc-driver=mysql:add( \
     driver-name=mysql, \
     driver-module-name=com.mysql.driver, \
-    driver-xa-datasource-class-name=com.mysql.jdbc.Driver) {allow-resource-service-restart=true}
+    driver-class-name=com.mysql.jdbc.Driver, \
+    driver-xa-datasource-class-name=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource) {allow-resource-service-restart=true}
 end-if
 
 # is the db connection in standalone.xml?
