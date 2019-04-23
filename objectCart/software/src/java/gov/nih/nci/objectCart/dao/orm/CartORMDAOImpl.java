@@ -16,15 +16,11 @@ import org.apache.log4j.Logger;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import gov.nih.nci.objectCart.dao.CartDAO;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
-import gov.nih.nci.objectCart.util.PropertiesLoader;
-import gov.nih.nci.security.acegi.authentication.CSMAuthenticationProvider;
 import gov.nih.nci.system.dao.DAOException;
 import gov.nih.nci.system.dao.orm.ORMDAOImpl;
 

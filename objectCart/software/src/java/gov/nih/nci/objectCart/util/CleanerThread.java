@@ -8,7 +8,6 @@
 package gov.nih.nci.objectCart.util;
 
 import gov.nih.nci.objectCart.dao.orm.CleanerDAO;
-import gov.nih.nci.system.applicationservice.ApplicationException;
 import org.apache.log4j.Logger;
 
 public class CleanerThread extends Thread {
