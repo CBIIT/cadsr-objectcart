@@ -1,0 +1,20 @@
+version: '2'
+services:
+  server:
+    container_name: cadsr-objectcart11
+    image: cadsr-objectcart11
+    build: ./
+    ports:
+     - "8094:8080"
+    environment:
+      OBJCART_DS_HOST: $OBJCART_DS_HOST
+      OBJCART_DS_PORT: $OBJCART_DS_PORT
+      OBJCART_DS_USER: $OBJCART_DS_USER
+      OBJCART_DS_PSWD: $OBJCART_DS_PSWD
+      BRANCH_OR_TAG: $BRANCH_OR_TAG
+      tag: $BRANCH_OR_TAG
+      JBOSS_MODULES_SYSTEM_PKGS: $JBOSS_MODULES_SYSTEM_PKGS
+      JAVA_OPTS: $JAVA_OPTS
+      debug: $debug
+      tiername: $tiername
+      
