@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--L
-  Copyright Ekagra Software Technologies Ltd, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-objectcart/LICENSE.txt for details.
-L-->
-
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans default-lazy-init="false" default-dependency-check="none" default-autowire="no">
 
-	<bean name="ApplicationServiceImpl" class="gov.nih.nci.objectCart.applicationService.impl.ObjectCartServiceImpl" singleton="true">
+	<bean name="ApplicationServiceImpl" class="gov.nih.nci.objectCart.applicationService.impl.ObjectCartServiceImpl">
 		<constructor-arg ref="ClassCache" index="0"></constructor-arg>
 	 
 	</bean>
 
 	<!-- Bean Definitions -->
-	<bean name="ClassCache" class="gov.nih.nci.system.util.ClassCache" singleton="true">
+	<bean name="ClassCache" class="gov.nih.nci.system.util.ClassCache">
 		<property name="daoList">
 			<list>
 				<!--  Add any DAO's here -->
@@ -118,7 +110,7 @@ L-->
 		</property>
 	</bean>
 
-	<bean id="ApplicationService" class="org.springframework.aop.framework.ProxyFactoryBean" singleton="false">
+	<bean id="ApplicationService" class="org.springframework.aop.framework.ProxyFactoryBean" scope="prototype">
 		<property name="target" ref="ApplicationServiceImpl" />
 		<property name="interfaces" value="gov.nih.nci.objectCart.applicationService.ObjectCartService" />
 		<property name="interceptorNames">

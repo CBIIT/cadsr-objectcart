@@ -13,9 +13,9 @@ import org.springframework.context.support.*;
 public class TestORMDAO {
 	
 	public static void main (){
-		
-		ApplicationContext context = new ClassPathXmlApplicationContext("application-config.xml");
-		CartORMDAOImpl cart = (CartORMDAOImpl) context.getBean("ORMDAO");
+		//this does not work in java11
+//		ApplicationContext context = new ClassPathXmlApplicationContext("application-config.xml");
+//		CartORMDAOImpl cart = (CartORMDAOImpl) context.getBean("ORMDAO");
 		
 	}
 

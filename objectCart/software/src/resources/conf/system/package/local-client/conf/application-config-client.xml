@@ -26,13 +26,13 @@ L-->
 		</constructor-arg>
 	</bean>
 	
-	<bean id="interceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy" singleton="false">
+	<bean id="interceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy" scope="prototype">
 		<property name="proxyFactory">
-			<bean class="gov.nih.nci.system.client.proxy.ProxyHelperImpl" singleton="false"/>
+			<bean class="gov.nih.nci.system.client.proxy.ProxyHelperImpl" scope="prototype"/>
 		</property>
 	</bean>
 	
-	<bean id="applicationService" class="org.springframework.aop.framework.ProxyFactoryBean" singleton="false">
+	<bean id="applicationService" class="org.springframework.aop.framework.ProxyFactoryBean" scope="prototype">
 		<property name="target">
 			<ref bean="ApplicationServiceImpl"/>
 		</property>

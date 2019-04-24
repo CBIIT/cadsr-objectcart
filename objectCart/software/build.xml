@@ -87,56 +87,13 @@
 		<delete dir="${build.dir}" />
 		<delete dir="${dist.dir}" />
 	</target>
+
 	<!--***********************************************************************
 	*** Compiles source code
 	*********************************************************************** -->
-	<target name="compile3" depends="init, deploy" description="Compiles source code">
+	<target name="compile" depends="init, deploy" description="Compiles source code">
 		<SDKecho message="${ant.project.name}: Compiling source code" />
-		<javac fork="true" includeantruntime="false" srcdir="${src.dir}" destdir="${build.classes.dir}" debug="on"
-			memoryInitialSize="128m"
-			  memoryMaximumSize="4096m">
-			<classpath refid="classpath" />
-			<include name="gov/nih/nci/objectCart/dao/*.java"/>
-		</javac>
-		<copy todir="${build.classes.dir}">
-			<fileset dir="${src.dir}" includes="gov/nih/nci/system/web/struts/action/package.properties" />
-		</copy>
-	</target>
-	<!--***********************************************************************
-	*** Compiles source code
-	*********************************************************************** -->
-	<target name="compile" depends="init,deploy" description="Compiles source code">
-		<SDKecho message="${ant.project.name}: Compiling4 source code" />
-        <manifestclasspath property="tem.classpath" jarfile="pathing.jar">
-            <classpath refid="classpath"/>
-        </manifestclasspath> 
-        <jar destfile="pathing.jar" basedir="build/classes">
-            <manifest>             
-                <attribute name="Class-Path" value="${tem.classpath}"/>
-            </manifest>
-        </jar>
-        <path id="javac.classpath">
-            <pathelement path="${build.classes.dir}"/>
-            <pathelement path="pathing.jar"/>           
-        </path>
-		<javac fork="true" includeantruntime="false" srcdir="${src.dir}" destdir="${build.classes.dir}" debug="on"
-			memoryInitialSize="128m"
-			  memoryMaximumSize="4096m">
-			<classpath refid="javac.classpath"/>
-			<exclude name="gov/nih/nci/objectCart/jUnit/**/*" />
-		</javac>
-		<copy todir="${build.classes.dir}">
-			<fileset dir="${src.dir}" includes="gov/nih/nci/system/web/struts/action/package.properties" />
-		</copy>
-	</target>
-	<!--***********************************************************************
-	*** Compiles source code
-	*********************************************************************** -->
-	<target name="compileJava8" depends="init,deploy" description="Compiles source code">
-		<SDKecho message="${ant.project.name}: Compiling source code" />
-		<javac fork="true" includeantruntime="false" srcdir="${src.dir}" destdir="${build.classes.dir}" debug="on"
-			memoryInitialSize="128m"
-			  memoryMaximumSize="4096m">
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true">
 			<classpath refid="classpath" />
 			<exclude name="gov/nih/nci/objectCart/jUnit/**/*" />
 		</javac>
@@ -144,6 +101,8 @@
 			<fileset dir="${src.dir}" includes="gov/nih/nci/system/web/struts/action/package.properties" />
 		</copy>
 	</target>
+
+
 	<!--***********************************************************************
 	*** Prepares for deployment on particular tier
 	*********************************************************************** -->
