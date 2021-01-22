@@ -162,18 +162,13 @@
 
 																			<ul>
 																				<li><a
-																					href="http://gforge.nci.nih.gov/projects/mdr/">MDR
-																						GForge site</a> - Contains news, information,
-																					documents, defects, feedback, and reports on
-																					ObjectCart.</li>
-																				<li><a
-																					href="http://ncicb.nci.nih.gov/download/objectcartapilicenseagreement.jsp">ObjectCart
+																					href="https://github.com/CBIIT/cadsr-objectcart/releases">ObjectCart
 																						Download site</a> - Contains documents, information,
 																					and downloads for the ObjectCart application.</li>
 																				<li><a
-																					href="https://wiki.nci.nih.gov/display/caDSR/Object+Cart+API+1.2+Release+Notes">ObjectCart
-																						1.0.3 Release Notes</a> - Release Notes for all caCORE products for version 1.0</li>
-																				<li><a href="docs/index.html">ObjectCart 1.0.3 javadocs</a></li>
+																					href="https://wiki.nci.nih.gov/display/caDSR/caDSR+Object+Cart+1.0.4+Release+Notes">ObjectCart
+																						1.0.4 Release Notes</a></li>
+																				<li><a href="docs/index.html">ObjectCart 1.0.4 javadocs</a></li>
 																			</ul>
 																		</td>
 																	</tr>
