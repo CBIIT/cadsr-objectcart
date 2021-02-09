@@ -1,5 +1,9 @@
 connect
 
+if (outcome ==success) of /deployment=objcart104.war:read-resource
+undeploy objcart104.war
+end-if
+
 #1 add the jdbc module it doesn't matter if it's already there
 # configure datasource
 # is the driver in standalone.xml?
@@ -9,6 +13,12 @@ if (outcome != success) of /subsystem=datasources/jdbc-driver=mysql:read-resourc
     driver-name=mysql, \
     driver-module-name=com.mysql.driver, \
     driver-xa-datasource-class-name=com.mysql.jdbc.Driver) {allow-resource-service-restart=true}
+end-if
+
+# is the db connection in standalone.xml?
+# if yes remove for a chance DB information is changed
+if (outcome == success) of /subsystem=datasources/data-source=ObjectCartDS:read-resource
+data-source remove --name=ObjectCartDS
 end-if
 
 # is the db connection in standalone.xml?
