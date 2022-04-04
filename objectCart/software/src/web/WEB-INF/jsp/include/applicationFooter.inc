@@ -20,6 +20,10 @@
                       <td align="center" height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='#'">
                         &nbsp;&nbsp;<a class="footerMenuLink" href="ApplicationSupport.jsp">APPLICATION SUPPORT</a>&nbsp;&nbsp;
                       </td>
+                      <td><img src="images/ftrMenuSeparator.gif" width="1" height="16" alt="Footer Menu Separator" /></td>
+                      <td align="center" height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='#'">
+                        &nbsp;&nbsp;<a class="footerMenuLink" href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" target="_blank">VULNERABILITY DISCLOSURE</a>&nbsp;&nbsp;
+                      </td>                      
                     </tr>
                   </table>
                   <!-- application ftr ends -->
