@@ -14,7 +14,7 @@ L--%>
 				 java.util.*" %> 
 			 
 <link href="styleSheet.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="jquery-1.6.3.min.js"></script>
 <script type="text/javascript" src="jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript" src="iso-21090-datatype.2.1.js"></script>
 <%
